@@ -4,22 +4,21 @@ use Auth0\Laravel\Facade\Auth0;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/private', function () {
-  return response('Welcome! You are logged in.');
-})->middleware('auth');
-
 Route::get('/', function () {
-  if (!auth()->check()) {
-    return response('You are not logged in.');
-  }
-
-  $user = auth()->user();
-
-  return Inertia::render('Welcome', [
-    'user' => $user
-  ]);
+  return Inertia::render('Welcome');
 });
 
-Route::get('/profile', function () {
-  $user = auth()->user();
-})->middleware('auth');
+Route::middleware('auth')->group(function () {
+
+  Route::get('/dashboard', function () {
+    $user = auth()->user();
+
+    return Inertia::render('App/Dashboard', [
+      'user' => $user
+    ]);
+  })->name('dashboard');
+
+  Route::get('/profile', function () {
+    $user = auth()->user();
+  });
+});
