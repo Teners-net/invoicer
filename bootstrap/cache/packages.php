@@ -59,6 +59,13 @@
       0 => 'Termwind\\Laravel\\TermwindServiceProvider',
     ),
   ),
+  'platinum/laravel-extras' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Platinum\\LaravelExtras\\LaravelExtrasServiceProvider',
+    ),
+  ),
   'spatie/laravel-ignition' => 
   array (
     'providers' => 

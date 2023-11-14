@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c7ea03f4a7d79b4595ece22ed193d839",
+    "content-hash": "90f0bc3a0d1c3bd29ea33fb3b5c62256",
     "packages": [
         {
             "name": "auth0/auth0-php",
@@ -2826,6 +2826,68 @@
                 }
             ],
             "time": "2023-11-12T21:59:55+00:00"
+        },
+        {
+            "name": "platinum/laravel-extras",
+            "version": "v1.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ThePlatinum/laravel-extras.git",
+                "reference": "c091eae085cbfd5f8ce5a5a8ac93501dc0aa4966"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ThePlatinum/laravel-extras/zipball/c091eae085cbfd5f8ce5a5a8ac93501dc0aa4966",
+                "reference": "c091eae085cbfd5f8ce5a5a8ac93501dc0aa4966",
+                "shasum": ""
+            },
+            "require-dev": {
+                "pestphp/pest": "^1.22",
+                "pestphp/pest-plugin-laravel": "^1.4"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Platinum\\LaravelExtras\\LaravelExtrasServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Platinum\\LaravelExtras\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Platinum",
+                    "email": "platinumemirate@gmail.com",
+                    "homepage": "https://emmannueldesina.vercel.app/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Extend laravel applications with more artisan commands, traits and useful helper classes",
+            "homepage": "https://github.com/ThePlatinum/laravel-extras#readme",
+            "keywords": [
+                "file",
+                "laravel",
+                "laravel-extras",
+                "make-blade",
+                "make-trait",
+                "readable",
+                "sluggable",
+                "trait",
+                "upload"
+            ],
+            "support": {
+                "issues": "https://github.com/ThePlatinum/laravel-extras/issues",
+                "source": "https://github.com/ThePlatinum/laravel-extras/tree/v1.2.2"
+            },
+            "time": "2023-06-02T02:06:02+00:00"
         },
         {
             "name": "psr-discovery/all",
