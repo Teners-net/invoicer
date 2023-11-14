@@ -15,9 +15,9 @@ const PrimaryInput = forwardRef(({
   return (
     <div>
       <label htmlFor={id ?? name} className='p'>{label}</label>
-      <div className={`mt-1 flex p-3 bg-gray-50 dark:bg-gray-950 border-2 ${(error && touched) && 'border-red-500'} ${wrapperStyle}`}>
+      <div className={`md:mt-1 flex p-3 bg-gray-50 dark:bg-gray-950 border md:border-2 ${(error && touched) && 'border-red-500'} ${wrapperStyle}`}>
         {prepend}
-        <input ref={ref} id={id ?? name} name={name} className={`flex-1 p-0 bg-transparent text-xl outline-none w-full placeholder:text-xl placeholder:font-light focus:bg-inherit ${inputStyle}`} {...rest} />
+        <input ref={ref} id={id ?? name} name={name} className={`flex-1 p-0 bg-transparent md:text-xl outline-none w-full placeholder:text-xl placeholder:font-light focus:bg-inherit ${inputStyle}`} {...rest} />
         {postpend}
       </div>
       {(error && touched) && <small className="text-red-500">{error}</small>}

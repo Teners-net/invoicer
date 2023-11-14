@@ -20,11 +20,13 @@ return new class extends Migration
             $table->foreignIdFor(Company::class);
             $table->foreignIdFor(Customer::class)->nullable();
             $table->string('slug')->unique();
+            $table->float('total_amount');
             $table->boolean('paid')->default(false);
             $table->boolean('draft')->default(false);
 
             $table->boolean('accept_crypto')->default(true);
-            $table->boolean('accepted_currencies')->nullable();
+            $table->text('accepted_currencies')->nullable();
+            $table->enum('type', ['FIAT', 'CRYPTO']);
 
             $table->string('invoice_file')->nullable();
             $table->timestamp('due_at')->nullable();

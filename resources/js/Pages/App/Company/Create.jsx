@@ -32,10 +32,10 @@ const Create = ({ status }) => {
 
       <Section className={'pb-10 md:pb-20'}>
         <Card>
-          <form onSubmit={submit} className="p-6">
+          <form onSubmit={submit} className="p-3 md:p-6">
 
             <div className="grid md:grid-cols-2">
-              <div className="py-3 md:pt-12 md:pb-12 md:pr-12 md:border-r space-y-6 ">
+              <div className="py-2 md:pt-12 md:pb-12 md:pr-12 md:border-r space-y-4 md:space-y-6">
                 <TextInput
                   label="Company Name *"
                   name="name"
@@ -54,7 +54,7 @@ const Create = ({ status }) => {
                 />
 
                 <TextInput
-                  label="RC NUmber"
+                  label="RC Number"
                   name="rc_number"
                   value={data.rc_number}
                   error={errors.rc_number}
@@ -62,7 +62,7 @@ const Create = ({ status }) => {
                 />
               </div>
 
-              <div className="py-3 md:pt-12 md:pb-12 md:pl-12 space-y-6 ">
+              <div className="py-2 md:pt-12 md:pb-12 md:pl-12 space-y-4 md:space-y-6">
                 <TextInput
                   label="Contact Email"
                   name="contact_email"

@@ -8,6 +8,7 @@
         "@inertiajs/inertia": "^0.11.1",
         "@inertiajs/inertia-react": "^0.8.1",
         "@inertiajs/react": "^1.0.14",
+        "@vitejs/plugin-react": "^4.1.1",
         "autoprefixer": "^10.4.16",
         "axios": "^1.1.2",
         "laravel-vite-plugin": "^0.7.2",
@@ -16,7 +17,12 @@
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "tailwindcss": "^3.3.5",
-        "@vitejs/plugin-react": "^4.1.1",
         "vite": "^4.0.0"
+    },
+    "dependencies": {
+        "chart.js": "^4.4.0",
+        "react-chartjs-2": "^5.2.0",
+        "react-data-table-component": "^7.5.4",
+        "styled-components": "^6.1.1"
     }
 }
