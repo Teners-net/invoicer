@@ -84,4 +84,11 @@
       0 => 'Spatie\\LaravelRay\\RayServiceProvider',
     ),
   ),
+  'tightenco/ziggy' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Tightenco\\Ziggy\\ZiggyServiceProvider',
+    ),
+  ),
 );

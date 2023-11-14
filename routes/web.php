@@ -1,24 +1,22 @@
 <?php
 
+use App\Http\Controllers\App\CompanyController;
+use App\Http\Controllers\App\DashboardController;
 use Auth0\Laravel\Facade\Auth0;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-  return Inertia::render('Welcome');
+    return Inertia::render('Welcome');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'company'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-  Route::get('/dashboard', function () {
-    $user = auth()->user();
-
-    return Inertia::render('App/Dashboard', [
-      'user' => $user
-    ]);
-  })->name('dashboard');
-
-  Route::get('/profile', function () {
-    $user = auth()->user();
-  });
+    Route::get('/profile', function () {});
 });
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('company', CompanyController::class);
+})->middleware('company.has');

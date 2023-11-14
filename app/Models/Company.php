@@ -16,4 +16,16 @@ class Company extends Model
      * @var array<int, string>
      */
     protected $guarded = ['id'];
+
+    public function customers() {
+        return $this->hasMany(Customer::class);
+    }
+
+    public function products() {
+        return $this->hasMany(Product::class);
+    }
+
+    public function invoices() {
+        return $this->hasMany(Invoice::class);
+    }
 }

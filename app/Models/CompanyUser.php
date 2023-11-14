@@ -15,4 +15,8 @@ class CompanyUser extends Model
      * @var array<int, string>
      */
     protected $guarded = ['id'];
+
+    public function company() {
+        return $this->belongsTo(Company::class);
+    }
 }
