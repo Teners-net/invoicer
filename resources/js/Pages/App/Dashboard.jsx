@@ -176,7 +176,7 @@ const Dashboard = ({ overview, paid, unpaid }) => {
         </Card>
       </Section>
 
-      <Section className={'pb-8 md:pb-16'}>
+      <Section bottom>
         <h2 className='h4 !font-light'>Menus</h2>
 
         <div className="grid md:grid-cols-4">

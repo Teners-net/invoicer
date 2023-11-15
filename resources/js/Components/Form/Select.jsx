@@ -1,32 +1,31 @@
-import { forwardRef, useEffect, useRef } from 'react';
+import React, { forwardRef } from 'react';
 
-export default forwardRef(function Select(
-  { name, id, className, required, isFocused, handleChange, options = [], children, value, valueKey='id', labelKey='title' },
-  ref
-) {
-  const input = ref ? ref : useRef();
-
-  useEffect(() => {
-    if (isFocused) input.current.focus();
-  }, []);
-
+const SelectInput = forwardRef(({
+  wrapperStyle = '',
+  inputStyle = '',
+  label,
+  id,
+  name,
+  prepend = <></>,
+  postpend = <></>,
+  error = '',
+  touched = true,
+  children,
+  ...rest
+}, ref) => {
   return (
-    <select
-      name={name}
-      id={id}
-      className={
-        `rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm ` +
-        className
-      }
-      ref={input}
-      required={required}
-      onChange={(e) => handleChange(e)}
-      defaultValue={value}
-    >
-      {children}
-      {options.map((option, i) => {
-        return (<option key={i} value={option[valueKey]} className='text-sm'> {option[labelKey]} </option>)
-      })}
-    </select>
+    <div>
+      <label htmlFor={id ?? name} className='p'>{label}</label>
+      <div className={`md:mt-1 flex p-3 bg-gray-50 dark:bg-gray-950 border md:border-2 ${(error && touched) && 'border-red-500'} ${wrapperStyle}`}>
+        {prepend}
+        <select ref={ref} id={id ?? name} name={name} className={`flex-1 p-0 bg-transparent md:text-xl outline-none w-full placeholder:text-xl placeholder:font-light focus:bg-inherit ${inputStyle}`} {...rest} >
+          {children}
+        </select>
+        {postpend}
+      </div>
+      {(error && touched) && <small className="text-red-500">{error}</small>}
+    </div>
   );
 });
+
+export default SelectInput;

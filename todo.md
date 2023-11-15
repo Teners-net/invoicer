@@ -6,6 +6,8 @@
 - Payment Gateway Integration
 - Company Currency Rates
 - Multi-Company
+- Use Modal to create product/customer from invoice
+- Product Anaytics
 
 
 # Premium Features

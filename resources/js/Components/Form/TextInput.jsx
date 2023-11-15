@@ -10,8 +10,25 @@ const PrimaryInput = forwardRef(({
   postpend = <></>,
   error = '',
   touched = true,
+  children,
+  textarea,
   ...rest
 }, ref) => {
+  if (textarea) {
+    return (
+      <div>
+        <label htmlFor={id ?? name} className='p'>{label}</label>
+        <div className={`md:mt-1 flex p-3 bg-gray-50 dark:bg-gray-950 border md:border-2 ${(error && touched) && 'border-red-500'} ${wrapperStyle}`}>
+          {prepend}
+          <textarea ref={ref} id={id ?? name} name={name} className={`flex-1 p-0 bg-transparent md:text-xl outline-none w-full placeholder:text-xl placeholder:font-light focus:bg-inherit ${inputStyle}`} {...rest} >
+            {children}
+          </textarea>
+          {postpend}
+        </div>
+        {(error && touched) && <small className="text-red-500">{error}</small>}
+      </div>
+  )}
+
   return (
     <div>
       <label htmlFor={id ?? name} className='p'>{label}</label>

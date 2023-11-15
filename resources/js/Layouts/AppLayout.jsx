@@ -17,6 +17,11 @@ const AppLayout = ({ children, title, onBackPress }) => {
           <Section className={'!pb-1 text-gray-50'}>
             {onBackPress &&
               <Button className={'!px-0'} onClick={onBackPress}>
+                <img
+                  src={'/imgs/icons/back.png'}
+                  alt='Back Icon'
+                  className="h-4 mr-3"
+                />
                 Back
               </Button>
             }
