@@ -16,7 +16,7 @@ trait CompanyTrait
         return $user_company->company;
     }
 
-    private function confirmOwnsProduct($product)
+    private function confirmOwner($product)
     {
         $company = $this->getCurrentCompany();
 

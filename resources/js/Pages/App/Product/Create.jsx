@@ -90,6 +90,7 @@ const CreateProduct = ({ product }) => {
                   onChange={onHandleChange}
                   textarea
                   rows={5}
+                  wrapperStyle={'!p-2'}
                 />
 
                 <SelectInput

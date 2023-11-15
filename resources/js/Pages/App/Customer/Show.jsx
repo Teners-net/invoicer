@@ -2,10 +2,10 @@ import { Inertia } from "@inertiajs/inertia";
 import Section from "../../../Components/Section";
 import AppLayout from "../../../Layouts/AppLayout";
 
-const ShowProduct = ({ product }) => {
+const ShowCustomer = ({ customer }) => {
 
   return (
-    <AppLayout title={`Product - ${product.name}`} onBackPress={() => Inertia.visit(route('products.index'))}>
+    <AppLayout title={`Customer - ${customer.first_name}`} onBackPress={() => Inertia.visit(route('customers.index'))}>
 
       <Section className={'pb-10 md:pb-20'}>
         <h1>Coming Soon...</h1>
@@ -15,4 +15,4 @@ const ShowProduct = ({ product }) => {
   );
 }
 
-export default ShowProduct
+export default ShowCustomer

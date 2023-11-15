@@ -69,14 +69,14 @@ class ProductController extends Controller
 
         $product->update($request->all());
 
-        $this->confirmOwnsProduct($product);
+        $this->confirmOwner($product);
 
         return redirect()->route('products.index');
     }
 
     public function show(Product $product)
     {
-        $this->confirmOwnsProduct($product);
+        $this->confirmOwner($product);
 
         return Inertia::render('App/Product/Show', [
             'product' => $product
@@ -85,7 +85,7 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        $this->confirmOwnsProduct($product);
+        $this->confirmOwner($product);
 
         $product->forceDelete();
     }
