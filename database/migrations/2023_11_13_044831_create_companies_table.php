@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Currency;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,6 +18,7 @@ return new class extends Migration
             $table->id();
             $table->string('name', 200)->unique();
             $table->string('slug', 200)->unique();
+            $table->foreignIdFor(Currency::class);
 
             $table->string('website', 100)->nullable();
             $table->string('contact_number')->nullable();

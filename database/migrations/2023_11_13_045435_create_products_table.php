@@ -25,7 +25,6 @@ return new class extends Migration
             $table->integer('stock')->nullable();
             $table->text('description')->nullable();
             $table->enum('type', ['GOODS', 'SERVICE']);
-            $table->boolean('accept_crypto')->default(true);
             $table->softDeletes();
             $table->timestamps();
         });

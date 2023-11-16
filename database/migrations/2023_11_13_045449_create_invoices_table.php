@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Company;
+use App\Models\Currency;
 use App\Models\Customer;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -19,20 +20,20 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Company::class);
             $table->foreignIdFor(Customer::class)->nullable();
+            $table->foreignIdFor(Currency::class);
+
             $table->string('slug')->unique();
             $table->float('total_amount');
             $table->boolean('paid')->default(false);
             $table->boolean('draft')->default(false);
 
-            $table->boolean('accept_crypto')->default(true);
-            $table->text('accepted_currencies')->nullable();
-            $table->enum('type', ['FIAT', 'CRYPTO']);
-
             $table->string('invoice_file')->nullable();
             $table->timestamp('due_at')->nullable();
-            $table->timestamp('sent_at')->nullable();
+            $table->timestamp('send_at')->nullable();
 
             $table->boolean('is_recuring')->default(false);
+            $table->mediumInteger('recuring_interval')->nullable();
+            $table->enum('recuring_interval_unit', ['Month', 'Day', 'Year'])->nullable();
 
             $table->softDeletes();
             $table->timestamps();

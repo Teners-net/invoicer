@@ -17,7 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('symbol');
-            $table->float('to_base')->default(1.00);
+            $table->string('code');
+            $table->float('base_rate')->default(1.00);
+            $table->boolean('supported')->default(true);
             $table->softDeletes();
             $table->timestamps();
         });

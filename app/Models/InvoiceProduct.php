@@ -15,4 +15,8 @@ class InvoiceProduct extends Model
      * @var array<int, string>
      */
     protected $guarded = ['id'];
+
+    public function product() {
+        return $this->belongsTo(Product::class);
+    }
 }

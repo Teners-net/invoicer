@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Currency;
 use App\Models\Invoice;
 use App\Models\Product;
 use Illuminate\Database\Migrations\Migration;
@@ -19,9 +20,10 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Invoice::class);
             $table->foreignIdFor(Product::class)->nullable();
+            $table->foreignIdFor(Currency::class);
             $table->string('name');
-            $table->float('price');
-            $table->integer('unit')->default(1);
+            $table->float('amount', 10, 6);
+            $table->integer('quantity')->default(1);
             $table->timestamps();
         });
     }

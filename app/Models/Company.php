@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Platform\Setting;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Platinum\LaravelExtras\Traits\Sluggable;
@@ -27,5 +28,13 @@ class Company extends Model
 
     public function invoices() {
         return $this->hasMany(Invoice::class);
+    }
+
+    public function currency() {
+        if ($this->currency_id) return $this->belongsTo(Currency::class);
+
+        $base_currency_id =  Setting::get('base_currency');
+
+        return  Currency::find($base_currency_id);
     }
 }

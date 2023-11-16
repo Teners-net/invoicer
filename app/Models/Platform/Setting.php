@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Platform;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Bank extends Model
+class Setting extends Model
 {
     use HasFactory;
 
@@ -15,4 +15,15 @@ class Bank extends Model
      * @var array<int, string>
      */
     protected $guarded = ['id'];
+
+    /**
+     * Get the platform's settings values
+     *
+     */
+    public static function get($key)
+    {
+        $setting = self::where('key', $key)->first();
+
+        return $setting->value;
+    }
 }

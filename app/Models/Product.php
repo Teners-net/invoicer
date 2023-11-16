@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Currency;
+use App\Models\Platform\Setting;
 use Illuminate\Database\Eloquent\Model;
 use Platinum\LaravelExtras\Traits\Sluggable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
@@ -16,4 +18,8 @@ class Product extends Model
      * @var array<int, string>
      */
     protected $guarded = ['id'];
+
+    public function currency() {
+        return $this->belongsTo(Currency::class);
+    }
 }
