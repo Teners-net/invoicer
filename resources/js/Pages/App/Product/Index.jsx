@@ -25,12 +25,12 @@ const Products = ({ products, overview }) => {
     },
     {
       name: 'STOCK',
-      selector: row => row.stock,
+      selector: row => row.type == 'GOODS' ? (row.stock ? row.stock : 'Unlimited') : 'Not Applicable',
       sortable: true,
     },
     {
       name: 'ACCEPT CRYPTO',
-      selector: row => row.accept_crypto,
+      selector: row => row.accept_crypto ? 'Yes' : 'No',
       sortable: true,
     },
     {

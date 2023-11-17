@@ -79,11 +79,12 @@ small,
     @apply underline-offset-4;
 }
 
-.bg-black-gradient {background: rgb(0,0,0);
+.bg-black-gradient {
+    background: rgb(0, 0, 0);
     background: -moz-linear-gradient(0deg, transparent 40%, #000000 40%);
     background: -webkit-linear-gradient(0deg, transparent 40%, #000000 40%);
     background: linear-gradient(0deg, transparent 40%, #000000 40%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000000",endColorstr="#000000",GradientType=1);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000000", endColorstr="#000000", GradientType=1);
     @apply text-gray-50;
 }
 
@@ -92,11 +93,16 @@ small,
     background: -moz-linear-gradient(90deg, #000030 -30%, #860081 100%);
     background: -webkit-linear-gradient(90deg, #000030 -30%, #860081 100%);
     background: linear-gradient(90deg, #000030 -30%, #860081 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000030",endColorstr="#860081",GradientType=1);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000030", endColorstr="#860081", GradientType=1);
 }
 
 input:-internal-autofill-selected {
     @apply !bg-inherit;
     color: inherit !important;
     appearance: unset !important;
+}
+
+th,
+td {
+    @apply whitespace-nowrap px-4 py-2;
 }
