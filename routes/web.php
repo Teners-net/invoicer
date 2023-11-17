@@ -5,6 +5,7 @@ use App\Http\Controllers\App\CustomerController;
 use App\Http\Controllers\App\DashboardController;
 use App\Http\Controllers\App\InvoiceController;
 use App\Http\Controllers\App\ProductController;
+use App\Http\Controllers\Platform\SubscriptionController;
 use Auth0\Laravel\Facade\Auth0;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -12,6 +13,8 @@ use Inertia\Inertia;
 Route::get('/', function () {
     return Inertia::render('Welcome');
 });
+
+Route::resource('pricing', SubscriptionController::class);
 
 Route::middleware(['auth', 'company'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -25,9 +28,10 @@ Route::middleware(['auth', 'company'])->group(function () {
     });
     Route::resource('invoices', InvoiceController::class);
 
-    Route::get('profile', function () {});
+    Route::get('profile', function () {
+    });
 });
 
-Route::middleware(['auth', 'company.has'])->group(function () {
-    Route::resource('company', CompanyController::class);
+Route::middleware(['auth'])->group(function () {
+    Route::resource('company', CompanyController::class)->middleware('company.has');
 });
