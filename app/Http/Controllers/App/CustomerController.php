@@ -80,7 +80,6 @@ class CustomerController extends Controller
         $request->validate($this->rules);
 
         $customer->update($request->all());
-
         $this->confirmOwner($customer);
 
         return redirect()->route('customers.index');
@@ -106,5 +105,6 @@ class CustomerController extends Controller
         $this->confirmOwner($customer);
 
         $customer->forceDelete();
+        return redirect()->route('customers.index');
     }
 }

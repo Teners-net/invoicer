@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\App;
 
 use App\Http\Controllers\Controller;
+use App\Models\Currency;
 use App\Models\Product;
 use App\Traits\CompanyTrait;
 use Illuminate\Http\Request;
@@ -23,7 +24,7 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = $this->getCurrentCompany()->products;
+        $products = $this->getCurrentCompany()->products()->with('currency')->get();
 
         $overview = [
             'all' => $products->count(),
@@ -39,7 +40,9 @@ class ProductController extends Controller
 
     public function create()
     {
-        return Inertia::render('App/Product/Create');
+        return Inertia::render('App/Product/Create', [
+            'currencies' => Currency::all()
+        ]);
     }
 
     public function store(Request $request)
@@ -59,7 +62,8 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         return Inertia::render('App/Product/Create', [
-            'product' => $product
+            'product' => $product,
+            'currencies' => Currency::all()
         ]);
     }
 
@@ -68,7 +72,6 @@ class ProductController extends Controller
         $request->validate($this->rules);
 
         $product->update($request->all());
-
         $this->confirmOwner($product);
 
         return redirect()->route('products.index');
@@ -88,5 +91,7 @@ class ProductController extends Controller
         $this->confirmOwner($product);
 
         $product->forceDelete();
+
+        return redirect()->route('products.index');
     }
 }

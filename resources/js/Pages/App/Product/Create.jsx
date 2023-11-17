@@ -7,7 +7,7 @@ import TextInput from "../../../Components/Form/TextInput";
 import SelectInput from "../../../Components/Form/Select";
 import { Inertia } from "@inertiajs/inertia";
 
-const CreateProduct = ({ product }) => {
+const CreateProduct = ({ product, currencies }) => {
 
   const { data, setData, post, patch, processing, errors, reset } = useForm({
     name: product?.name,
@@ -15,7 +15,7 @@ const CreateProduct = ({ product }) => {
     stock: product?.stock,
     description: product?.description,
     type: product?.type,
-    accept_crypto: product?.accept_crypto,
+    currency_id: product?.currency_id
   });
 
   const onHandleChange = (e) => {
@@ -82,6 +82,17 @@ const CreateProduct = ({ product }) => {
 
               <div className="py-2 md:pt-12 md:pb-12 md:pl-12 space-y-4 md:space-y-6">
 
+                <SelectInput
+                  label="Currency"
+                  name="currency_id"
+                  value={data.currency_id}
+                  error={errors.currency_id}
+                  onChange={onHandleChange}
+                >
+                  <option value="">Select</option>
+                  {currencies?.map(_ => <option value={_.id}>{_.name} ({_.symbol})</option>)}
+                </SelectInput>
+
                 <TextInput
                   label="Product Description"
                   name="description"
@@ -92,18 +103,6 @@ const CreateProduct = ({ product }) => {
                   rows={5}
                   wrapperStyle={'!p-2'}
                 />
-
-                <SelectInput
-                  label="Accept Crypto Payment"
-                  name="accept_crypto"
-                  value={data.accept_crypto}
-                  error={errors.accept_crypto}
-                  onChange={onHandleChange}
-                >
-                  <option value="">Select</option>
-                  <option value={1}>Yes</option>
-                  <option value={0}>No</option>
-                </SelectInput>
               </div>
             </div>
 

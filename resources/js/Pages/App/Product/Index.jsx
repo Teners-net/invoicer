@@ -15,7 +15,7 @@ const Products = ({ products, overview }) => {
     },
     {
       name: 'PRICE',
-      selector: row => 'NGN' + row.price,
+      selector: row => row.currency.symbol + ' ' + row.price,
       sortable: true,
     },
     {

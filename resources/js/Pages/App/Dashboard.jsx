@@ -7,7 +7,7 @@ import { Inertia } from '@inertiajs/inertia';
 
 ChartJS.register(ArcElement, Tooltip);
 
-const Dashboard = ({ overview, paid, unpaid }) => {
+const Dashboard = ({ overview, invoices }) => {
 
   const menus = [
     {
@@ -69,30 +69,15 @@ const Dashboard = ({ overview, paid, unpaid }) => {
     },
   ]
 
-  const unpaidData = {
-    labels: ['FIAT', 'CRYPTO'],
+  const invoiceData = {
+    labels: ['Paid', 'Unpaid'],
     datasets: [
       {
-        data: [unpaid.FIAT, unpaid.CRYPTO],
+        data: [invoices.paid + 4, invoices.unpaid + 7],
         backgroundColor: [
           '#000030',
           '#860081',
-        ],
-        label: ['Paid'],
-      }
-    ],
-  }
-
-  const paidData = {
-    labels: ['FIAT', 'CRYPTO'],
-    datasets: [
-      {
-        data: [paid.FIAT, paid.CRYPTO],
-        backgroundColor: [
-          '#000030',
-          '#860081',
-        ],
-        label: ['Paid'],
+        ]
       }
     ],
   }
@@ -105,11 +90,36 @@ const Dashboard = ({ overview, paid, unpaid }) => {
           <h2 className='h4 !font-light'>Overview</h2>
 
           <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
+            <Card className={"p-4 md:p-4 col-span-2 md:col-span-1"}>
+              <div className='flex gap-4 items-center'>
+                <div className="h-28 w-28">
+                  <Doughnut data={invoiceData} />
+                </div>
+                <div className="space-y-4">
+                  <div>
+                    <div className="flex gap-2 items-center">
+                      <div className="h-3 w-3 bg-primary"></div>
+                      <small>{invoices.paid_count} Paid Invoices</small>
+                    </div>
+                    <p>NGN{invoices.paid}</p>
+                  </div>
+
+                  <div>
+                    <div className="flex gap-2 items-center">
+                      <div className="h-3 w-3 bg-secondary"></div>
+                      <small>{invoices.unpaid_count} Unpaid Invoices</small>
+                    </div>
+                    <p>NGN{invoices.unpaid}</p>
+                  </div>
+                </div>
+              </div>
+            </Card>
+
             {overviews.map(_ =>
-              <Card key={_.label} className={'flex gap-4'}>
-                <img src={_.icon} alt={_.label} className="h-12 w-12 p-3 bg-gray-50" />
+              <Card key={_.label} className={'flex gap-3 md:gap-6'}>
+                <img src={_.icon} alt={_.label} className="h-8 md:h-14 w-8 md:w-14 p-2 md:p-3 bg-gray-50" />
                 <div>
-                  <h3 className="h1 !mb-1">{_.value}</h3>
+                  <h3 className="h1 !mb-2 md:text-5xl">{_.value}</h3>
                   <p>{_.label}</p>
                 </div>
               </Card>
@@ -117,64 +127,6 @@ const Dashboard = ({ overview, paid, unpaid }) => {
           </div>
         </Section>
       </div>
-
-      <Section>
-        <h2 className='h4 !font-light'>Account Summary</h2>
-
-        <Card className={"grid md:grid-cols-2 !p-0 !py-4 !md:py-8"}>
-          <div className="px-4 md:px-8 !py-4 !md:py-8 md:border-r">
-            <h5 className="mb-8 h6">Paid Invoices</h5>
-            <div className="flex gap-4 items-center">
-              <div className="h-40 w-40">
-                <Doughnut data={paidData} />
-              </div>
-              <div className="space-y-6">
-                <div>
-                  <div className="flex gap-2 items-center">
-                    <div className="h-4 w-4 bg-primary"></div>
-                    <p>FIAT Currency</p>
-                  </div>
-                  <p className="h5">NGN{paid.FIAT} ({paid.FIAT_count})</p>
-                </div>
-
-                <div>
-                  <div className="flex gap-2 items-center">
-                    <div className="h-4 w-4 bg-secondary"></div>
-                    <p>CRYPTO Currency</p>
-                  </div>
-                  <p className="h5">NGN{paid.CRYPTO} ({paid.CRYPTO_count})</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="px-4 md:px-8 !py-4 !md:py-8 md:border-l">
-            <h5 className="mb-8 h6">Unpaid Invoices</h5>
-            <div className="flex gap-4 items-center">
-              <div className="h-40 w-40">
-                <Doughnut data={unpaidData} />
-              </div>
-              <div className="space-y-6">
-                <div>
-                  <div className="flex gap-2 items-center">
-                    <div className="h-4 w-4 bg-primary"></div>
-                    <p>FIAT Currency</p>
-                  </div>
-                  <p className="h5">NGN{unpaid.CRYPTO} ({unpaid.CRYPTO_count})</p>
-                </div>
-
-                <div>
-                  <div className="flex gap-2 items-center">
-                    <div className="h-4 w-4 bg-secondary"></div>
-                    <p>CRYPTO Currency</p>
-                  </div>
-                  <p className="h5">NGN{unpaid.CRYPTO} ({unpaid.CRYPTO_count})</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Card>
-      </Section>
 
       <Section bottom>
         <h2 className='h4 !font-light'>Menus</h2>

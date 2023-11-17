@@ -22,29 +22,17 @@ class DashboardController extends Controller
         ];
 
         $inv = $user_company->company->invoices();
-        $inv_paid = $inv->where('paid', true);
-        $inv_unpaid = $inv->where('paid', false);
 
-        $paid = [
-            'FIAT' => $inv_paid->where('type', 'FIAT')->sum('total_amount'),
-            'CRYPTO' => $inv_paid->where('type', 'CRYPTO')->sum('total_amount'),
-
-            'FIAT_count' => $inv_paid->where('type', 'FIAT')->count(),
-            'CRYPTO_count' => $inv_paid->where('type', 'CRYPTO')->count(),
-        ];
-
-        $unpaid = [
-            'FIAT' => $inv_unpaid->where('type', 'FIAT')->sum('total_amount'),
-            'CRYPTO' => $inv_unpaid->where('type', 'CRYPTO')->sum('total_amount'),
-
-            'FIAT_count' => $inv_unpaid->where('type', 'FIAT')->count(),
-            'CRYPTO_count' => $inv_unpaid->where('type', 'CRYPTO')->count(),
+        $invoices = [
+            'paid' => $inv->where('paid', true)->sum('total_amount'),
+            'paid_count' => $inv->where('paid', true)->count(),
+            'unpaid' => $inv->where('paid', false)->sum('total_amount'),
+            'unpaid_count' => $inv->where('paid', false)->count()
         ];
 
         return Inertia::render('App/Dashboard', [
             'overview' => $overview,
-            'paid' => $paid,
-            'unpaid' => $unpaid,
+            'invoices' => $invoices,
         ]);
     }
 }
