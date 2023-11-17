@@ -16,7 +16,7 @@ const CreateCustomer = ({ customer }) => {
     address: customer?.address,
   });
 
-  const onHandleChange = (e) => {
+  const handleChange = (e) => {
     setData(e.target.name, e.target.type === 'checkbox' ? e.target.checked : e.target.value);
   };
 
@@ -41,7 +41,7 @@ const CreateCustomer = ({ customer }) => {
                   value={data.first_name}
                   error={errors.first_name}
                   required
-                  onChange={onHandleChange}
+                  onChange={handleChange}
                 />
 
                 <TextInput
@@ -49,7 +49,7 @@ const CreateCustomer = ({ customer }) => {
                   name="last_name"
                   value={data.last_name}
                   error={errors.last_name}
-                  onChange={onHandleChange}
+                  onChange={handleChange}
                 />
 
                 <TextInput
@@ -58,7 +58,7 @@ const CreateCustomer = ({ customer }) => {
                   value={data.email}
                   error={errors.email}
                   required
-                  onChange={onHandleChange}
+                  onChange={handleChange}
                 />
               </div>
 
@@ -69,7 +69,7 @@ const CreateCustomer = ({ customer }) => {
                   name="phone"
                   value={data.phone}
                   error={errors.phone}
-                  onChange={onHandleChange}
+                  onChange={handleChange}
                 />
 
                 <TextInput
@@ -77,7 +77,7 @@ const CreateCustomer = ({ customer }) => {
                   name="address"
                   value={data.address}
                   error={errors.address}
-                  onChange={onHandleChange}
+                  onChange={handleChange}
                   textarea
                   rows={5}
                   wrapperStyle={'!p-2'}

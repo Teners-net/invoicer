@@ -17,7 +17,7 @@ const Create = ({ status }) => {
     address: '',
   });
 
-  const onHandleChange = (e) => {
+  const handleChange = (e) => {
     setData(e.target.name, e.target.type === 'checkbox' ? e.target.checked : e.target.value);
   };
 
@@ -42,7 +42,7 @@ const Create = ({ status }) => {
                   value={data.name}
                   error={errors.name}
                   required
-                  onChange={onHandleChange}
+                  onChange={handleChange}
                 />
 
                 <TextInput
@@ -50,7 +50,7 @@ const Create = ({ status }) => {
                   name="website"
                   value={data.website}
                   error={errors.website}
-                  onChange={onHandleChange}
+                  onChange={handleChange}
                 />
 
                 <TextInput
@@ -58,7 +58,7 @@ const Create = ({ status }) => {
                   name="rc_number"
                   value={data.rc_number}
                   error={errors.rc_number}
-                  onChange={onHandleChange}
+                  onChange={handleChange}
                 />
               </div>
 
@@ -68,7 +68,7 @@ const Create = ({ status }) => {
                   name="contact_email"
                   value={data.contact_email}
                   error={errors.contact_email}
-                  onChange={onHandleChange}
+                  onChange={handleChange}
                 />
 
                 <TextInput
@@ -76,7 +76,7 @@ const Create = ({ status }) => {
                   name="contact_number"
                   value={data.contact_number}
                   error={errors.contact_number}
-                  onChange={onHandleChange}
+                  onChange={handleChange}
                 />
 
                 <TextInput
@@ -84,7 +84,7 @@ const Create = ({ status }) => {
                   name="address"
                   value={data.address}
                   error={errors.address}
-                  onChange={onHandleChange}
+                  onChange={handleChange}
                 />
               </div>
             </div>

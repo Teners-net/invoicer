@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\App;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
+use App\Models\Currency;
 use App\Models\Customer;
 use App\Models\Invoice;
 use App\Models\InvoiceProduct;
+use App\Models\Platform\Setting;
 use App\Models\Product;
 use App\Traits\CompanyTrait;
 use Illuminate\Http\Request;
@@ -48,9 +51,18 @@ class InvoiceController extends Controller
         return Inertia::render('App/Invoice/Create', [
             'products' => $company->products()->with('currency')->get(),
             'customers' => $company->customers,
-            'base_currency' => $company->currency
+            'base_currency' => [
+                'company' => $company->currency,
+                'platform' => Currency::find(Setting::get('base_currency'))
+            ],
         ]);
     }
+
+    private function productInCompanyCurrency($product, $base_currency) {
+        $amnt_platform = $product->price / ($product->currency['base_rate'] ?? 1);
+
+        return number_format($amnt_platform * $base_currency['company']['base_rate'], 2, '.', '');
+      }
 
     /**
      * Store a new resource.
@@ -63,7 +75,7 @@ class InvoiceController extends Controller
             'products' => 'required|array',
             'products.*.product' => 'required|array',
             'products.*.product.id' => 'required|exists:products,id',
-            'due_at' => 'nullable|date',
+            'due_at' => 'nullable|required_if:draft,false|date',
             'note' => 'nullable|string'
         ], [
             'products.*.product.id' => 'Select product',
@@ -71,9 +83,12 @@ class InvoiceController extends Controller
 
         $company = $this->getCurrentCompany();
 
+        $t_amount = 0.00;
+
         $request->merge([
             'company_id' => $company->id,
-            'currency_id' => $company->currency->id
+            'currency_id' => $company->currency->id,
+            'total_amount' => $t_amount
         ]);
 
         $invoice = Invoice::create($request->all());
@@ -89,13 +104,20 @@ class InvoiceController extends Controller
                 'amount' => $prod->price * $_p['quantity'],
                 'name' => $prod->name,
             ]);
+
+            $t_amount += $this->productInCompanyCurrency($prod, $request->base_currency);
         }
+
+        // Too many transactions in one query
+        $invoice->update([
+            'total_amount' => $t_amount
+        ]);
 
         if (!$request->draft){
             $customer = Customer::findOrFail($request->customer_id);
             $this->confirmOwner($customer);
 
-            return redirect()->route('invoices.setup');
+            return redirect()->route('invoices.setup', $invoice);
         }
 
         return redirect()->route('invoices.index');
@@ -105,15 +127,34 @@ class InvoiceController extends Controller
      */
     public function setup(Invoice $invoice)
     {
+        $company = $this->getCurrentCompany();
+        $invoice = Invoice::with('customer', 'currency')->find($invoice->id);
+        $company = Company::with('paymentChannels', 'paymentChannels.currency')->find($company->id);
+
         return Inertia::render('App/Invoice/InvoicePaymentMethod', [
-            'invoice' => $invoice
+            'invoice' => $invoice,
+            'payment_channels' => $company->paymentChannels,
+            'base_currency' => [
+                'company' => $company->currency,
+                'platform' => Setting::get('base_currency')
+            ],
         ]);
     }
 
     /**
      */
-    public function setupUpdate(Invoice $invoice)
+    public function setupUpdate(Request $request, Invoice $invoice)
     {
+        $request->validate([
+            'payment_channels' => 'required|array',
+            'is_recuring' => 'required|boolean'
+        ], [
+            'payment_channels.required' => 'Select at least one payment channel'
+        ]);
+
+        $invoice->channels()->attach($request->payment_channels);
+
+        return redirect()->route('invoices.index');
     }
 
     /**
@@ -121,7 +162,12 @@ class InvoiceController extends Controller
      */
     public function edit(Invoice $invoice)
     {
+        $company = $this->getCurrentCompany();
+
         return Inertia::render('App/Invoice/Create', [
+            'products' => $company->products()->with('currency')->get(),
+            'customers' => $company->customers,
+            'base_currency' => $company->currency,
             'invoice' => $invoice
         ]);
     }
@@ -134,7 +180,6 @@ class InvoiceController extends Controller
         $request->validate($this->rules);
 
         $customer->update($request->all());
-
         $this->confirmOwner($customer);
 
         return redirect()->route('invoices.index');
@@ -158,7 +203,8 @@ class InvoiceController extends Controller
     public function destroy(Invoice $customer)
     {
         $this->confirmOwner($customer);
-
         $customer->forceDelete();
+
+        return redirect()->route('invoices.index');
     }
 }

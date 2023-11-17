@@ -18,7 +18,7 @@ const CreateProduct = ({ product, currencies }) => {
     currency_id: product?.currency_id
   });
 
-  const onHandleChange = (e) => {
+  const handleChange = (e) => {
     setData(e.target.name, e.target.type === 'checkbox' ? e.target.checked : e.target.value);
   };
 
@@ -43,7 +43,7 @@ const CreateProduct = ({ product, currencies }) => {
                   value={data.name}
                   error={errors.name}
                   required
-                  onChange={onHandleChange}
+                  onChange={handleChange}
                 />
 
                 <TextInput
@@ -55,7 +55,7 @@ const CreateProduct = ({ product, currencies }) => {
                   required
                   value={data.price}
                   error={errors.price}
-                  onChange={onHandleChange}
+                  onChange={handleChange}
                 />
 
                 <SelectInput
@@ -64,7 +64,7 @@ const CreateProduct = ({ product, currencies }) => {
                   required
                   value={data.type}
                   error={errors.type}
-                  onChange={onHandleChange}
+                  onChange={handleChange}
                 >
                   <option value="">Select</option>
                   <option value="GOODS">Goods (Physical Items)</option>
@@ -76,7 +76,7 @@ const CreateProduct = ({ product, currencies }) => {
                   name="stock"
                   value={data.stock}
                   error={errors.stock}
-                  onChange={onHandleChange}
+                  onChange={handleChange}
                 />}
               </div>
 
@@ -87,7 +87,7 @@ const CreateProduct = ({ product, currencies }) => {
                   name="currency_id"
                   value={data.currency_id}
                   error={errors.currency_id}
-                  onChange={onHandleChange}
+                  onChange={handleChange}
                 >
                   <option value="">Select</option>
                   {currencies?.map(_ => <option value={_.id}>{_.name} ({_.symbol})</option>)}
@@ -98,7 +98,7 @@ const CreateProduct = ({ product, currencies }) => {
                   name="description"
                   value={data.description}
                   error={errors.description}
-                  onChange={onHandleChange}
+                  onChange={handleChange}
                   textarea
                   rows={5}
                   wrapperStyle={'!p-2'}

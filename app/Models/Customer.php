@@ -15,4 +15,12 @@ class Customer extends Model
      * @var array<int, string>
      */
     protected $guarded = ['id'];
+
+    public function getFullNameAttribute(): string {
+        return "$this->first_name $this->last_name";
+    }
+
+    public $appends = [
+        'full_name'
+    ];
 }

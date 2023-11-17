@@ -14,7 +14,7 @@ const Brand = ({ status }) => {
     rc_number: '',
   });
 
-  const onHandleChange = (e) => {
+  const handleChange = (e) => {
     setData(e.target.name, e.target.type === 'checkbox' ? e.target.checked : e.target.value);
   };
 
@@ -39,7 +39,7 @@ const Brand = ({ status }) => {
                   value={data.name}
                   error={errors.name}
                   required
-                  onChange={onHandleChange}
+                  onChange={handleChange}
                 />
 
                 <TextInput
@@ -48,7 +48,7 @@ const Brand = ({ status }) => {
                   type="color"
                   value={data.website}
                   error={errors.website}
-                  onChange={onHandleChange}
+                  onChange={handleChange}
                 />
 
                 <TextInput
@@ -57,7 +57,7 @@ const Brand = ({ status }) => {
                   type="color"
                   value={data.rc_number}
                   error={errors.rc_number}
-                  onChange={onHandleChange}
+                  onChange={handleChange}
                 />
               </div>
 

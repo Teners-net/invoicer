@@ -23,8 +23,8 @@ Route::middleware(['auth', 'company'])->group(function () {
     Route::resource('customers', CustomerController::class);
 
     Route::controller(InvoiceController::class)->prefix('invoices')->group(function () {
-        Route::get('setup', 'setup')->name('invoices.setup');
-        Route::patch('setup', 'setupUpdate')->name('invoices.setup');
+        Route::get('{invoice}/setup', 'setup')->name('invoices.setup');
+        Route::patch('{invoice}/setup', 'setupUpdate')->name('invoices.setup');
     });
     Route::resource('invoices', InvoiceController::class);
 

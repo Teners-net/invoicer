@@ -21,7 +21,7 @@ class DashboardController extends Controller
             'invoices' => $user_company->company->invoices->count(),
         ];
 
-        $inv = $user_company->company->invoices();
+        $inv = $user_company->company->invoices;
 
         $invoices = [
             'paid' => $inv->where('paid', true)->sum('total_amount'),

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Company;
 use App\Models\CompanyUser;
 use App\Models\Currency;
+use App\Models\PaymentChannel;
 use App\Models\Product;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -65,6 +66,12 @@ class AppSeeders extends Seeder
             ['name' => 'AI and Machine Learning Consultation', 'price' => 999.99, 'stock' => 15, 'description' => 'Expert consultation services', 'type' => 'SERVICE'],
             ['name' => 'Tech Startup Accelerator Note', 'price' => 2499.99, 'stock' => 10, 'description' => 'Accelerate your tech startup journey with a step-by-step training guide', 'type' => 'SERVICE'],
         ]);
+
+        foreach (Company::all() as $company) {
+            PaymentChannel::factory(2)->create([
+                'company_id' => $company->id
+            ]);
+        }
     }
 
     /**

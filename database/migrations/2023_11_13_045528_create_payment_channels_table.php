@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Company;
+use App\Models\Currency;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,11 +18,13 @@ return new class extends Migration
         Schema::create('payment_channels', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Company::class);
+            $table->foreignIdFor(Currency::class);
             $table->string('note')->nullable();
 
-            $table->string('address');
-            $table->string('attached_name'); // Holder name / Currency type
-            $table->string('channel_name'); // Bank name
+            $table->string('bank_name');
+            $table->string('account_name');
+            $table->string('account_number');
+            $table->text('extras')->nullable();
 
             $table->softDeletes();
             $table->timestamps();

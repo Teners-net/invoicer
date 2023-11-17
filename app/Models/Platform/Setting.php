@@ -22,6 +22,7 @@ class Setting extends Model
      */
     public static function get($key)
     {
+        // TODO: Use Cache
         $setting = self::where('key', $key)->first();
 
         return $setting->value;

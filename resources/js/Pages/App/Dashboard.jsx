@@ -73,7 +73,7 @@ const Dashboard = ({ overview, invoices }) => {
     labels: ['Paid', 'Unpaid'],
     datasets: [
       {
-        data: [invoices.paid + 4, invoices.unpaid + 7],
+        data: [invoices.paid, invoices.unpaid],
         backgroundColor: [
           '#000030',
           '#860081',
@@ -90,9 +90,9 @@ const Dashboard = ({ overview, invoices }) => {
           <h2 className='h4 !font-light'>Overview</h2>
 
           <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
-            <Card className={"p-4 md:p-4 col-span-2 md:col-span-1"}>
+            <Card className={"md:!p-4 col-span-2 md:col-span-1"}>
               <div className='flex gap-4 items-center'>
-                <div className="h-28 w-28">
+                <div className="h-[6.5rem] w-[6.5rem]">
                   <Doughnut data={invoiceData} />
                 </div>
                 <div className="space-y-4">

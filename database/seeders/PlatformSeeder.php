@@ -27,19 +27,19 @@ class PlatformSeeder extends Seeder
                 'name' => 'South African rand',
                 'code' => 'ZAR',
                 'symbol' => 'R',
-                'base_rate' => 24.9100
+                'base_rate' => 0.022
             ],
             [
                 'name' => 'Ugandan shilling',
                 'code' => 'UGX',
                 'symbol' => 'USh',
-                'base_rate' => 0.1233
+                'base_rate' => 4.57
             ],
             [
                 'name' => 'US Dollar',
                 'code' => 'USD',
                 'symbol' => '$',
-                'base_rate' => 0.000833
+                'base_rate' => 0.0012
             ]
         ];
 

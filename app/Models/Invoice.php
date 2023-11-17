@@ -32,4 +32,12 @@ class Invoice extends Model
     {
         return $this->hasMany(InvoiceProduct::class);
     }
+
+    public function currency() {
+        return $this->belongsTo(Currency::class);
+    }
+
+    public function channels() {
+        return $this->belongsToMany(PaymentChannel::class);
+    }
 }
