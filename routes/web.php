@@ -27,11 +27,8 @@ Route::middleware(['auth', 'company'])->group(function () {
         Route::patch('{invoice}/setup', 'setupUpdate')->name('invoices.setup');
     });
     Route::resource('invoices', InvoiceController::class);
-
-    Route::get('profile', function () {
-    });
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::resource('company', CompanyController::class)->middleware('company.has');
+    Route::resource('company', CompanyController::class);
 });

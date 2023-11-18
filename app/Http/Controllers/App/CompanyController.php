@@ -4,11 +4,14 @@ namespace App\Http\Controllers\App;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\CompanyUser;
+use App\Traits\CompanyTrait;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CompanyController extends Controller
 {
+    use CompanyTrait;
+
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +19,11 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        //
+        $company = $this->getCurrentCompany();
+
+        return Inertia::render('App/Company/Index', [
+            'company' => $company
+        ]);
     }
 
     /**
@@ -26,11 +33,10 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        $user = auth()->user();
+        $company = $this->getCurrentCompany();
+        if ($company) return redirect()->route('dashboard');
 
-        return Inertia::render('App/Company/Create', [
-            'user' => $user
-        ]);
+        return Inertia::render('App/Company/Create');
     }
 
     /**
