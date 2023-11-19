@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create('invoice_instances', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Invoice::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(Invoice::class)->constrained()->cascadeOnDelete();
             $table->boolean('paid')->default(false);
             $table->string('slug', 200)->unique();
             $table->timestamps();

@@ -17,8 +17,8 @@ return new class extends Migration
     {
         Schema::create('invoice_payment_channel', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Invoice::class)->constrained()->onDelete('cascade');
-            $table->foreignIdFor(PaymentChannel::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(Invoice::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(PaymentChannel::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

@@ -17,8 +17,8 @@ return new class extends Migration
     {
         Schema::create('payment_channels', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Company::class);
-            $table->foreignIdFor(Currency::class);
+            $table->foreignIdFor(Company::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Currency::class)->constrained()->restrictOnDelete();
             $table->string('note')->nullable();
 
             $table->string('bank_name');

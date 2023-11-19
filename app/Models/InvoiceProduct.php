@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Platform\Setting;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -26,11 +27,21 @@ class InvoiceProduct extends Model
         'updated_at',
     ];
 
-    public function product() {
+    public function product()
+    {
         return $this->belongsTo(Product::class);
     }
 
-    public function invoice() {
+    public function invoice()
+    {
         return $this->belongsTo(Invoice::class);
+    }
+
+    public function currency()
+    {
+        if ($this->currency_id) return $this->belongsTo(Currency::class);
+        $base_currency_id = Setting::get('base_currency');
+
+        return Currency::find($base_currency_id);
     }
 }

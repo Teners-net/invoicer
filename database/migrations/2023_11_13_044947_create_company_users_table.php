@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create('company_users', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Company::class);
+            $table->foreignIdFor(Company::class)->constrained()->cascadeOnDelete();
             $table->string('user_id');
             $table->boolean('is_owner')->default(true);
             $table->timestamps();
