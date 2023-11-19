@@ -23,7 +23,7 @@ return new class extends Migration
             $table->foreignIdFor(Currency::class);
 
             $table->string('slug')->unique();
-            $table->float('total_amount');
+            $table->float('total_amount', 18);
             $table->boolean('paid')->default(false);
             $table->boolean('draft')->default(false);
 

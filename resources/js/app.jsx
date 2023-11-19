@@ -3,12 +3,15 @@ import '../css/app.css';
 
 import { createInertiaApp } from '@inertiajs/inertia-react';
 import { createRoot } from 'react-dom/client'
+import { AppProvider } from './context';
+import Confirmation from './Components/Modals/Confirmation';
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
 const cleanApp = () => {
   document.getElementById('app').removeAttribute('data-page')
 }
+
 document.addEventListener('inertia:finish', cleanApp)
 
 createInertiaApp({
@@ -20,6 +23,12 @@ createInertiaApp({
   setup({ el, App, props }) {
     const root = createRoot(el);
 
-    root.render(<App {...props} />);
+    root.render(
+      <AppProvider>
+        <App {...props} />
+
+        <Confirmation />
+      </AppProvider>
+    );
   },
 }).then(cleanApp)

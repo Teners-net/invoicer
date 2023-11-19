@@ -14,12 +14,12 @@ class CompanyController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $company = $this->getCurrentCompany();
+        $company_id = $this->getCurrentCompany()->id;
+        $company = Company::with('paymentChannels', 'paymentChannels.currency')->find($company_id);
 
         return Inertia::render('App/Company/Index', [
             'company' => $company
@@ -28,7 +28,6 @@ class CompanyController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
      * @return \Illuminate\Http\Response
      */
     public function create()
@@ -41,9 +40,6 @@ class CompanyController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
@@ -67,9 +63,6 @@ class CompanyController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param  \App\Models\Company  $company
-     * @return \Illuminate\Http\Response
      */
     public function show(Company $company)
     {
@@ -78,9 +71,6 @@ class CompanyController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Company  $company
-     * @return \Illuminate\Http\Response
      */
     public function edit(Company $company)
     {
@@ -89,10 +79,7 @@ class CompanyController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Company  $company
-     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Company $company)
     {
@@ -101,9 +88,6 @@ class CompanyController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Company  $company
-     * @return \Illuminate\Http\Response
      */
     public function destroy(Company $company)
     {

@@ -26,28 +26,19 @@ const Dashboard = ({ overview, invoices }) => {
       route: 'invoices.index'
     },
     {
-      title: 'Brand Setup',
+      title: 'Account Setup',
       icon: '/imgs/icons/pencil.png',
-      route: 'products.index'
-    },
-    {
-      title: 'Payment Setup',
-      icon: '/imgs/icons/payment.png',
-      route: 'products.index'
-    },
-    {
-      title: 'Your Profile',
-      icon: '/imgs/icons/account.png',
-      route: 'profile.index'
+      route: 'company.index'
     },
     {
       title: 'Subscription',
       icon: '/imgs/icons/bill.png',
-      route: 'subscription.index'
+      route: 'pricing.index'
     }
   ]
 
   const handleItemClick = (_route) => {
+    console.log('_route: ', route(_route));
     Inertia.visit(route(_route));
   };
 
@@ -128,22 +119,22 @@ const Dashboard = ({ overview, invoices }) => {
         </Section>
       </div>
 
-      <Section bottom>
+      <Section>
         <h2 className='h4 !font-light'>Menus</h2>
 
-        <div className="grid md:grid-cols-4">
-          <div className="col-span-3 md:border-r pr-0 md:pr-8 ">
-            <div className="grid gap-6 md:gap-10 grid-cols-2 md:grid-cols-5">
+        <div className="grid md:grid-cols-3 gap-4 md:gap-0">
+          <div className="col-span-2 md:border-r pr-0 md:pr-8 ">
+            <div className="grid gap-4 md:gap-6 grid-cols-3 md:grid-cols-5">
               {menus.map(menu =>
                 <div
                   className="space-y-2 text-center cursor-pointer group"
                   key={menu.title}
                   onClick={() => handleItemClick(menu.route)}>
-                  <div className="h-28 md:h-32 bg-brand-gradient shadow-lg flex items-center justify-center group-hover:scale-95 transition-transform duration-500">
+                  <div className="p-6 md:p-8 bg-brand-gradient shadow-lg flex items-center justify-center group-hover:scale-95 transition-transform duration-500">
                     <img
                       src={menu.icon}
                       alt={menu.title}
-                      className="h-14 w-14 p-1 group-hover:scale-125 transition-transform duration-500"
+                      className="h-10 md:h-14 w-10 md:w-14 group-hover:scale-125 transition-transform duration-500"
                     />
                   </div>
                   <p>{menu.title}</p>
@@ -152,8 +143,25 @@ const Dashboard = ({ overview, invoices }) => {
             </div>
           </div>
 
-          <div className="col-span-1 md:border-l pl-4 md:pl-8"></div>
+          {/* <div className="col-span-1 md:border-l pl-0 md:pl-8">
+            <h2 className='h4 !font-light'>Inventory Notice</h2>
+            <Card>
+              <p className='text-red-500'>You have {5} goods with stock size less than 5</p>
+            </Card>
+          </div> */}
         </div>
+      </Section>
+
+      <Section bottom className={'grid md:grid-cols-3 gap-4'}>
+        <Card flat>
+          <h6>Top Customers</h6>
+        </Card>
+        <Card flat>
+          <h6>Top Products</h6>
+        </Card>
+        <Card flat>
+          <h6>Low Stocks</h6>
+        </Card>
       </Section>
     </AppLayout>
   );

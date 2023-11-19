@@ -4,6 +4,7 @@ use App\Http\Controllers\App\CompanyController;
 use App\Http\Controllers\App\CustomerController;
 use App\Http\Controllers\App\DashboardController;
 use App\Http\Controllers\App\InvoiceController;
+use App\Http\Controllers\App\PaymentChannelController;
 use App\Http\Controllers\App\ProductController;
 use App\Http\Controllers\Platform\SubscriptionController;
 use Auth0\Laravel\Facade\Auth0;
@@ -14,7 +15,7 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 });
 
-Route::resource('pricing', SubscriptionController::class);
+Route::resource('pricing', SubscriptionController::class)->only(['index']);
 
 Route::middleware(['auth', 'company'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -27,8 +28,10 @@ Route::middleware(['auth', 'company'])->group(function () {
         Route::patch('{invoice}/setup', 'setupUpdate')->name('invoices.setup');
     });
     Route::resource('invoices', InvoiceController::class);
+
+    Route::resource('payment_channels', PaymentChannelController::class)->only(['store', 'update', 'destroy']);
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::resource('company', CompanyController::class);
+    Route::resource('company', CompanyController::class)->only(['index', 'store', 'update']);
 });

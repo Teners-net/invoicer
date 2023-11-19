@@ -27,8 +27,8 @@ return new class extends Migration
             $table->string('address')->nullable();
 
             $table->string('logo')->nullable();
-            $table->string('primary_color', 7)->nullable();
-            $table->string('secondary_color', 7)->nullable();
+            $table->string('primary_color', 7)->default('#000030');
+            $table->string('secondary_color', 7)->default('#860081');
 
             $table->timestamp('subscribed_at')->nullable();
             $table->timestamp('subscribed_till')->nullable();
