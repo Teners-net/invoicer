@@ -4,13 +4,13 @@ import Header from '../Components/Header';
 import Footer from '../Components/Footer';
 import Button from '../Components/Button';
 
-const AppLayout = ({ children, title, onBackPress }) => {
+const AppLayout = ({ children, title, onBackPress, user }) => {
 
   return (
     <div className="min-h-screen">
       <Head title={title} />
 
-      <Header />
+      <Header user={user} />
 
       <main>
         <div className="bg-black">

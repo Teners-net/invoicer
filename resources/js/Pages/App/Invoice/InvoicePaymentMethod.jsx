@@ -1,5 +1,5 @@
 import { Inertia } from "@inertiajs/inertia";
-import { useForm } from "@inertiajs/inertia-react";
+import { useForm, usePage } from "@inertiajs/inertia-react";
 import { useEffect, useState } from "react";
 import Button from "../../../Components/Button";
 import Card from "../../../Components/Card";
@@ -81,8 +81,10 @@ const InvoicePaymentMethod = ({ invoice, payment_channels }) => {
     setData(e.target.name, e.target.type === 'checkbox' ? e.target.checked : e.target.value)
   }
 
+  const { user } = usePage().props
+
   return (
-    <AppLayout title={'Invoice Payment Setup'} onBackPress={() => Inertia.visit(route('invoices.edit', invoice))}>
+    <AppLayout user={user}  title={'Invoice Payment Setup'} onBackPress={() => Inertia.visit(route('invoices.edit', invoice))}>
 
       <Section className={'pb-10 md:pb-20'}>
         <Card>

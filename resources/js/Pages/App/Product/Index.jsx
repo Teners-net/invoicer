@@ -4,6 +4,7 @@ import Section from "../../../Components/Section";
 import AppLayout from "../../../Layouts/AppLayout";
 import Button from "../../../Components/Button";
 import { Inertia } from "@inertiajs/inertia";
+import { usePage } from "@inertiajs/inertia-react";
 
 const Products = ({ products, overview }) => {
 
@@ -56,8 +57,10 @@ const Products = ({ products, overview }) => {
     },
   ]
 
+  const { user } = usePage().props
+
   return (
-    <AppLayout title='Products' onBackPress={()=>Inertia.visit(route('dashboard'))}>
+    <AppLayout user={user} title='Products' onBackPress={()=>Inertia.visit(route('dashboard'))}>
 
       <div className="bg-black-gradient">
         <Section className={'!pt-1'}>

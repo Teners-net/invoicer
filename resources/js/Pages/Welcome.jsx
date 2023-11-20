@@ -1,14 +1,19 @@
+import { usePage } from "@inertiajs/inertia-react";
 import Button from "../Components/Button";
 import Card from "../Components/Card";
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
 import Section from "../Components/Section";
-import AppLayout from "../Layouts/AppLayout";
 
-const WelcomePage = ({ user }) => {
+const Welcome = () => {
+
+  const { user } = usePage().props
+
+  const GetStarted = ({...rest}) => <Button {...rest}>Create a Free Invoice Now</Button>
+
   return (
     <>
-      <Header />
+      <Header user={user} />
 
       <Section className={'grid md:grid-cols-2'}>
         <div className="space-y-6">
@@ -19,7 +24,7 @@ const WelcomePage = ({ user }) => {
           </p>
 
           <div className="flex gap-4">
-            <Button>Create a Free Invoice Now</Button>
+            <GetStarted />
             <Button outline>See a Demo</Button>
           </div>
         </div>
@@ -35,18 +40,18 @@ const WelcomePage = ({ user }) => {
             <h3></h3>
             <p></p>
           </Card>
-          <Card></Card>
-          <Card></Card>
           <Card className={"space-y-6"}>
             <h3>Multiple Currency</h3>
             <p>Don't be restricted, create your invoices in any currency and work smoothly with your international customers</p>
           </Card>
+          <Card></Card>
+          <Card></Card>
         </div>
       </Section>
 
       <div className="bg-black text-white">
         <Section bottom className={'flex items-center gap-4 justify-center'}>
-          <Button outline>Create a Your First Invoice Now</Button>
+          <GetStarted outline />
           <p>It's FREE!</p>
         </Section>
       </div>
@@ -58,4 +63,4 @@ const WelcomePage = ({ user }) => {
   );
 }
 
-export default WelcomePage
+export default Welcome

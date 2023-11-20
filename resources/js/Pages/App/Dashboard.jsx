@@ -4,6 +4,7 @@ import Card from "../../Components/Card";
 import Section from "../../Components/Section";
 import AppLayout from "../../Layouts/AppLayout";
 import { Inertia } from '@inertiajs/inertia';
+import { usePage } from '@inertiajs/inertia-react';
 
 ChartJS.register(ArcElement, Tooltip);
 
@@ -73,8 +74,10 @@ const Dashboard = ({ overview, invoices }) => {
     ],
   }
 
+  const { user } = usePage().props
+
   return (
-    <AppLayout title='Dashboard'>
+    <AppLayout user={user} title='Dashboard'>
 
       <div className="bg-black-gradient">
         <Section className={'!pt-1'}>

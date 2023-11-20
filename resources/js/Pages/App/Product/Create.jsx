@@ -1,4 +1,4 @@
-import { useForm } from "@inertiajs/inertia-react";
+import { useForm, usePage } from "@inertiajs/inertia-react";
 import Button from "../../../Components/Button";
 import Card from "../../../Components/Card";
 import Section from "../../../Components/Section";
@@ -26,10 +26,12 @@ const CreateProduct = ({ product, currencies }) => {
     e.preventDefault();
 
     product ? patch(route('products.update', product)) : post(route('products.store'));
-  };
+  }
+
+  const { user } = usePage().props
 
   return (
-    <AppLayout title={product ? 'Edit Product' : 'Create New Product'} onBackPress={() => Inertia.visit(route('products.index'))}>
+    <AppLayout user={user} title={product ? 'Edit Product' : 'Create New Product'} onBackPress={() => Inertia.visit(route('products.index'))}>
 
       <Section className={'pb-10 md:pb-20'}>
         <Card>

@@ -40,8 +40,10 @@ const Company = ({ company }) => {
 
   const NewChannelButton = <Button onClick={() => setOpenChannelModal(true)}>Add Payment Channel</Button>
 
+  const { user } = usePage().props
+
   return (
-    <AppLayout title='Company Setup'>
+    <AppLayout user={user} title='Company Setup'>
 
       <Section className={'grid md:grid-cols-3 gap-4'}>
         <Card className={'col-span-2'}>
@@ -91,7 +93,7 @@ const Company = ({ company }) => {
         </div> */}
       </Section>
 
-      <Section>
+      <Section bottom>
         <Card>
           <h3>Payment Channels</h3>
           <p className="mb-4">Setup how you accept payments</p>

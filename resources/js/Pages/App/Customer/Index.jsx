@@ -4,6 +4,7 @@ import Section from "../../../Components/Section";
 import AppLayout from "../../../Layouts/AppLayout";
 import Button from "../../../Components/Button";
 import { Inertia } from "@inertiajs/inertia";
+import { usePage } from "@inertiajs/inertia-react";
 
 const Customers = ({ customers, overview }) => {
 
@@ -41,10 +42,12 @@ const Customers = ({ customers, overview }) => {
         <Button outline className={'!text-xs !py-2 !px-5'} onClick={() => { Inertia.visit(route('customers.edit', row)) }}>Edit</Button>
       </div>
     },
-  ];
+  ]
+
+  const { user } = usePage().props
 
   return (
-    <AppLayout title='Customers' onBackPress={() => Inertia.visit(route('dashboard'))}>
+    <AppLayout user={user} title='Customers' onBackPress={() => Inertia.visit(route('dashboard'))}>
 
       <div className="bg-black-gradient">
         <Section className={'!pt-1'}>

@@ -1,5 +1,5 @@
 import { Inertia } from "@inertiajs/inertia";
-import { useForm } from "@inertiajs/inertia-react";
+import { useForm, usePage } from "@inertiajs/inertia-react";
 import Button from "../../../Components/Button";
 import Card from "../../../Components/Card";
 import TextInput from "../../../Components/Form/TextInput";
@@ -24,10 +24,12 @@ const CreateCustomer = ({ customer }) => {
     e.preventDefault();
 
     customer ? patch(route('customers.update', customer)) : post(route('customers.store'));
-  };
+  }
+
+  const { user } = usePage().props
 
   return (
-    <AppLayout title={customer ? 'Edit Customer' : 'New Customer'} onBackPress={() => Inertia.visit(route('customers.index'))}>
+    <AppLayout user={user} title={customer ? 'Edit Customer' : 'New Customer'} onBackPress={() => Inertia.visit(route('customers.index'))}>
 
       <Section className={'pb-10 md:pb-20'}>
         <Card>

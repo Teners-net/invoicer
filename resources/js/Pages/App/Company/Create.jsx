@@ -1,12 +1,11 @@
-import { useForm } from "@inertiajs/inertia-react";
+import { useForm, usePage } from "@inertiajs/inertia-react";
 import Button from "../../../Components/Button";
 import Card from "../../../Components/Card";
+import TextInput from "../../../Components/Form/TextInput";
 import Section from "../../../Components/Section";
 import AppLayout from "../../../Layouts/AppLayout";
-import TextInput from "../../../Components/Form/TextInput";
 
-
-const Create = ({ status }) => {
+const Create = () => {
 
   const { data, setData, post, processing, errors, reset } = useForm({
     name: '',
@@ -25,10 +24,12 @@ const Create = ({ status }) => {
     e.preventDefault();
 
     post(route('company.store'));
-  };
+  }
+
+  const { user } = usePage().props
 
   return (
-    <AppLayout title='Company Setup'>
+    <AppLayout user={user} title='Company Setup'>
 
       <Section className={'pb-10 md:pb-20'}>
         <Card>
