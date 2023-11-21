@@ -1,126 +1,172 @@
-import { useForm, usePage } from "@inertiajs/inertia-react";
-import Button from "../../../Components/Button";
-import Card from "../../../Components/Card";
-import Section from "../../../Components/Section";
-import AppLayout from "../../../Layouts/AppLayout";
-import TextInput from "../../../Components/Form/TextInput";
-import SelectInput from "../../../Components/Form/Select";
 import { Inertia } from "@inertiajs/inertia";
+import { usePage } from "@inertiajs/inertia-react";
+import { Editor } from "@tinymce/tinymce-react";
+import { useEffect, useState } from "react";
+import Button from "../../../Components/Button";
+import SelectInput from "../../../Components/Form/Select";
+import TextInput from "../../../Components/Form/TextInput";
+import Modal from "../../../Components/Modal";
 
-const CreateProduct = ({ product, currencies }) => {
+const CreateProduct = ({ product, setProduct, currencies, show, setShow }) => {
 
-  const { data, setData, post, patch, processing, errors, reset } = useForm({
-    name: product?.name,
-    price: product?.price,
-    stock: product?.stock,
-    description: product?.description,
-    type: product?.type,
-    currency_id: product?.currency_id
-  });
-
-  const handleChange = (e) => {
-    setData(e.target.name, e.target.type === 'checkbox' ? e.target.checked : e.target.value);
-  };
-
-  const submit = (e) => {
-    e.preventDefault();
-
-    product ? patch(route('products.update', product)) : post(route('products.store'));
+  const empty = {
+    name: '',
+    price: '',
+    stock: '',
+    description: '',
+    type: '',
+    currency_id: ''
   }
 
-  const { user } = usePage().props
+  const [data, setData] = useState(empty)
+  const { config } = usePage().props
+
+  useEffect(() => {
+    (product) ? setData(product) : setData(empty)
+  }, [product])
+
+  const [errors, setErrors] = useState({})
+  const [processing, setProcessing] = useState(false)
+
+  const handleChange = (e) => {
+    const key = e.target.name;
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
+
+    setData(values => ({
+      ...values,
+      [key]: value,
+    }))
+  }
+
+  const submit = async (e) => {
+    e.preventDefault();
+
+    setProcessing(true)
+
+    if (product) {
+      Inertia.patch(
+        route('products.update', product),
+        data,
+        {
+          onError: e => {
+            setErrors(e)
+            setProcessing(false)
+          },
+          onSuccess: handleClose(),
+        }
+      )
+      return;
+    }
+    else Inertia.post(
+      route('products.store'),
+      data,
+      {
+        onError: e => {
+          setErrors(e)
+          setProcessing(false)
+        },
+        onSuccess: handleClose()
+      }
+    );
+  }
+
+  const handleClose = () => {
+    setProduct && setProduct(null)
+    setShow(false)
+    setProcessing(false)
+  }
 
   return (
-    <AppLayout user={user} title={product ? 'Edit Product' : 'Create New Product'} onBackPress={() => Inertia.visit(route('products.index'))}>
+    <Modal open={show} onClose={handleClose}>
+      <h4>{product ? 'Edit Product' : 'Create New Product'}</h4>
 
-      <Section className={'pb-10 md:pb-20'}>
-        <Card>
-          <form onSubmit={submit} className="p-3 md:p-6">
+      <form onSubmit={submit} >
 
-            <div className="grid md:grid-cols-2">
-              <div className="py-2 md:pt-12 md:pb-12 md:pr-12 md:border-r space-y-4 md:space-y-6">
-                <TextInput
-                  label="Product Name *"
-                  name="name"
-                  value={data.name}
-                  error={errors.name}
-                  required
-                  onChange={handleChange}
-                />
+        <div className="grid md:grid-cols-2">
+          <div className="py-4 md:pr-6 md:border-r space-y-4 md:space-y-6">
+            <TextInput
+              label="Product Name *"
+              name="name"
+              value={data.name}
+              error={errors.name}
+              required
+              onChange={handleChange}
+            />
 
-                <TextInput
-                  label="Unit Price *"
-                  name="price"
-                  type='number'
-                  min={0.01}
-                  step={0.01}
-                  required
-                  value={data.price}
-                  error={errors.price}
-                  onChange={handleChange}
-                />
+            <TextInput
+              label="Unit Price *"
+              name="price"
+              type='number'
+              min={0.01}
+              step={0.01}
+              required
+              value={data.price}
+              error={errors.price}
+              onChange={handleChange}
+            />
 
-                <SelectInput
-                  label="Product Type *"
-                  name="type"
-                  required
-                  value={data.type}
-                  error={errors.type}
-                  onChange={handleChange}
-                >
-                  <option value="">Select</option>
-                  <option value="GOODS">Goods (Physical Items)</option>
-                  <option value="SERVICE">Services</option>
-                </SelectInput>
+            <SelectInput
+              label="Product Type *"
+              name="type"
+              required
+              value={data.type}
+              error={errors.type}
+              onChange={handleChange}
+            >
+              <option value="">Select</option>
+              <option value="GOODS">Goods (Physical Items)</option>
+              <option value="SERVICE">Services</option>
+            </SelectInput>
 
-                {data.type != 'SERVICE' && <TextInput
-                  label="Number in Stock"
-                  name="stock"
-                  value={data.stock}
-                  error={errors.stock}
-                  onChange={handleChange}
-                />}
-              </div>
+            {data.type != 'SERVICE' && <TextInput
+              label="Number in Stock"
+              name="stock"
+              value={data.stock}
+              error={errors.stock}
+              onChange={handleChange}
+            />}
+          </div>
 
-              <div className="py-2 md:pt-12 md:pb-12 md:pl-12 space-y-4 md:space-y-6">
+          <div className="md:py-4 md:pl-6 space-y-4 md:space-y-6">
+            <SelectInput
+              label="Currency"
+              name="currency_id"
+              value={data.currency_id}
+              error={errors.currency_id}
+              onChange={handleChange}
+            >
+              <option value="">Select</option>
+              {currencies?.map(_ => <option value={_.id} key={_.id}>{_.name} ({_.symbol})</option>)}
+            </SelectInput>
 
-                <SelectInput
-                  label="Currency"
-                  name="currency_id"
-                  value={data.currency_id}
-                  error={errors.currency_id}
-                  onChange={handleChange}
-                >
-                  <option value="">Select</option>
-                  {currencies?.map(_ => <option value={_.id}>{_.name} ({_.symbol})</option>)}
-                </SelectInput>
-
-                <TextInput
-                  label="Product Description"
-                  name="description"
-                  value={data.description}
-                  error={errors.description}
-                  onChange={handleChange}
-                  textarea
-                  rows={5}
-                  wrapperStyle={'!p-2'}
-                />
-              </div>
+            <div>
+              <label htmlFor="note" className='p'>{"Product Description"}</label>
+              <Editor
+                value={data.description}
+                apiKey={config.tiny_mce}
+                textareaName='description'
+                init={{ height: 250 }}
+                onEditorChange={(newValue, editor) =>
+                  setData(values => ({
+                    ...values,
+                    description: newValue
+                  }))
+                }
+              />
             </div>
+          </div>
+        </div>
 
-            <div className="flex justify-end mt-6">
-              <Button
-                type="submit"
-                isLoading={processing}>
-                {product ? 'Update' : 'Create'}
-              </Button>
-            </div>
+        <div className="flex justify-end mt-6">
+          <Button
+            type="submit"
+            isLoading={processing}>
+            {product ? 'Update' : 'Create'}
+          </Button>
+        </div>
 
-          </form>
-        </Card>
-      </Section>
-
-    </AppLayout>
+      </form>
+    </Modal>
   );
 }
 

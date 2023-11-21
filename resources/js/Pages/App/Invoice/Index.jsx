@@ -31,7 +31,7 @@ const Invoices = ({ invoices, overview }) => {
     },
     {
       name: "CUSTOMER'S NAME",
-      selector: row => row.customer?.name,
+      selector: row => row.customer?.full_name,
       sortable: true,
     },
     {

@@ -40,4 +40,13 @@ class Invoice extends Model
     public function channels() {
         return $this->belongsToMany(PaymentChannel::class);
     }
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'total_amount' => 'float',
+    ];
 }

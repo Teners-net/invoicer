@@ -14,7 +14,7 @@ class ProductController extends Controller
     use CompanyTrait;
 
     private $rules = [
-        'name' => 'required|string',
+        'name' => 'required|string|min:2',
         'price' => 'required|numeric|min:0.01',
         'stock' => 'nullable|numeric|min:0',
         'type' => 'required|in:GOODS,SERVICE',
@@ -34,13 +34,7 @@ class ProductController extends Controller
 
         return Inertia::render('App/Product/Index', [
             'products' => $products,
-            'overview' => $overview
-        ]);
-    }
-
-    public function create()
-    {
-        return Inertia::render('App/Product/Create', [
+            'overview' => $overview,
             'currencies' => Currency::all()
         ]);
     }
@@ -48,23 +42,13 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $request->validate($this->rules);
-
         $request->merge([
             'company_id' => $this->getCurrentCompany()->id,
-            'currency_id' => 1
         ]);
 
         Product::create($request->all());
 
-        return redirect()->route('products.index');
-    }
-
-    public function edit(Product $product)
-    {
-        return Inertia::render('App/Product/Create', [
-            'product' => $product,
-            'currencies' => Currency::all()
-        ]);
+        return redirect()->back();
     }
 
     public function update(Request $request, Product $product)
@@ -89,7 +73,6 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $this->confirmOwner($product);
-
         $product->forceDelete();
 
         return redirect()->route('products.index');

@@ -9,7 +9,7 @@ import Modal from "../Modal";
 
 const PaymentChannel = ({ show, setClose, channel, currencies }) => {
 
-  const { data, setData, post, patch, processing, errors } = useForm({
+  const { data, setData, post, patch, processing, errors, reset } = useForm({
     bank_name: channel?.bank_name ?? '',
     account_name: channel?.account_name ?? '',
     account_number: channel?.account_number ?? '',
@@ -20,14 +20,24 @@ const PaymentChannel = ({ show, setClose, channel, currencies }) => {
     setData(e.target.name, e.target.type === 'checkbox' ? e.target.checked : e.target.value);
   };
 
+  const handleClose = () => {
+    reset()
+    setClose && setClose()
+  }
+
   const submit = (e) => {
     e.preventDefault();
-    channel ? patch(route('payment_channels.update', channel)) : post(route('payment_channels.store'));
 
-    handleClose()
-  };
-
-  const handleClose = () => setClose && setClose()
+    channel ?
+      patch(route('payment_channels.update', channel), {
+        preserveScroll: true,
+        onSuccess: () => handleClose(),
+      }) :
+      post(route('payment_channels.store'), {
+        preserveScroll: true,
+        onSuccess: () => handleClose(),
+      })
+  }
 
   const { setConfirmation } = useContext(AppContext)
 

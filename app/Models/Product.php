@@ -22,4 +22,13 @@ class Product extends Model
     public function currency() {
         return $this->belongsTo(Currency::class);
     }
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'price' => 'float',
+    ];
 }

@@ -40,6 +40,9 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             'user' => auth()->user(),
             'currencies' => Currency::all(),
+            'config' => [
+                'tiny_mce' => env('TINY_MCE')
+            ]
         ]);
     }
 }

@@ -1,15 +1,23 @@
 import { Inertia } from "@inertiajs/inertia";
 import { useForm, usePage } from "@inertiajs/inertia-react";
+import { Editor } from "@tinymce/tinymce-react";
+import { memo, useEffect, useRef, useState } from "react";
 import Button from "../../../Components/Button";
 import Card from "../../../Components/Card";
-import TextInput from "../../../Components/Form/TextInput";
 import SelectInput from "../../../Components/Form/Select";
+import TextInput from "../../../Components/Form/TextInput";
 import Section from "../../../Components/Section";
 import AppLayout from "../../../Layouts/AppLayout";
-import { memo, useEffect, useState } from "react";
+import CreateProduct from "../Product/Create";
 
 const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
   // TODO: load products from API for performance
+
+  const { currencies } = usePage().props
+  const [showCreateProduct, setShowCreateProduct] = useState(false)
+
+  const { user, config } = usePage().props
+  const editorRef = useRef(null);
 
   const emptyProduct = {
     price: 0.00,
@@ -19,16 +27,33 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
 
   const [rows, setRows] = useState([
     { row_id: 1, product: emptyProduct, quantity: 1 }
-  ]);
+  ])
 
-  const { data, setData, post, patch, processing, errors, reset } = useForm({
+  useEffect(() => {
+    if (invoice) {
+      const newRows = invoice.products.map((product, index) => ({
+        row_id: index + 1,
+        product: {
+          id: product.product_id,
+          currency: product.product.currency ?? product.currency,
+          currency_id: product.product.currency_id ?? product.currency_id,
+          price: product.product.price ?? product.amount,
+          name: product.product.name ?? product.name,
+        },
+        quantity: product.quantity
+      }));
+
+      setRows(newRows);
+    }
+  }, [invoice]);
+
+  const { data, setData, post, patch, processing, errors, reset, transform } = useForm({
     customer_id: invoice?.customer_id ?? '',
     due_at: invoice?.due_at ?? '',
     draft: true,
     products: invoice?.products ?? [],
-    note: '',
-    is_recuring: false,
-    base_currency: base_currency
+    note: invoice?.note ?? '',
+    is_recuring: false
   });
 
   const addNewRow = () => {
@@ -39,7 +64,6 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
 
   const productInCompanyCurrency = (product) => {
     let amnt_platform = product.price / (product.currency?.base_rate ?? 1)
-
     return (amnt_platform * base_currency?.company.base_rate).toFixed(2)
   }
 
@@ -50,10 +74,6 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
     }, 0).toFixed(2);
   };
 
-  useEffect(() => {
-    setData('products', rows)
-  }, [rows])
-
   const handleChange = (e) => {
     setData(e.target.name, e.target.type === 'checkbox' ? e.target.checked : e.target.value)
   }
@@ -61,7 +81,13 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
   const submit = async (e) => {
     e.preventDefault();
 
-    await new Promise((resolve) => setTimeout(resolve, 300));
+    transform((data) => ({
+      ...data,
+      'products': rows,
+      'total_amount': totalAmount(),
+      'note': editorRef?.current?.getContent()
+    }))
+
     invoice ? patch(route('invoices.update', invoice)) : post(route('invoices.store'))
   };
 
@@ -123,8 +149,8 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
             wrapperStyle={'!p-2'}
           />
         </td>
-        <td>{row.product?.currency?.symbol} {row.product.price.toFixed(2)}</td>
-        <td>{row.product?.currency?.symbol} {(row.quantity * row.product.price).toFixed(2)}</td>
+        <td>{row.product?.currency?.symbol} {row.product.price}</td>
+        <td>{row.product?.currency?.symbol} {row.quantity * row.product.price}</td>
         <td>{base_currency?.company.symbol} {row.quantity * productInCompanyCurrency(row.product)}</td>
         <td>
           <Button
@@ -142,9 +168,6 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
       prevProps.row.quantity === nextProps.row.quantity
     );
   })
-
-  const { user } = usePage().props
-
   return (
     <AppLayout user={user} title={invoice ? 'Edit Invoice' : 'New Invoice'} onBackPress={() => Inertia.visit(route('invoices.index'))}>
 
@@ -187,7 +210,7 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
                       <th className="!w-[150px]">QUANTITY</th>
                       <th className="!w-[150px]">RATE</th>
                       <th className="!w-[150px]">AMOUNT</th>
-                      <th className="!w-[150px]">AMOUNT IN BASE CURRENCY</th>
+                      <th className="!w-[150px]">IN BASE CURRENCY</th>
                       <th className="!w-[50px]"></th>
                     </tr>
                   </thead>
@@ -202,9 +225,11 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
             <div className="flex gap-4 flex-wrap-reverse">
               <Button
                 outline
+                onClick={()=>setShowCreateProduct(true)}
                 className={'!py-3'}>
                 Create New Product
               </Button>
+
               <Button
                 onClick={addNewRow}
                 className={'!py-3'}>
@@ -213,19 +238,20 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
             </div>
 
             <div className="grid md:grid-cols-2">
-              <div className="py-2 md:pt-12 md:pb-12 md:pr-12 space-y-4 md:space-y-6">
-                <TextInput
-                  label="Add Note"
-                  value={data.note}
-                  name={'note'}
-                  placeholder='notes'
-                  onChange={handleChange}
-                  textarea
-                  rows={4}
+              <div className="py-2 pt-6 md:pt-12 md:pb-12 md:pr-12">
+                <label htmlFor="note" className='p'>{"Add Note"}</label>
+                <Editor
+                  initialValue={data.note}
+                  apiKey={config.tiny_mce}
+                  textareaName='note'
+                  init={{
+                    height: 350,
+                  }}
+                  onInit={(evt, editor) => editorRef.current = editor}
                 />
               </div>
 
-              <div className="py-2 md:pt-12 md:pb-12 md:pr-12 space-y-4 md:space-y-6">
+              <div className="py-2 pt-6 md:pt-12 md:pb-12 md:pr-12">
                 <TextInput
                   label="Total"
                   prepend={<p className="pr-1">{base_currency?.company.symbol}</p>}
@@ -249,13 +275,18 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
                 onClick={() => setData('draft', false)}
                 isLoading={processing}>
                 {invoice ? 'Update and Proceed' : 'Save and Proceed'}
-                {/* TODO:  */}
               </Button>}
             </div>
 
           </form>
         </Card>
       </Section>
+
+      <CreateProduct
+        currencies={currencies}
+        show={showCreateProduct}
+        setShow={setShowCreateProduct}
+      />
 
     </AppLayout>
   );

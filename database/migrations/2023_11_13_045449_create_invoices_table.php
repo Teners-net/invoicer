@@ -34,6 +34,8 @@ return new class extends Migration
             $table->boolean('is_recuring')->default(false);
             $table->mediumInteger('recuring_interval')->nullable();
             $table->enum('recuring_interval_unit', ['Month', 'Day', 'Year'])->nullable();
+            
+            $table->text('note')->nullable();
 
             $table->softDeletes();
             $table->timestamps();

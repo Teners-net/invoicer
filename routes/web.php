@@ -20,7 +20,7 @@ Route::resource('pricing', SubscriptionController::class)->only(['index']);
 Route::middleware(['auth', 'company'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('products', ProductController::class);
+    Route::resource('products', ProductController::class)->except(['create', 'edit']);
     Route::resource('customers', CustomerController::class);
 
     Route::controller(InvoiceController::class)->prefix('invoices')->group(function () {

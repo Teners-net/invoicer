@@ -41,10 +41,13 @@ const Welcome = () => {
             <p></p>
           </Card>
           <Card className={"space-y-6"}>
+            <h3>Easy Inventory Management</h3>
+            <p>Know what stock sells faster and what ite is low on stock</p>
+          </Card>
+          <Card>
             <h3>Multiple Currency</h3>
             <p>Don't be restricted, create your invoices in any currency and work smoothly with your international customers</p>
           </Card>
-          <Card></Card>
           <Card></Card>
         </div>
       </Section>

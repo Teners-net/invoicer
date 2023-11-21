@@ -39,9 +39,6 @@ class InvoiceProduct extends Model
 
     public function currency()
     {
-        if ($this->currency_id) return $this->belongsTo(Currency::class);
-        $base_currency_id = Setting::get('base_currency');
-
-        return Currency::find($base_currency_id);
+        return $this->belongsTo(Currency::class);
     }
 }

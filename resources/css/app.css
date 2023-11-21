@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 * {
-    @apply scroll-smooth;
+    @apply scroll-smooth !rounded-none ;
 }
 
 @layer utilities {
@@ -106,3 +106,7 @@ th,
 td {
     @apply whitespace-nowrap px-4 py-2;
 }
+
+/* .tox-statusbar__branding {
+    @apply hidden;
+} */

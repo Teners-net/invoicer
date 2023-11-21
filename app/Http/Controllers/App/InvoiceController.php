@@ -19,7 +19,14 @@ class InvoiceController extends Controller
     use CompanyTrait;
 
     private $rules = [
-        'customer_id' => 'required',
+        'draft' => 'required',
+        'customer_id' => 'nullable|required_if:draft,false|exists:customers,id',
+        'products' => 'required|array',
+        'products.*.product' => 'required|array',
+        'products.*.product.id' => 'required|exists:products,id',
+        'due_at' => 'nullable|required_if:draft,false|date',
+        'note' => 'nullable|string',
+        'total_amount' => 'required|numeric'
     ];
 
     /**
@@ -36,7 +43,7 @@ class InvoiceController extends Controller
         ];
 
         return Inertia::render('App/Invoice/Index', [
-            'invoices' => $invoices,
+            'invoices' => $this->getCurrentCompany()->invoices()->with('customer')->get(),
             'overview' => $overview
         ]);
     }
@@ -69,26 +76,15 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'draft' => 'required',
-            'customer_id' => 'nullable|required_if:draft,false|exists:customers,id',
-            'products' => 'required|array',
-            'products.*.product' => 'required|array',
-            'products.*.product.id' => 'required|exists:products,id',
-            'due_at' => 'nullable|required_if:draft,false|date',
-            'note' => 'nullable|string'
-        ], [
+        $request->validate($this->rules, [
             'products.*.product.id' => 'Select product',
         ]);
 
         $company = $this->getCurrentCompany();
 
-        $t_amount = 0.00;
-
         $request->merge([
             'company_id' => $company->id,
-            'currency_id' => $company->currency->id,
-            'total_amount' => $t_amount
+            'currency_id' => $company->currency->id
         ]);
 
         $invoice = Invoice::create($request->all());
@@ -104,14 +100,7 @@ class InvoiceController extends Controller
                 'amount' => $prod->price * $_p['quantity'],
                 'name' => $prod->name,
             ]);
-
-            $t_amount += $this->productInCompanyCurrency($prod, $request->base_currency);
         }
-
-        // Too many transactions in one query
-        $invoice->update([
-            'total_amount' => $t_amount
-        ]);
 
         if (!$request->draft){
             $customer = Customer::findOrFail($request->customer_id);
@@ -163,11 +152,15 @@ class InvoiceController extends Controller
     public function edit(Invoice $invoice)
     {
         $company = $this->getCurrentCompany();
+        $invoice = Invoice::with('currency', 'customer', 'products', 'products.product', 'products.currency', 'products.product.currency')->find($invoice->id);
 
         return Inertia::render('App/Invoice/Create', [
             'products' => $company->products()->with('currency')->get(),
             'customers' => $company->customers,
-            'base_currency' => $company->currency,
+            'base_currency' => [
+                'company' => $company->currency,
+                'platform' => Currency::find(Setting::get('base_currency'))
+            ],
             'invoice' => $invoice
         ]);
     }
@@ -175,12 +168,43 @@ class InvoiceController extends Controller
     /**
      * Update the specified resource.
      */
-    public function update(Request $request, Invoice $customer)
+    public function update(Request $request, Invoice $invoice)
     {
-        $request->validate($this->rules);
+        $request->validate($this->rules, [
+            'products.*.product.id' => 'Select product',
+        ]);
 
-        $customer->update($request->all());
-        $this->confirmOwner($customer);
+        $company = $this->getCurrentCompany();
+
+        $request->merge([
+            'currency_id' => $company->currency->id
+        ]);
+
+        $invoice->update($request->all());
+
+        $invoice->products()->delete();
+
+        foreach ($request->products as $_p) {
+            $prod = (object) $_p['product'];
+
+            InvoiceProduct::create([
+                'product_id' => $prod->id,
+                'invoice_id' => $invoice->id,
+                'currency_id' => $prod->currency_id,
+                'quantity' => $_p['quantity'],
+                'amount' => $prod->price * $_p['quantity'],
+                'name' => $prod->name,
+            ]);
+        }
+
+        $this->confirmOwner($invoice);
+
+        if (!$request->draft){
+            $customer = Customer::findOrFail($request->customer_id);
+            $this->confirmOwner($customer);
+
+            return redirect()->route('invoices.setup', $invoice);
+        }
 
         return redirect()->route('invoices.index');
     }
