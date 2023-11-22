@@ -4,6 +4,7 @@ namespace App\Http\Controllers\App;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\CompanyUser;
+use App\Models\Platform\Setting;
 use App\Traits\CompanyTrait;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -47,6 +48,12 @@ class CompanyController extends Controller
             'name' => 'required|string|min:3|max:200|unique:companies,name',
             'website' => 'nullable|url:http,https|max:200',
             'contact_email' => 'nullable|email',
+            'contact_phone' => 'nullable|string',
+            'address' => 'nullable|string',
+        ]);
+
+        $request->merge([
+            'currency_id' => Setting::platform_currency()->id
         ]);
 
         $company = Company::create($request->all());
@@ -55,7 +62,7 @@ class CompanyController extends Controller
         CompanyUser::create([
             'user_id' => $user->sub,
             'company_id' => $company->id,
-            'is_owner' => true
+            'is_owner' => true,
         ]);
 
         return redirect()->route('dashboard');

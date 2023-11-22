@@ -8,8 +8,8 @@ use App\Http\Controllers\App\PaymentChannelController;
 use App\Http\Controllers\App\ProductController;
 use App\Http\Controllers\Platform\SubscriptionController;
 use App\Models\Invoice;
+use App\Services\InvoiceService;
 use Auth0\Laravel\Facade\Auth0;
-use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -17,19 +17,9 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 });
 Route::get('/classic', function () {
-    // $invoice = Invoice::with('company', 'customer', 'products', 'currency', 'channels')->find(1);
+    $invoice = Invoice::with('company', 'customer', 'products', 'currency', 'channels')->find(1);
 
-    // if ($type == 'pdf') {
-    //     $pdf = PDF::loadView('templates.classic', [
-    //         'invoice' => $invoice
-    //     ]);
-
-    //     return $pdf
-    //         ->setPaper('a4')
-    //         ->setOption(['dpi' => 150])
-    //         ->setWarnings(true)
-    //         ->stream();
-    // }
+    return (new InvoiceService($invoice))->generateInvoice();
 });
 
 Route::resource('pricing', SubscriptionController::class)->only(['index']);
@@ -38,7 +28,7 @@ Route::middleware(['auth', 'company'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('products', ProductController::class)->except(['create', 'edit']);
-    Route::resource('customers', CustomerController::class);
+    Route::resource('customers', CustomerController::class)->except(['create', 'edit']);
 
     Route::controller(InvoiceController::class)->prefix('invoices')->group(function () {
         Route::get('{invoice}/setup', 'setup')->name('invoices.setup');
@@ -50,5 +40,5 @@ Route::middleware(['auth', 'company'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::resource('company', CompanyController::class)->only(['index', 'store', 'update']);
+    Route::resource('company', CompanyController::class)->only(['index', 'store', 'update', 'create']);
 });

@@ -1,10 +1,12 @@
-import { Head } from '@inertiajs/inertia-react';
+import { Head, usePage } from '@inertiajs/inertia-react';
 import Section from '../Components/Section';
 import Header from '../Components/Header';
 import Footer from '../Components/Footer';
 import Button from '../Components/Button';
 
-const AppLayout = ({ children, title, onBackPress, user }) => {
+const AppLayout = ({ children, title, onBackPress }) => {
+
+  const {user} = usePage().props
 
   return (
     <div className="min-h-screen">

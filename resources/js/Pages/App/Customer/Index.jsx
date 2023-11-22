@@ -1,12 +1,20 @@
+import { Inertia } from "@inertiajs/inertia";
 import DataTable from "react-data-table-component";
+import Button from "../../../Components/Button";
 import Card from "../../../Components/Card";
 import Section from "../../../Components/Section";
 import AppLayout from "../../../Layouts/AppLayout";
-import Button from "../../../Components/Button";
-import { Inertia } from "@inertiajs/inertia";
-import { usePage } from "@inertiajs/inertia-react";
+import CreateCustomer from "./Create";
+import { useEffect, useState } from "react";
 
 const Customers = ({ customers, overview }) => {
+
+  const [customerToEdit, setCustomerToEdit] = useState(null)
+  const [showCreateCustomer, setShowCreateCustomer] = useState(false)
+
+  useEffect(() => {
+    if (customerToEdit) setShowCreateCustomer(true)
+  }, [customerToEdit])
 
   const overviews = [
     {
@@ -39,15 +47,13 @@ const Customers = ({ customers, overview }) => {
     {
       cell: (row, index, column, id) => <div className="flex gap-3">
         <Button className={'!text-xs !py-2 !px-5'} onClick={() => { Inertia.visit(route('customers.show', row)) }}>View</Button>
-        <Button outline className={'!text-xs !py-2 !px-5'} onClick={() => { Inertia.visit(route('customers.edit', row)) }}>Edit</Button>
+        <Button outline className={'!text-xs !py-2 !px-5'} onClick={() => setCustomerToEdit(row)}>Edit</Button>
       </div>
     },
   ]
 
-  const { user } = usePage().props
-
   return (
-    <AppLayout user={user} title='Customers' onBackPress={() => Inertia.visit(route('dashboard'))}>
+    <AppLayout title='Customers' onBackPress={() => Inertia.visit(route('dashboard'))}>
 
       <div className="bg-black-gradient">
         <Section className={'!pt-1'}>
@@ -65,7 +71,7 @@ const Customers = ({ customers, overview }) => {
       </div>
 
       <Section bottom className={'space-y-4'}>
-        <Button onClick={() => { Inertia.visit(route('customers.create')) }}>Add Customer</Button>
+        <Button onClick={() => setShowCreateCustomer(true)}>Add Customer</Button>
         <DataTable
           columns={columns}
           data={customers}
@@ -74,6 +80,13 @@ const Customers = ({ customers, overview }) => {
           responsive
         />
       </Section>
+
+      <CreateCustomer
+        show={showCreateCustomer}
+        setShow={setShowCreateCustomer}
+        customer={customerToEdit}
+        setCustomer={setCustomerToEdit}
+      />
 
     </AppLayout>
   );

@@ -7,7 +7,9 @@ import SelectInput from "../../../Components/Form/Select";
 import TextInput from "../../../Components/Form/TextInput";
 import Modal from "../../../Components/Modal";
 
-const CreateProduct = ({ product, setProduct, currencies, show, setShow }) => {
+const CreateProduct = ({ product, setProduct, show, setShow }) => {
+
+  const { config, currencies, company } = usePage().props
 
   const empty = {
     name: '',
@@ -15,18 +17,16 @@ const CreateProduct = ({ product, setProduct, currencies, show, setShow }) => {
     stock: '',
     description: '',
     type: '',
-    currency_id: ''
+    currency_id: company?.currency_id
   }
 
   const [data, setData] = useState(empty)
-  const { config } = usePage().props
+  const [errors, setErrors] = useState({})
+  const [processing, setProcessing] = useState(false)
 
   useEffect(() => {
     (product) ? setData(product) : setData(empty)
   }, [product])
-
-  const [errors, setErrors] = useState({})
-  const [processing, setProcessing] = useState(false)
 
   const handleChange = (e) => {
     const key = e.target.name;

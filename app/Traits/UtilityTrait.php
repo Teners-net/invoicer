@@ -8,6 +8,7 @@ trait UtilityTrait
     {
         $timestamp = str_replace('.', '', microtime(true));
         $timestampLength = ceil($randPartRatio * $maxLength);
+
         $timestamp = substr($timestamp, -$timestampLength);
         $randomString = bin2hex(random_bytes( ceil(( $maxLength - strlen($timestamp) ) / 2) ));
         $transactionReference = $timestamp . $randomString;

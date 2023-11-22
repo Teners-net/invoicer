@@ -1,5 +1,4 @@
 import { Inertia } from "@inertiajs/inertia";
-import { usePage } from "@inertiajs/inertia-react";
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import Button from "../../../Components/Button";
@@ -8,7 +7,7 @@ import Section from "../../../Components/Section";
 import AppLayout from "../../../Layouts/AppLayout";
 import CreateProduct from "./Create";
 
-const Products = ({ products, overview, currencies }) => {
+const Products = ({ products, overview }) => {
 
   const [productToEdit, setProductToEdit] = useState(null)
   const [showCreateProduct, setShowCreateProduct] = useState(false)
@@ -61,10 +60,8 @@ const Products = ({ products, overview, currencies }) => {
     },
   ]
 
-  const { user } = usePage().props
-
   return (
-    <AppLayout user={user} title='Products' onBackPress={() => Inertia.visit(route('dashboard'))}>
+    <AppLayout title='Products' onBackPress={() => Inertia.visit(route('dashboard'))}>
 
       <div className="bg-black-gradient">
         <Section className={'!pt-1'}>
@@ -93,7 +90,6 @@ const Products = ({ products, overview, currencies }) => {
       </Section>
 
       <CreateProduct
-        currencies={currencies}
         show={showCreateProduct}
         setShow={setShowCreateProduct}
         product={productToEdit}

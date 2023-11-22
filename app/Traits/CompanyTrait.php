@@ -7,13 +7,17 @@ use App\Models\CompanyUser;
 
 trait CompanyTrait
 {
-    private function getCurrentCompany(): Company
+    private function getCurrentCompany():? Company
     {
 
         $user = auth()->user();
         $user_company = CompanyUser::where('user_id', $user->sub)->first();
 
-        return $user_company->company;
+        if ($user && $user_company) {
+            return $user_company->company;
+        }
+
+        return null;
     }
 
     private function confirmOwner($product)

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\App;
 
 use App\Http\Controllers\Controller;
-use App\Models\Currency;
 use App\Models\Product;
 use App\Traits\CompanyTrait;
 use Illuminate\Http\Request;
@@ -34,8 +33,7 @@ class ProductController extends Controller
 
         return Inertia::render('App/Product/Index', [
             'products' => $products,
-            'overview' => $overview,
-            'currencies' => Currency::all()
+            'overview' => $overview
         ]);
     }
 

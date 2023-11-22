@@ -2,6 +2,7 @@
 
 namespace App\Models\Platform;
 
+use App\Models\Currency;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -26,5 +27,9 @@ class Setting extends Model
         $setting = self::where('key', $key)->first();
 
         return $setting->value;
+    }
+
+    public static function platform_currency(): Currency {
+        return Currency::find(self::get('base_currency'));
     }
 }

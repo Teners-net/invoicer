@@ -39,7 +39,6 @@ const Dashboard = ({ overview, invoices }) => {
   ]
 
   const handleItemClick = (_route) => {
-    console.log('_route: ', route(_route));
     Inertia.visit(route(_route));
   };
 
@@ -74,10 +73,8 @@ const Dashboard = ({ overview, invoices }) => {
     ],
   }
 
-  const { user } = usePage().props
-
   return (
-    <AppLayout user={user} title='Dashboard'>
+    <AppLayout title='Dashboard'>
 
       <div className="bg-black-gradient">
         <Section className={'!pt-1'}>

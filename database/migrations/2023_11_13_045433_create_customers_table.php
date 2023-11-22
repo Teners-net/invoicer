@@ -16,10 +16,11 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
+            $table->string('slug')->unique();
             $table->foreignIdFor(Company::class)->constrained()->cascadeOnDelete();
             $table->string('first_name', 100);
-            $table->string('email')->unique();
             $table->string('last_name', 100)->nullable();
+            $table->string('email')->unique();
             $table->string('phone', 15)->nullable();
             $table->string('address')->nullable();
             $table->timestamps();

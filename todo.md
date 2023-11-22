@@ -2,12 +2,11 @@
 - Collections
 - Product Discount
 - Taxation
-- Support Crypto Only or Fiat Only
 - Payment Gateway Integration
 - Company Currency Rates
 - Multi-Company
-- Use Modal to create product/customer from invoice
 - Product Anaytics
+- Discount entire invoice
 
 
 # Premium Features

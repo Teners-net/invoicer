@@ -20,9 +20,10 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Invoice::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Product::class)->nullable()->constrained()->nullOnDelete();
-            $table->foreignIdFor(Currency::class)->constrained()->restrictOnDelete();
+            $table->foreignIdFor(Currency::class)->constrained()->restrictOnDelete(); // Currency of the product
             $table->string('name');
             $table->float('amount');
+            $table->float('amount_in_base');
             $table->integer('quantity')->default(1);
             $table->timestamps();
         });

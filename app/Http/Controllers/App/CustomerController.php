@@ -26,7 +26,6 @@ class CustomerController extends Controller
     public function index()
     {
         $customers = $this->getCurrentCompany()->customers;
-
         $overview = [
             'all' => $customers->count()
         ];
@@ -38,20 +37,11 @@ class CustomerController extends Controller
     }
 
     /**
-     * Display the create page for a new resource.
-     */
-    public function create()
-    {
-        return Inertia::render('App/Customer/Create');
-    }
-
-    /**
      * Store a new resource.
      */
     public function store(Request $request)
     {
         $request->validate($this->rules);
-
         $request->merge([
             'company_id' => $this->getCurrentCompany()->id,
             'currency_id' => 1
@@ -59,17 +49,7 @@ class CustomerController extends Controller
 
         Customer::create($request->all());
 
-        return redirect()->route('customers.index');
-    }
-
-    /**
-     * Edit the specified resource.
-     */
-    public function edit(Customer $customer)
-    {
-        return Inertia::render('App/Customer/Create', [
-            'customer' => $customer
-        ]);
+        return redirect()->back();
     }
 
     /**

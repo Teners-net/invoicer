@@ -3,11 +3,14 @@
 namespace App\Http\Middleware;
 
 use App\Models\Currency;
+use App\Traits\CompanyTrait;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
 {
+    use CompanyTrait;
+
     /**
      * The root template that's loaded on the first page visit.
      *
@@ -39,7 +42,8 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'user' => auth()->user(),
-            'currencies' => Currency::all(),
+            'currencies' => Currency::all(), // Use cache
+            'company' => $this->getCurrentCompany(),
             'config' => [
                 'tiny_mce' => config('app.secrets.tiny_mce')
             ]

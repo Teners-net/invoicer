@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\UtilityTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Platinum\LaravelExtras\Traits\Sluggable;
 
 class Customer extends Model
 {
-    use HasFactory;
+    use HasFactory, Sluggable, UtilityTrait;
 
     /**
      * The attributes that are not mass assignable.
@@ -23,4 +25,9 @@ class Customer extends Model
     public $appends = [
         'full_name'
     ];
+
+    protected function generateSlug()
+    {
+        return strtoupper('CUS-' . $this->getRandomString(24, 0.75));
+    }
 }

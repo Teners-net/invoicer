@@ -26,10 +26,8 @@ const Create = () => {
     post(route('company.store'));
   }
 
-  const { user } = usePage().props
-
   return (
-    <AppLayout user={user} title='Company Setup'>
+    <AppLayout title='Company Setup'>
 
       <Section className={'pb-10 md:pb-20'}>
         <Card>
