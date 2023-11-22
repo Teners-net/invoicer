@@ -37,6 +37,10 @@ class Invoice extends Model
         return $this->belongsTo(Currency::class);
     }
 
+    public function company() {
+        return $this->belongsTo(Company::class);
+    }
+
     public function channels() {
         return $this->belongsToMany(PaymentChannel::class);
     }

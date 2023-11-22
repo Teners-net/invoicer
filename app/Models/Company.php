@@ -52,6 +52,16 @@ class Company extends Model
      *
      * @return string
      */
+    public function getLogoPublicUrlAttribute()
+    {
+        return ($this->logo) ? '/company_logo/' . $this->logo : null;
+    }
+
+    /**
+     * Get the URL for the user's profile picture.
+     *
+     * @return string
+     */
     public function getLogoUrlAttribute()
     {
         if ($this->logo) {
@@ -65,6 +75,7 @@ class Company extends Model
      * Appends Accessors to the model
      */
     protected $appends = [
-        'logo_url'
+        'logo_url',
+        'logo_public_url',
     ];
 }

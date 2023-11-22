@@ -16,3 +16,4 @@
 - Max - 1 Bank Details
 - Only 1 currency
 - Only 1 Company
+
