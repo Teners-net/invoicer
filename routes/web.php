@@ -16,24 +16,20 @@ use Inertia\Inertia;
 Route::get('/', function () {
     return Inertia::render('Welcome');
 });
-Route::get('/classic/{type}', function ($type) {
-    $invoice = Invoice::with('company', 'customer', 'products', 'currency', 'channels')->find(1);
+Route::get('/classic', function () {
+    // $invoice = Invoice::with('company', 'customer', 'products', 'currency', 'channels')->find(1);
 
-    if ($type == 'pdf') {
-        $pdf = PDF::loadView('templates.classic', [
-            'invoice' => $invoice
-        ]);
+    // if ($type == 'pdf') {
+    //     $pdf = PDF::loadView('templates.classic', [
+    //         'invoice' => $invoice
+    //     ]);
 
-        return $pdf
-            ->setPaper('a4')
-            ->setOption(['dpi' => 150])
-            ->setWarnings(true)
-            ->stream();
-    }
-
-    return view('templates.classic', [
-        'invoice' => $invoice
-    ]);
+    //     return $pdf
+    //         ->setPaper('a4')
+    //         ->setOption(['dpi' => 150])
+    //         ->setWarnings(true)
+    //         ->stream();
+    // }
 });
 
 Route::resource('pricing', SubscriptionController::class)->only(['index']);

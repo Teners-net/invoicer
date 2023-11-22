@@ -22,6 +22,11 @@ return [
 
     'key' => env('APP_KEY'),
 
+    'secrets' => [
+        'tiny_mce' => env('TINY_MCE'),
+        'exchange_rate_pro' => env('EXCHANGE_RATE_KEY'),
+    ],
+
     'cipher' => 'AES-256-CBC',
 
     'maintenance' => [

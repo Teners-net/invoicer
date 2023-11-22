@@ -41,7 +41,7 @@ class HandleInertiaRequests extends Middleware
             'user' => auth()->user(),
             'currencies' => Currency::all(),
             'config' => [
-                'tiny_mce' => env('TINY_MCE')
+                'tiny_mce' => config('app.secrets.tiny_mce')
             ]
         ]);
     }
