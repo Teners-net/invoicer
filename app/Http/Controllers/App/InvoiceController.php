@@ -10,6 +10,7 @@ use App\Models\Invoice;
 use App\Models\InvoiceProduct;
 use App\Models\Platform\Setting;
 use App\Models\Product;
+use App\Services\InvoiceService;
 use App\Traits\CompanyTrait;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -19,14 +20,16 @@ class InvoiceController extends Controller
     use CompanyTrait;
 
     private $rules = [
-        'draft' => 'required',
-        'customer_id' => 'nullable|required_if:draft,false|exists:customers,id',
+        'customer_id' => 'nullable|exists:customers,id',
         'products' => 'required|array',
         'products.*.product' => 'required|array',
         'products.*.product.id' => 'required|exists:products,id',
-        'due_at' => 'nullable|required_if:draft,false|date',
+        'due_at' => 'nullable|date',
         'note' => 'nullable|string',
-        'total_amount' => 'required|numeric'
+        'sub_amount' => 'required|numeric',
+        'total_amount' => 'required|numeric',
+        'discount_type' => 'in:PERCENTAGE, FIXED',
+        'discount_value' => 'required|numeric'
     ];
 
     /**
@@ -60,7 +63,7 @@ class InvoiceController extends Controller
             'customers' => $company->customers,
             'base_currency' => [
                 'company' => $company->currency,
-                'platform' => Currency::find(Setting::get('base_currency'))
+                'platform' => Setting::platformCurrency()
             ],
         ]);
     }
@@ -76,6 +79,7 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
+        dd($request->all());
         $request->validate($this->rules, [
             'products.*.product.id' => 'Select product',
         ]);
@@ -96,20 +100,16 @@ class InvoiceController extends Controller
                 'product_id' => $prod->id,
                 'invoice_id' => $invoice->id,
                 'currency_id' => $prod->currency_id,
+                'name' => $prod->name,
                 'quantity' => $_p['quantity'],
                 'amount' => $prod->price * $_p['quantity'],
-                'name' => $prod->name,
+                'amount_in_base' => $_p['amount_in_base']
             ]);
         }
 
-        if (!$request->draft){
-            $customer = Customer::findOrFail($request->customer_id);
-            $this->confirmOwner($customer);
+        InvoiceService::generateInvoice($invoice);
 
-            return redirect()->route('invoices.setup', $invoice);
-        }
-
-        return redirect()->route('invoices.index');
+        return redirect()->route('invoices.show', $invoice);
     }
 
     /**
@@ -191,22 +191,16 @@ class InvoiceController extends Controller
                 'product_id' => $prod->id,
                 'invoice_id' => $invoice->id,
                 'currency_id' => $prod->currency_id,
+                'name' => $prod->name,
                 'quantity' => $_p['quantity'],
                 'amount' => $prod->price * $_p['quantity'],
-                'name' => $prod->name,
+                'amount_in_base' => $_p['amount_in_base']
             ]);
         }
 
-        $this->confirmOwner($invoice);
+        InvoiceService::generateInvoice($invoice);
 
-        if (!$request->draft){
-            $customer = Customer::findOrFail($request->customer_id);
-            $this->confirmOwner($customer);
-
-            return redirect()->route('invoices.setup', $invoice);
-        }
-
-        return redirect()->route('invoices.index');
+        return redirect()->route('invoices.show', $invoice);
     }
 
     /**

@@ -1,17 +1,18 @@
 import { Inertia } from "@inertiajs/inertia";
+import Card from "../../../Components/Card";
 import Section from "../../../Components/Section";
 import AppLayout from "../../../Layouts/AppLayout";
-import { usePage } from "@inertiajs/inertia-react";
 
 const ShowInvoice = ({ invoice }) => {
 
-  const { user } = usePage().props
-
   return (
-    <AppLayout user={user} title={`Invoice - ${invoice.slug}`} onBackPress={() => Inertia.visit(route('invoices.index'))}>
+    <AppLayout title={`Invoice - ${invoice.slug}`} onBackPress={() => Inertia.visit(route('invoices.index'))}>
 
-      <Section className={'pb-10 md:pb-20'}>
-        <h1>Coming Soon...</h1>
+      <Section className={'pb-10 md:pb-20 grid grid-cols-3'}>
+        <Card>
+        </Card>
+
+        <div></div>
       </Section>
 
     </AppLayout>

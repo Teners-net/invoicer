@@ -1,10 +1,9 @@
+import { Inertia } from "@inertiajs/inertia";
 import DataTable from "react-data-table-component";
+import Button from "../../../Components/Button";
 import Card from "../../../Components/Card";
 import Section from "../../../Components/Section";
 import AppLayout from "../../../Layouts/AppLayout";
-import Button from "../../../Components/Button";
-import { Inertia } from "@inertiajs/inertia";
-import { usePage } from "@inertiajs/inertia-react";
 
 const Invoices = ({ invoices, overview }) => {
 
@@ -52,10 +51,8 @@ const Invoices = ({ invoices, overview }) => {
     }
   ]
 
-  const { user } = usePage().props
-
   return (
-    <AppLayout user={user} title='Invoices' onBackPress={() => Inertia.visit(route('dashboard'))}>
+    <AppLayout title='Invoices' onBackPress={() => Inertia.visit(route('dashboard'))}>
 
       <div className="bg-black-gradient">
         <Section className={'!pt-1'}>

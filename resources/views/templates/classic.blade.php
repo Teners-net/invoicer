@@ -157,6 +157,7 @@
       <p>Due Date: {{$invoice->due_at}}</p>
     </div>
 
+    @if ($invoice->customer)
     <div>
       <small>BILL TO</small>
       <h3>{{$invoice->customer->full_name}}</h3>
@@ -164,6 +165,7 @@
       <p>{{$invoice->customer->phone}}</p>
       <p>{{$invoice->customer->address}}</p>
     </div>
+    @endif
 
     <table class="table my-4">
       <thead>

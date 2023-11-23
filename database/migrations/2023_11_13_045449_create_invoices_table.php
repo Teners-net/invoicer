@@ -21,20 +21,18 @@ return new class extends Migration
             $table->foreignIdFor(Company::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Customer::class)->nullable()->constrained()->nullOnDelete();
             $table->foreignIdFor(Currency::class)->constrained()->restrictOnDelete();
-
             $table->string('slug')->unique();
+
+            $table->float('sub_amount', 18);
             $table->float('total_amount', 18);
-            $table->boolean('paid')->default(false);
-            $table->boolean('draft')->default(false);
+            $table->enum('discount_type', ['PERCENTAGE', 'FIXED']);
+            $table->float('discount_value', 18)->nullable();
 
-            $table->string('invoice_file')->nullable();
             $table->timestamp('due_at')->nullable();
-            $table->timestamp('send_at')->nullable();
+            $table->timestamp('sent_at')->nullable();
+            $table->timestamp('paid_at')->nullable();
+            $table->timestamp('customer_marked_paid_at')->nullable();
 
-            $table->boolean('is_recuring')->default(false);
-            $table->mediumInteger('recuring_interval')->nullable();
-            $table->enum('recuring_interval_unit', ['Month', 'Day', 'Year'])->nullable();
-            
             $table->text('note')->nullable();
 
             $table->softDeletes();

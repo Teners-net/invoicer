@@ -7,23 +7,31 @@ use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 class InvoiceService
 {
-    private $invoice;
 
-    public function __construct(Invoice $invoice)
-    {
-        $this->invoice = $invoice;
-    }
-
-    public function generateInvoice()
+    public static function generateInvoice(Invoice $invoice)
     {
         $pdf = PDF::loadView('templates.classic', [
-            'invoice' => $this->invoice
+            'invoice' => $invoice
         ]);
 
-        return $pdf
+        $storagePath = self::makeStoragePath($invoice->company->slug);
+
+        $pdf
             ->setPaper('a4')
             ->setOption(['dpi' => 150])
             ->setWarnings(true)
-            ->stream();
+            ->save("$storagePath$invoice->slug.pdf");
+
+        return;
+    }
+
+    private static function makeStoragePath(string $companySlug): string {
+        $folderPath = "storage/invoices/$companySlug/";
+
+        if (!file_exists($folderPath)) {
+            mkdir($folderPath, 0755, true);
+        }
+
+        return "$folderPath/";
     }
 }

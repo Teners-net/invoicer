@@ -19,6 +19,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Invoice::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(PaymentChannel::class)->constrained()->cascadeOnDelete();
+            $table->float('amount');
             $table->timestamps();
         });
     }

@@ -29,7 +29,7 @@ class Setting extends Model
         return $setting->value;
     }
 
-    public static function platform_currency(): Currency {
+    public static function platformCurrency(): Currency {
         return Currency::find(self::get('base_currency'));
     }
 }

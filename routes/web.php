@@ -7,6 +7,7 @@ use App\Http\Controllers\App\InvoiceController;
 use App\Http\Controllers\App\PaymentChannelController;
 use App\Http\Controllers\App\ProductController;
 use App\Http\Controllers\Platform\SubscriptionController;
+use App\Jobs\CurrencyUpdateJob;
 use App\Models\Invoice;
 use App\Services\InvoiceService;
 use Auth0\Laravel\Facade\Auth0;
@@ -17,9 +18,9 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 });
 Route::get('/classic', function () {
-    $invoice = Invoice::with('company', 'customer', 'products', 'currency', 'channels')->find(1);
-
-    return (new InvoiceService($invoice))->generateInvoice();
+    // with('company', 'customer', 'products', 'currency', 'channels')->
+    // $invoice = Invoice::find(1);
+    // InvoiceService::generateInvoice($invoice);
 });
 
 Route::resource('pricing', SubscriptionController::class)->only(['index']);

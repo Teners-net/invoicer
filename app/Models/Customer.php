@@ -18,6 +18,15 @@ class Customer extends Model
      */
     protected $guarded = ['id'];
 
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'updated_at',
+    ];
+
     public function getFullNameAttribute(): string {
         return "$this->first_name $this->last_name";
     }

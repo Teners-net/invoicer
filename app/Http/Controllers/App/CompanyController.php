@@ -53,7 +53,7 @@ class CompanyController extends Controller
         ]);
 
         $request->merge([
-            'currency_id' => Setting::platform_currency()->id
+            'currency_id' => Setting::platformCurrency()->id
         ]);
 
         $company = Company::create($request->all());

@@ -19,10 +19,6 @@ class Product extends Model
      */
     protected $guarded = ['id'];
 
-    public function currency() {
-        return $this->belongsTo(Currency::class);
-    }
-
     /**
      * The attributes that should be cast.
      *
@@ -31,4 +27,17 @@ class Product extends Model
     protected $casts = [
         'price' => 'float',
     ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'updated_at',
+    ];
+
+    public function currency() {
+        return $this->belongsTo(Currency::class);
+    }
 }

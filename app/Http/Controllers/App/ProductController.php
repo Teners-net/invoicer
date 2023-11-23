@@ -62,6 +62,7 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         $this->confirmOwner($product);
+        $product = Product::with('currency')->find($product->id);
 
         return Inertia::render('App/Product/Show', [
             'product' => $product

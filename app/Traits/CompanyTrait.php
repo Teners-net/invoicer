@@ -9,15 +9,10 @@ trait CompanyTrait
 {
     private function getCurrentCompany():? Company
     {
-
         $user = auth()->user();
-        $user_company = CompanyUser::where('user_id', $user->sub)->first();
+        $user_company = $user ? CompanyUser::where('user_id', $user->sub)->first() : null;
 
-        if ($user && $user_company) {
-            return $user_company->company;
-        }
-
-        return null;
+        return $user_company ? $user_company->company : null;
     }
 
     private function confirmOwner($product)

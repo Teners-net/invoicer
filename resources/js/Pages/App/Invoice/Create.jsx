@@ -8,15 +8,16 @@ import SelectInput from "../../../Components/Form/Select";
 import TextInput from "../../../Components/Form/TextInput";
 import Section from "../../../Components/Section";
 import AppLayout from "../../../Layouts/AppLayout";
+import { dateInputFormat } from "../../../utis/date";
+import CreateCustomer from "../Customer/Create";
 import CreateProduct from "../Product/Create";
 
 const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
-  // TODO: load products from API for performance
 
-  const { currencies } = usePage().props
+  const { currencies, config } = usePage().props
   const [showCreateProduct, setShowCreateProduct] = useState(false)
-
-  const { user, config } = usePage().props
+  const [showCreateCustomer, setShowCreateCustomer] = useState(false)
+  const [subTotal, setSubTotal] = useState(0.00)
   const editorRef = useRef(null);
 
   const emptyProduct = {
@@ -26,8 +27,17 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
   }
 
   const [rows, setRows] = useState([
-    { row_id: 1, product: emptyProduct, quantity: 1 }
+    { row_id: 1, product: emptyProduct, quantity: 1, amount_in_base: 0.00 }
   ])
+
+  const { data, setData, post, patch, processing, errors, transform } = useForm({
+    customer_id: invoice?.customer_id ?? '',
+    discount_type: invoice?.discount_type ?? 'PERCENTAGE',
+    discount_value: invoice?.discount_value ?? '',
+    due_at: dateInputFormat(invoice?.due_at) ?? '',
+    products: invoice?.products ?? [],
+    note: invoice?.note ?? '',
+  });
 
   useEffect(() => {
     if (invoice) {
@@ -40,56 +50,78 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
           price: product.product.price ?? product.amount,
           name: product.product.name ?? product.name,
         },
-        quantity: product.quantity
+        quantity: product.quantity,
+        amount_in_base: product.amount_in_base
       }));
 
       setRows(newRows);
     }
   }, [invoice]);
 
-  const { data, setData, post, patch, processing, errors, reset, transform } = useForm({
-    customer_id: invoice?.customer_id ?? '',
-    due_at: invoice?.due_at ?? '',
-    draft: true,
-    products: invoice?.products ?? [],
-    note: invoice?.note ?? '',
-    is_recuring: false
-  });
+  useEffect(() => {
+    let total = rows.reduce((total_A, row) => {
+      const productAmount = row.quantity * toCompanyCurrency(row.product?.price, row.product?.currency);
+      return total_A + productAmount;
+    }, 0).toFixed(2);
 
-  const addNewRow = () => {
-    const lastRowId = rows.length > 0 ? rows[rows.length - 1].row_id : 0;
-    const newRow = { row_id: lastRowId + 1, product: emptyProduct, quantity: 1 }
-    setRows([...rows, newRow]);
-  };
+    setSubTotal(total)
+  }, [rows])
 
-  const productInCompanyCurrency = (product) => {
-    let amnt_platform = product.price / (product.currency?.base_rate ?? 1)
+  // TODO: Make a UTIL
+  const toCompanyCurrency = (price, current_currency) => {
+    let amnt_platform = price / (current_currency?.base_rate ?? 1)
     return (amnt_platform * base_currency?.company.base_rate).toFixed(2)
   }
-
-  const totalAmount = () => {
-    return rows.reduce((totalAmount, row) => {
-      const productAmount = row.quantity * productInCompanyCurrency(row.product);
-      return totalAmount + productAmount;
-    }, 0).toFixed(2);
-  };
 
   const handleChange = (e) => {
     setData(e.target.name, e.target.type === 'checkbox' ? e.target.checked : e.target.value)
   }
 
-  const submit = async (e) => {
+  const getTotalAmount = () => {
+    let value = 0
+    if (data.discount_type == 'PERCENTAGE') value = subTotal - ((data.discount_value / 100) * subTotal)
+    else value = (subTotal > 0 && subTotal >= data.discount_value) ? (subTotal - data.discount_value) : 0
+    return value.toFixed(2)
+  }
+
+  const submit = (e) => {
     e.preventDefault();
 
-    transform((data) => ({
+    const newData = {
       ...data,
-      'products': rows,
-      'total_amount': totalAmount(),
-      'note': editorRef?.current?.getContent()
-    }))
+      products: rows,
+      sub_amount: subTotal,
+      total_amount: getTotalAmount(),
+      note: editorRef?.current?.getContent(),
+    }
 
-    invoice ? patch(route('invoices.update', invoice)) : post(route('invoices.store'))
+    // transform((data) => ({
+    //   ...data,
+    //   products: rows,
+    //   sub_amount: subTotal,
+    //   total_amount: getTotalAmount(),
+    //   note: editorRef?.current?.getContent(),
+    // }));
+
+    invoice ?
+      Inertia.patch(route('invoices.update', invoice), newData) :
+      Inertia.post(route('invoices.store'), newData)
   };
+
+  const addNewRow = () => {
+    const lastRowId = rows.length > 0 ? rows[rows.length - 1].row_id : 0;
+    const newRow = {
+      row_id: lastRowId + 1,
+      product: emptyProduct,
+      quantity: 1,
+      amount_in_base: toCompanyCurrency(emptyProduct?.price, emptyProduct?.currency)
+    }
+    setRows([...rows, newRow]);
+  };
+
+  const removeRow = (row_id) => {
+    setRows((prevRows) => prevRows.filter((row) => row.row_id !== row_id));
+  }
 
   const Row = memo(({ sn, row }) => {
 
@@ -108,21 +140,15 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
     };
 
     const handleProductChange = (e) => {
-      if (!e.target.value) {
-        updateRowProperty(row.row_id, 'product', emptyProduct)
-        return;
-      }
+      const selectedProduct = (!e.target.value || e.target.value == "null") ? emptyProduct : products.find((p) => p.id.toString() === e.target.value);
 
-      const selectedProduct = products.find((p) => p.id.toString() === e.target.value);
       updateRowProperty(row.row_id, 'product', selectedProduct);
+      updateRowProperty(row.row_id, 'amount_in_base', row.quantity * toCompanyCurrency(selectedProduct?.price, selectedProduct?.currency))
     }
 
-    const setQuantity = (q) => updateRowProperty(row.row_id, 'quantity', q)
-
-    const removeRow = (row_id) => {
-      setRows((prevRows) => {
-        return prevRows.filter((row) => row.row_id !== row_id);
-      });
+    const setQuantity = (q, product) => {
+      updateRowProperty(row.row_id, 'quantity', q)
+      updateRowProperty(row.row_id, 'amount_in_base', q * toCompanyCurrency(product?.price, product?.currency))
     }
 
     return (
@@ -135,7 +161,7 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
             onChange={handleProductChange}
             error={errors && errors[`products.${sn - 1}.product.id`]}
             inputStyle={'!w-fit'}>
-            <option value="null" ></option>
+            <option value="null" >Select Product</option>
             {products.map(_ => <option value={_.id} key={_.id}>{_.name}</option>)}
           </SelectInput>
         </td>
@@ -143,7 +169,7 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
           <TextInput
             value={row.quantity}
             type="number"
-            onChange={(e) => setQuantity(e.target.value)}
+            onChange={(e) => setQuantity(e.target.value, row.product)}
             min={1}
             required
             wrapperStyle={'!p-2'}
@@ -151,7 +177,7 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
         </td>
         <td>{row.product?.currency?.symbol} {row.product.price}</td>
         <td>{row.product?.currency?.symbol} {row.quantity * row.product.price}</td>
-        <td>{base_currency?.company.symbol} {row.quantity * productInCompanyCurrency(row.product)}</td>
+        <td>{base_currency?.company.symbol} {row.amount_in_base}</td>
         <td>
           <Button
             className={'bg-red-500 !px-4 !py-2'}
@@ -168,25 +194,32 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
       prevProps.row.quantity === nextProps.row.quantity
     );
   })
+
   return (
-    <AppLayout user={user} title={invoice ? 'Edit Invoice' : 'New Invoice'} onBackPress={() => Inertia.visit(route('invoices.index'))}>
+    <AppLayout title={invoice ? 'Edit Invoice' : 'New Invoice'} onBackPress={() => Inertia.visit(route('invoices.index'))}>
 
       <Section className={'pb-10 md:pb-20'}>
         <Card>
-          <form onSubmit={submit} className="p-3 md:p-6">
-
-            <div className="grid md:grid-cols-2">
-              <div className="py-2 md:pt-12 md:pb-12 md:pr-12 space-y-4 md:space-y-6">
-                <SelectInput
-                  label="Customer"
-                  name="customer_id"
-                  value={data.customer_id}
-                  error={errors.customer_id}
-                  onChange={handleChange}
-                >
-                  <option value="" disabled></option>
-                  {customers.map(_ => <option value={_.id} key={_.id}>{_.first_name} {_.last_name}</option>)}
-                </SelectInput>
+          <form onSubmit={submit} className="p-3 md:p-6 space-y-6 md:space-y-12">
+            <div className="grid md:grid-cols-2 gap-5 md:gap-10">
+              <div className="space-y-4 md:space-y-6">
+                <div className="space-y-2">
+                  <SelectInput
+                    label="Customer"
+                    name="customer_id"
+                    value={data.customer_id}
+                    error={errors.customer_id}
+                    onChange={handleChange}
+                  >
+                    <option value="" disabled></option>
+                    {customers.map(_ => <option value={_.id} key={_.id}>{_.first_name} {_.last_name}</option>)}
+                  </SelectInput>
+                  <Button
+                    outline
+                    onClick={() => setShowCreateCustomer(true)}>
+                    Create New Custoner
+                  </Button>
+                </div>
 
                 <TextInput
                   label="Due Date"
@@ -197,10 +230,12 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
                   onChange={handleChange}
                 />
               </div>
+
+              <div></div>
             </div>
 
-            <div className="pb-2">
-              <h5>Products</h5>
+            <div>
+              <p>Products</p>
               <div className="overflow-x-auto pb-3">
                 <table className="min-w-full divide-gray-200 bg-white text-sm text-left table-auto">
                   <thead className="border">
@@ -220,64 +255,83 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
                   </tbody>
                 </table>
               </div>
+
+              <div className="flex gap-4 flex-wrap-reverse">
+                <Button
+                  outline
+                  onClick={() => setShowCreateProduct(true)}
+                  className={'!py-3'}>
+                  Create New Product
+                </Button>
+
+                <Button
+                  onClick={addNewRow}
+                  className={'!py-3'}>
+                  New Row
+                </Button>
+              </div>
             </div>
 
-            <div className="flex gap-4 flex-wrap-reverse">
-              <Button
-                outline
-                onClick={()=>setShowCreateProduct(true)}
-                className={'!py-3'}>
-                Create New Product
-              </Button>
-
-              <Button
-                onClick={addNewRow}
-                className={'!py-3'}>
-                New Row
-              </Button>
-            </div>
-
-            <div className="grid md:grid-cols-2">
-              <div className="py-2 pt-6 md:pt-12 md:pb-12 md:pr-12">
+            <div className="grid md:grid-cols-2 gap-5 md:gap-10">
+              <div>
                 <label htmlFor="note" className='p'>{"Add Note"}</label>
                 <Editor
                   initialValue={data.note}
                   apiKey={config.tiny_mce}
                   textareaName='note'
                   init={{
-                    height: 350,
+                    height: 300,
                   }}
                   onInit={(evt, editor) => editorRef.current = editor}
                 />
               </div>
 
-              <div className="py-2 pt-6 md:pt-12 md:pb-12 md:pr-12">
+              <div className="space-y-3 md:space-y-6">
+                <TextInput
+                  label="Sub Total"
+                  prepend={<span className="pr-1 ">{base_currency?.company.symbol}</span>}
+                  value={subTotal}
+                  readOnly
+                />
+
+                <TextInput
+                  value={data.discount_value}
+                  type="number"
+                  onChange={handleChange}
+                  wrapperStyle={'!py-0'}
+                  label="Discount"
+                  name='discount_value'
+                  max={data.discount_type == 'PERCENTAGE' ? 100 : subTotal}
+                  step={0.01}
+                  postpend={
+                    <SelectInput
+                      wrapperStyle={'!border-none !mt-0'}
+                      value={data.discount_type}
+                      name='discount_type'
+                      onChange={handleChange}
+                      error={errors.discount_type}>
+                      <option value="PERCENTAGE">Percentage </option>
+                      <option value="FIXED">Fixed</option>
+                    </SelectInput>
+                  }
+                />
+
                 <TextInput
                   label="Total"
-                  prepend={<p className="pr-1">{base_currency?.company.symbol}</p>}
-                  value={totalAmount()}
+                  prepend={<span className="pr-1 ">{base_currency?.company.symbol}</span>}
+                  value={getTotalAmount()}
                   readOnly
                 />
               </div>
             </div>
 
-            <div className="flex justify-end mt-6 gap-4">
+            <div className="flex justify-end">
               <Button
                 type="submit"
-                outline
-                onClick={() => setData('draft', true)}
-                isLoading={processing}>
-                Save Draft
-              </Button>
-
-              {data.customer_id && <Button
-                type="submit"
-                onClick={() => setData('draft', false)}
                 isLoading={processing}>
                 {invoice ? 'Update and Proceed' : 'Save and Proceed'}
-              </Button>}
+              </Button>
             </div>
-
           </form>
         </Card>
       </Section>
@@ -286,6 +340,11 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
         currencies={currencies}
         show={showCreateProduct}
         setShow={setShowCreateProduct}
+      />
+
+      <CreateCustomer
+        show={showCreateCustomer}
+        setShow={setShowCreateCustomer}
       />
 
     </AppLayout>
