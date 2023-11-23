@@ -19,8 +19,8 @@ Route::get('/', function () {
 });
 Route::get('/classic', function () {
     // with('company', 'customer', 'products', 'currency', 'channels')->
-    // $invoice = Invoice::find(1);
-    // InvoiceService::generateInvoice($invoice);
+    $invoice = Invoice::find(1);
+    InvoiceService::generateInvoice($invoice);
 });
 
 Route::resource('pricing', SubscriptionController::class)->only(['index']);

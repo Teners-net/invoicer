@@ -89,21 +89,6 @@ const InvoicePaymentMethod = ({ invoice, payment_channels }) => {
           <form onSubmit={submit} className="p-3 md:p-6">
 
             <div className="pb-12 grid gap-4 md:grid-cols-3">
-              <div>
-                <p>To:</p>
-                <Card flat className={' !bg-gray-50 mt-1 mb-6 md:p-4'}>
-                  <p>{invoice.customer.full_name}</p>
-                  <p>{invoice.customer.email}</p>
-                  <p>{invoice.customer.phone}</p>
-                  <p>{invoice.customer.address}</p>
-                </Card>
-
-                <p>Due On:</p>
-                <p className="mt-1 mb-6 p-4 bg-gray-50 dark:bg-gray-950 border ">{invoice.due_at}</p>
-
-                <p>Invoice Amount (Base Currency):</p>
-                <p className="mt-1 p-4 bg-gray-50 dark:bg-gray-950 border ">{invoice.currency?.symbol} {invoice.total_amount}</p>
-              </div>
 
               <div></div>
 

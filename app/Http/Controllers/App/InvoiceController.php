@@ -41,8 +41,8 @@ class InvoiceController extends Controller
 
         $overview = [
             'all' => $invoices->count(),
-            'paid' => $invoices->where('paid', true)->count(),
-            'unpaid' => $invoices->where('paid', false)->count(),
+            'paid' => $invoices->whereNotNull('paid_at')->count(),
+            'unpaid' => $invoices->whereNull('paid_at')->count(),
         ];
 
         return Inertia::render('App/Invoice/Index', [
@@ -79,7 +79,6 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
         $request->validate($this->rules, [
             'products.*.product.id' => 'Select product',
         ]);
@@ -110,24 +109,6 @@ class InvoiceController extends Controller
         InvoiceService::generateInvoice($invoice);
 
         return redirect()->route('invoices.show', $invoice);
-    }
-
-    /**
-     */
-    public function setup(Invoice $invoice)
-    {
-        $company = $this->getCurrentCompany();
-        $invoice = Invoice::with('customer', 'currency')->find($invoice->id);
-        $company = Company::with('paymentChannels', 'paymentChannels.currency')->find($company->id);
-
-        return Inertia::render('App/Invoice/InvoicePaymentMethod', [
-            'invoice' => $invoice,
-            'payment_channels' => $company->paymentChannels,
-            'base_currency' => [
-                'company' => $company->currency,
-                'platform' => Setting::get('base_currency')
-            ],
-        ]);
     }
 
     /**
@@ -209,9 +190,18 @@ class InvoiceController extends Controller
     public function show(Invoice $invoice)
     {
         $this->confirmOwner($invoice);
+        $company = $this->getCurrentCompany();
+
+        $invoice = Invoice::with('customer', 'currency')->find($invoice->id);
+        $company = Company::with('paymentChannels', 'paymentChannels.currency')->find($company->id);
 
         return Inertia::render('App/Invoice/Show', [
-            'invoice' => $invoice
+            'invoice' => $invoice,
+            'payment_channels' => $company->paymentChannels,
+            // 'base_currency' => [
+            //     'company' => $company->currency,
+            //     'platform' => Setting::platformCurrency()
+            // ],
         ]);
     }
 
