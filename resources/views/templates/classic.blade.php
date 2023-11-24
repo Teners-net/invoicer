@@ -37,7 +37,7 @@
         }
 
         body {
-            font-family: "DejaVu Sans";
+            font-family: "DejaVu Serif", "DejaVu Sans";
         }
 
         h1,
@@ -91,7 +91,7 @@
         .table td {
             border-collapse: collapse;
             white-space: nowrap;
-            padding: 0.5rem 1rem;
+            padding: 0.4rem 0.8rem;
             text-align: left;
         }
 
@@ -120,11 +120,6 @@
             border: 1px solid rgb(229 231 235);
         }
 
-        small {
-            font-size: 0.6rem;
-            font-weight: lighter;
-        }
-
         h1 {
             font-size: 2.5rem;
         }
@@ -134,6 +129,11 @@
         th {
             font-weight: lighter;
             font-size: 0.8rem;
+        }
+
+        small {
+            font-size: 0.6rem;
+            font-weight: lighter;
         }
 
         thead {
@@ -155,8 +155,8 @@
     </header>
 
     <footer style="padding: 0.1rem 3rem; border-bottom: 0.8rem solid <?php echo $invoice->company->secondary_color; ?>">
-        <hr>
-        <small>Powered by Invoicer &bull; invoicer.teners.net</small>
+    <hr>
+    <small>Powered by Invoicer &bull; invoicer.teners.net</small>
     </footer>
 
     <main>
@@ -180,7 +180,10 @@
         <div class="my-4">
             <small>INVOICE</small>
             <h3>#{{$invoice->slug}}</h3>
-            <p>Due Date: {{date_format($invoice->due_at, 'jS F, Y')}}</p>
+            <p>Invoice Date: {{date_format($invoice->sent_at ?? $invoice->created_at, 'jS F, Y')}}</p>
+            @if ($invoice->due_at)
+            <p>Due Date: {{date_format($invoice->due_at ?? $invoice->created_at, 'jS F, Y')}}</p>
+            @endif
         </div>
 
         @if ($invoice->customer)
@@ -195,7 +198,7 @@
 
         <table class="table my-4">
             <thead>
-                <tr>
+                <tr class="border">
                     <th></th>
                     <th>Item Description</th>
                     <th>Qty.</th>
@@ -244,7 +247,7 @@
                     <td colspan="3"></td>
                     <td>Total</td>
                     <td class="money">
-                        <h3>{{$invoice->currency->symbol}} {{$invoice->total_amount}}</h3>
+                        <h2>{{$invoice->currency->symbol}} {{$invoice->total_amount}}</h2>
                     </td>
                 </tr>
                 <tr class="no-border">
@@ -265,14 +268,14 @@
 
         @if ($invoice->channels->count() > 0)
         <div class="my-4">
-            <p>Pay through any of the following channels</p>
+            <p>Payment should be made to:</p>
             <table class="mt-1">
                 <tbody>
                     @foreach ($invoice->channels->chunk(2) as $chunk)
                     <tr>
                         @foreach ($chunk as $channel)
-                        <td style="width: 49%;">
-                            <div class="p-2 border">
+                        <td style="width: 33%;">
+                            <div class="p-2 border" style="background-color: gray;">
                                 <h4>{{$channel->bank_name}}</h4>
                                 <p class="mt-1">
                                     <small>Account Name</small> <br>
