@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\App;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\UpdateStockJob;
 use App\Mail\NewInvoiceMail;
 use App\Models\Company;
 use App\Models\Currency;
@@ -31,7 +32,7 @@ class InvoiceController extends Controller
         'sub_amount' => 'required|numeric',
         'total_amount' => 'required|numeric',
         'discount_type' => 'in:PERCENTAGE, FIXED',
-        'discount_value' => 'required|numeric'
+        'discount_value' => 'nullable|numeric'
     ];
 
     /**
@@ -136,6 +137,8 @@ class InvoiceController extends Controller
             $invoice->update([
                 'sent_at' => now()
             ]);
+
+            UpdateStockJob::dispatch($invoice->products);
 
             try {
                 if ($invoice->company->send_invoice_email)

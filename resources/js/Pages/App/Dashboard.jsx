@@ -1,15 +1,20 @@
-import { Chart as ChartJS, ArcElement, Tooltip, RadialLinearScale, BarElement, LinearScale, CategoryScale } from 'chart.js';
-import { Bar, Doughnut, PolarArea } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, RadialLinearScale, BarElement, LinearScale, CategoryScale, LineElement, PointElement } from 'chart.js';
+import { Bar, Doughnut, Line, PolarArea } from "react-chartjs-2";
 import Card from "../../Components/Card";
 import Section from "../../Components/Section";
 import AppLayout from "../../Layouts/AppLayout";
 import { Inertia } from '@inertiajs/inertia';
 import { usePage } from '@inertiajs/inertia-react';
 import Button from '../../Components/Button';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, ArcElement, Tooltip);
 
 const Dashboard = ({ overview, invoices }) => {
+
+  const [salesData, setSalesData] = useState({})
+  const [productsData, setProductsData] = useState({})
 
   const menus = [
     {
@@ -36,12 +41,27 @@ const Dashboard = ({ overview, invoices }) => {
       title: 'Subscription',
       icon: '/imgs/icons/bill.png',
       route: 'pricing.index'
+    },
+    {
+      title: 'Documentation',
+      icon: '/imgs/icons/bill.png',
+      route: 'pricing.index'
     }
   ]
 
+  useEffect(() => {
+    axios.get(route('dashboard.sales'))
+      .then((res) => setSalesData(res.data))
+      .catch((error) => console.error('Error fetching sales data:', error));
+
+    axios.get(route('dashboard.products'))
+      .then((res) => setProductsData(res.data))
+      .catch((error) => console.error('Error fetching sales data:', error));
+  }, [])
+
   const handleItemClick = (_route) => {
     Inertia.visit(route(_route));
-  };
+  }
 
   const overviews = [
     {
@@ -61,7 +81,7 @@ const Dashboard = ({ overview, invoices }) => {
     },
   ]
 
-  const invoiceData = {
+  const invoiceChartData = {
     labels: ['Paid', 'Unpaid'],
     datasets: [
       {
@@ -74,28 +94,58 @@ const Dashboard = ({ overview, invoices }) => {
     ],
   }
 
-  const inventoryData = {
-    labels: ['Out of Stock', 'Critical', 'Low Stocks', 'Adequate Stock'],
+  const inventoryChartData = {
+    labels: ['Out of Stock', 'Low Stocks', 'Adequate Stock'],
     datasets: [
       {
-        data: [4, 19, 30, 50],
+        data: [productsData?.stock?.out, productsData?.stock?.low, productsData?.stock?.adequate],
         backgroundColor: [
-          '#1a1423ff',
-          '#372549ff',
+          '#eacdc2ff',
           '#774c60ff',
-          '#b75d69ff',
+          '#1a1423ff',
         ]
       },
     ],
-  };
+  }
 
-  const Indicator = ({ color, title, children }) =>
+  const salesChartData = {
+    labels: salesData?.dates,
+    datasets: [
+      {
+        label: 'Paid',
+        data: salesData?.paid,
+        borderColor: '#1a1423ff',
+        backgroundColor: '#1a1423ff',
+      },
+      {
+        label: 'Unpaid',
+        data: salesData?.unpaid,
+        borderColor: '#b75d69ff',
+        backgroundColor: '#b75d69ff',
+      },
+    ],
+  }
+
+  const productsChartData = {
+    labels: ['Goods', 'Services'],
+    datasets: [
+      {
+        data: [productsData?.goods, productsData?.services],
+        backgroundColor: [
+          '#b75d69ff',
+          '#372549ff',
+        ]
+      }
+    ],
+  }
+
+  const Indicator = ({ color, title, value }) =>
     <div>
-      <div className="flex gap-2 items-center">
+      <div className="flex gap-2 items-start">
         <div className={`h-3 w-3 ${color}`}></div>
         <small>{title}</small>
       </div>
-      {children}
+      <p className='font-bold'>{value}</p>
     </div>
 
   return (
@@ -103,22 +153,17 @@ const Dashboard = ({ overview, invoices }) => {
 
       <div className="bg-black-gradient">
         <Section className={'!pt-1'}>
-          <h2 className='h4 !font-light'>Overview</h2>
+          <h2 className='h6 !font-light'>Overview</h2>
 
-          <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
+          <div className="grid gap-2 md:gap-3 grid-cols-2 md:grid-cols-4">
             <Card className={"md:!p-4 col-span-2 md:col-span-1"}>
-              <div className='flex gap-4 items-center'>
+              <div className='flex gap-2 md:gap-3 items-center'>
                 <div className="h-[6.5rem] w-[6.5rem]">
-                  <Doughnut data={invoiceData} />
+                  <Doughnut data={invoiceChartData} />
                 </div>
                 <div className="space-y-4">
-                  <Indicator color={'bg-redwood'} title={`${invoices.paid_count} Paid Invoices`}>
-                    <p>{invoices.paid}</p>
-                  </Indicator>
-
-                  <Indicator color={'bg-primary'} title={`${invoices.unpaid_count} Unpaid Invoices`}>
-                    <p>{invoices.unpaid}</p>
-                  </Indicator>
+                  <Indicator color={'bg-redwood'} title={`${invoices.paid_count} Paid Invoices`} value={invoices.paid} />
+                  <Indicator color={'bg-primary'} title={`${invoices.unpaid_count} Unpaid Invoices`} value={invoices.unpaid} />
                 </div>
               </div>
             </Card>
@@ -137,11 +182,10 @@ const Dashboard = ({ overview, invoices }) => {
       </div>
 
       <Section>
-        <h2 className='h4 !font-light'>Menus</h2>
-
-        <div className="grid md:grid-cols-3 gap-4 md:gap-0">
-          <div className="col-span-2 md:border-r pr-0 md:pr-8 ">
-            <div className="grid gap-4 md:gap-6 grid-cols-3 md:grid-cols-5">
+        <div className="grid md:grid-cols-4 gap-2 md:gap-0">
+          <div className="col-span-3 md:border-r pr-0 md:pr-8 ">
+            <h2 className='h6 !font-light'>Menus</h2>
+            <div className="grid gap-2 md:gap-3 grid-cols-3 md:grid-cols-6">
               {menus.map(menu =>
                 <div
                   className="space-y-2 text-center cursor-pointer group"
@@ -151,7 +195,7 @@ const Dashboard = ({ overview, invoices }) => {
                     <img
                       src={menu.icon}
                       alt={menu.title}
-                      className="h-10 md:h-14 w-10 md:w-14 group-hover:scale-125 transition-transform duration-500"
+                      className="h-10 w-10 group-hover:scale-125 transition-transform duration-500"
                     />
                   </div>
                   <p>{menu.title}</p>
@@ -159,48 +203,53 @@ const Dashboard = ({ overview, invoices }) => {
               )}
             </div>
           </div>
-
-          {/* <div className="col-span-1 md:border-l pl-0 md:pl-8">
-            <h2 className='h4 !font-light'>Inventory Notice</h2>
-            <Card>
-              <p className='text-red-500'>You have {5} goods with stock size less than 5</p>
-            </Card>
-          </div> */}
         </div>
       </Section>
 
-      <Section bottom className={'grid md:grid-cols-3 gap-4'}>
-        <Card flat>
-          <h6>Inventory Status</h6>
-          <hr />
+      <Section bottom className='grid md:grid-cols-12 gap-3'>
+        <div className='md:col-span-3 flex flex-col gap-2 md:gap-3 justify-between'>
+          <Card flat className=' !p-4'>
+            <h2 className='h6 !font-light'>Product Distribution Status</h2>
+            <div className='grid grid-cols-8 gap-3 items-center mt-6'>
+              <div className="col-span-4 md:col-span-5">
+                <Doughnut data={productsChartData} />
+              </div>
 
-          <div className='flex gap-6 items-center mt-6'>
-            <div className="">
-              <Doughnut data={inventoryData} />
+              <div className='col-span-3 flex flex-col gap-2 md:gap-3 justify-center'>
+                <Indicator color={'bg-redwood'} title={`GOODS`} value={productsData?.goods} />
+                <Indicator color={'bg-secondary'} title={`SERVICES`} value={productsData?.services} />
+              </div>
             </div>
+          </Card>
 
-            <div className='flex flex-col gap-4 justify-center'>
-              <Indicator color={'bg-primary'} title={`Out of Stock`}>
-                <p>4</p>
-              </Indicator>
+          <Card flat className=' !p-4'>
+            <h2 className='h6 !font-light'>GOODS Inventory Status</h2>
+            <div className='grid grid-cols-8 gap-3 items-center mt-6'>
+              <div className="col-span-4 md:col-span-5">
+                <Doughnut data={inventoryChartData} />
+              </div>
 
-              <Indicator color={'bg-secondary'} title={`Critical`}>
-                <p>19</p>
-              </Indicator>
+              <div className='col-span-3 flex flex-col gap-2 md:gap-3 justify-center'>
+                <Indicator color={'bg-dogwood'} title={`Out of Stock`} value={productsData?.stock?.out} />
+                <Indicator color={'bg-eggplant'} title={`Low Stocks`} value={productsData?.stock?.low} />
+                <Indicator color={'bg-primary'} title={`Adequate`} value={productsData?.stock?.adequate} />
+              </div>
+            </div>
+          </Card>
+        </div>
 
-              <Indicator color={'bg-eggplant'} title={`Low Stocks`}>
-                <p>30</p>
-              </Indicator>
-
-              <Indicator color={'bg-redwood'} title={`Adequate Stocks`}>
-                <p>50</p>
-              </Indicator>
+        <Card flat className='md:col-span-9 !p-4'>
+          <h2 className='h6 !font-light'>Sales</h2>
+          <hr />
+          <div className='grid grid-cols-7 gap-2 md:gap-3 items-center mt-6'>
+            <div className='col-span-6'>
+              <Line data={salesChartData} />
+            </div>
+            <div className='col-span-1 flex flex-col gap-2 md:gap-3 justify-center'>
+              <Indicator color={'bg-primary'} title={`Paid`} value={salesData?.paid?.reduce((a, val) => { return a + val }, 0)} />
+              <Indicator color={'bg-redwood'} title={`UnPaid`} value={salesData?.unpaid?.reduce((a, val) => { return a + val }, 0)} />
             </div>
           </div>
-        </Card>
-
-        <Card flat>
-          <h6>Top Customers</h6>
         </Card>
       </Section>
     </AppLayout>

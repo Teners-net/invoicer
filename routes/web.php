@@ -55,7 +55,12 @@ Route::resource('pricing', SubscriptionController::class)->only(['index']);
 Route::resource('invoice', CustomerInvoiceController::class)->only(['show', 'update']);
 
 Route::middleware(['auth', 'company'])->group(function () {
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::controller(DashboardController::class)->prefix('dashboard')->group(function () {
+        Route::get('', 'index')->name('dashboard');
+        Route::get('sales', 'sales')->name('dashboard.sales');
+        Route::get('products', 'products')->name('dashboard.products');
+    });
 
     Route::resource('products', ProductController::class)->except(['create', 'edit']);
     Route::resource('customers', CustomerController::class)->except(['create', 'edit']);
