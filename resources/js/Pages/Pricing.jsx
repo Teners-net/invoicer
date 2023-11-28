@@ -1,20 +1,26 @@
 import Button from "../Components/Button";
 import Card from "../Components/Card";
-import Footer from "../Components/Footer";
-import Header from "../Components/Header";
 import Section from "../Components/Section";
-import AppLayout from "../Layouts/AppLayout";
+import GuestLayout from "../Layouts/GuestLayout";
 
-const WelcomePage = ({ user }) => {
+const Pricing = () => {
   return (
-    <>
-      <Header />
-      <Section className={'pb-10 md:pb-20'}>
-        <h1>Coming Soon...</h1>
+    <GuestLayout>
+      <Section className={'md:grid grid-cols-2'} bottom>
+        <div className={'md:-mr-14 z-10 flex flex-col justify-center'}>
+          <Card>
+            <h3 className="h4">Free Forever</h3>
+          </Card>
+        </div>
+
+        <Card className={'md:!pl-20'}>
+          <h3 className="h4">Premium</h3>
+
+          <Button className="w-full">Subscribe</Button>
+        </Card>
       </Section>
-      <Footer />
-    </>
+    </GuestLayout>
   );
 }
 
-export default WelcomePage
+export default Pricing

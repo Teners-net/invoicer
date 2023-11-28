@@ -1,13 +1,9 @@
-import { usePage } from "@inertiajs/inertia-react";
 import Button from "../Components/Button";
 import Card from "../Components/Card";
-import Footer from "../Components/Footer";
-import Header from "../Components/Header";
 import Section from "../Components/Section";
+import GuestLayout from "../Layouts/GuestLayout";
 
 const Welcome = () => {
-
-  const { user } = usePage().props
 
   const GetStarted = ({ ...rest }) => <Button {...rest} link href={route('dashboard')}>Create a Free Invoice Now</Button>
 
@@ -27,25 +23,25 @@ const Welcome = () => {
   ]
 
   return (
-    <>
-      <Header user={user} />
+    <GuestLayout title={'Home'}>
+      <div className="bg-white">
+        <Section block className={'grid md:grid-cols-2 gap-6 md:gap-12 items-center'}>
+          <div className="space-y-6 py-6 md:py-0">
+            <h1>Effortless Invoicing and Seamless Inventory Management for Your Business</h1>
+            <p>
+              The world's simplest way to manage your payments and customers.
+              Save time, stay organized and professional, keep proper records and manage your inventory.
+            </p>
 
-      <Section block className={'grid md:grid-cols-2 gap-6 md:gap-12 items-center'}>
-        <div className="space-y-6 py-6 md:py-0">
-          <h1>Invoice Your Customers in Seconds</h1>
-          <p>
-            The world's simplest way to manage your payments and customers.
-            Save time, stay organized and professional, keep proper records and manage your inventory.
-          </p>
-
-          <div className="flex gap-3 md:gap-6">
-            <GetStarted />
-            <Button outline>See a Demo</Button>
+            <div className="flex gap-3 md:gap-6">
+              <GetStarted />
+              <Button outline>See a Demo</Button>
+            </div>
           </div>
-        </div>
 
-        <img src="/imgs/assets/8845366_4023505.svg" alt="Invoicer" className="hidden md:block" />
-      </Section>
+          <img src="/imgs/assets/invoicer_banner.png" alt="Invoicer" className="hidden md:block w-full py-12" />
+        </Section>
+      </div>
 
       <Section bottom className={"space-y-6"}>
         <div>
@@ -68,11 +64,7 @@ const Welcome = () => {
           <p>It's FREE!</p>
         </Section>
       </div>
-
-      <Section></Section>
-
-      <Footer />
-    </>
+    </GuestLayout>
   );
 }
 
