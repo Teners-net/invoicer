@@ -24,13 +24,13 @@ class PlatformSeeder extends Seeder
                 'base_rate' => 1
             ],
             [
-                'name' => 'South African rand',
+                'name' => 'South African Rand',
                 'code' => 'ZAR',
                 'symbol' => 'R',
                 'base_rate' => 0.022
             ],
             [
-                'name' => 'Ugandan shilling',
+                'name' => 'Ugandan Shilling',
                 'code' => 'UGX',
                 'symbol' => 'USh',
                 'base_rate' => 4.57
@@ -40,6 +40,42 @@ class PlatformSeeder extends Seeder
                 'code' => 'USD',
                 'symbol' => '$',
                 'base_rate' => 0.0012
+            ],
+            [
+                'name' => 'Euro',
+                'code' => 'EUR',
+                'symbol' => '€',
+                'base_rate' => 0.0010
+            ],
+            [
+                'name' => 'British Pound',
+                'code' => 'GBP',
+                'symbol' => '£',
+                'base_rate' => 0.0009
+            ],
+            [
+                'name' => 'Japanese Yen',
+                'code' => 'JPY',
+                'symbol' => '¥',
+                'base_rate' => 0.16
+            ],
+            [
+                'name' => 'Canadian Dollar',
+                'code' => 'CAD',
+                'symbol' => 'CA$',
+                'base_rate' => 0.0015
+            ],
+            [
+                'name' => 'Australian Dollar',
+                'code' => 'AUD',
+                'symbol' => 'A$',
+                'base_rate' => 0.0017
+            ],
+            [
+                'name' => 'Swiss Franc',
+                'code' => 'CHF',
+                'symbol' => 'CHF',
+                'base_rate' => 0.0011
             ]
         ];
 

@@ -19,43 +19,22 @@ class AppSeeders extends Seeder
      */
     public function run()
     {
-        foreach ([
-            [
-                'name' => 'Pythonist',
-                'currency_id' => Currency::inRandomOrder()->first()->id
-            ],
-            [
-                'name' => 'Teners',
-                'website' => 'https://teners.net',
-                'currency_id' => Currency::inRandomOrder()->first()->id
-            ],
-        ] as $value) {
-            Company::create($value);
-        }
+        $company = Company::create([
+            'name' => 'Teners',
+            'website' => 'https://teners.net',
+            'currency_id' => Currency::inRandomOrder()->first()->id
+        ]);
 
-        foreach ([
-            [
-                'company_id' => Company::where('name', 'Pythonist')->first()->id,
-                'user_id' => 'auth0|65517a3e7409f1302185c5c7',
-                'is_owner' => 1,
-            ],
-            [
-                'company_id' => Company::where('name', 'Teners')->first()->id,
-                'user_id' => 'google-oauth2|105241206780222283429',
-                'is_owner' => 1,
-            ],
-        ] as $value) {
-            CompanyUser::create($value);
-        }
+        CompanyUser::create([
+            'company_id' => $company->id,
+            'user_id' => 'google-oauth2|105241206780222283429',
+        ]);
 
-        $this->seedProducts(Company::where('name', 'Pythonist')->first()->id, [
+        $this->seedProducts($company->id, [
             ['name' => 'Python Development Course', 'price' => 199.99, 'stock' => 100, 'description' => 'Comprehensive Python course', 'type' => 'SERVICE'],
             ['name' => 'Python Coding Bootcamp', 'price' => 249.99, 'stock' => 75, 'description' => 'Intensive Python coding program', 'type' => 'SERVICE'],
             ['name' => 'Python Framework Mastery', 'price' => 149.99, 'stock' => 50, 'description' => 'Mastering popular Python frameworks', 'type' => 'SERVICE'],
             ['name' => 'Pythonista Hoodie', 'price' => 39.99, 'stock' => 200, 'description' => 'Stylish hoodie for Python enthusiasts', 'type' => 'GOODS'],
-        ]);
-
-        $this->seedProducts(Company::where('name', 'Teners')->first()->id, [
             ['name' => 'Web Development Starter Kit', 'price' => 299.99, 'stock' => 80, 'description' => 'Essential tools for web development', 'type' => 'GOODS'],
             ['name' => 'Database Management Service', 'price' => 499.99, 'stock' => 60, 'description' => 'Managed database hosting service', 'type' => 'SERVICE'],
             ['name' => 'Database Hosting Tier 1', 'price' => 90.99, 'stock' => 60, 'description' => 'Managed database hosting service', 'type' => 'SERVICE'],
@@ -67,11 +46,9 @@ class AppSeeders extends Seeder
             ['name' => 'Tech Startup Accelerator Note', 'price' => 2499.99, 'stock' => 10, 'description' => 'Accelerate your tech startup journey with a step-by-step training guide', 'type' => 'SERVICE'],
         ]);
 
-        foreach (Company::all() as $company) {
-            PaymentChannel::factory(2)->create([
-                'company_id' => $company->id
-            ]);
-        }
+        PaymentChannel::factory(2)->create([
+            'company_id' => $company->id
+        ]);
     }
 
     /**
@@ -84,15 +61,12 @@ class AppSeeders extends Seeder
     private function seedProducts($companyId, $products)
     {
         foreach ($products as $product) {
-            Product::create([
+            $prod = array_merge($product, [
                 'company_id' => $companyId,
                 'currency_id' => Company::inRandomOrder()->first()->id,
-                'name' => $product['name'],
-                'price' => $product['price'],
-                'stock' => $product['stock'],
-                'description' => $product['description'],
-                'type' => $product['type']
             ]);
+            
+            Product::create($prod);
         }
     }
 }

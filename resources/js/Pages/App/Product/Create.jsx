@@ -38,42 +38,27 @@ const CreateProduct = ({ product, setProduct, show, setShow }) => {
     }))
   }
 
+  const handleClose = () => {
+    setProduct && setProduct(null)
+    setShow(false)
+    setProcessing(false)
+  }
+
   const submit = async (e) => {
     e.preventDefault();
 
     setProcessing(true)
 
-    if (product) {
-      Inertia.patch(
-        route('products.update', product),
-        data,
-        {
-          onError: e => {
-            setErrors(e)
-            setProcessing(false)
-          },
-          onSuccess: handleClose(),
-        }
-      )
-      return;
+    const options = {
+      onError: e => {
+        setErrors(e)
+        setProcessing(false)
+      },
+      onSuccess: handleClose()
     }
-    else Inertia.post(
-      route('products.store'),
-      data,
-      {
-        onError: e => {
-          setErrors(e)
-          setProcessing(false)
-        },
-        onSuccess: handleClose()
-      }
-    );
-  }
 
-  const handleClose = () => {
-    setProduct && setProduct(null)
-    setShow(false)
-    setProcessing(false)
+    if (product) Inertia.patch(route('products.update', product), data, options)
+    else Inertia.post(route('products.store'), data, options);
   }
 
   return (

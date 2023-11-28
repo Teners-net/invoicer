@@ -15,7 +15,7 @@ const AppLayout = ({ children, title, onBackPress }) => {
       <Header user={user} />
 
       <main>
-        <div className="bg-black">
+        <div className="bg-primary">
           <Section className={'!pb-1 text-gray-50'}>
             {onBackPress &&
               <Button className={'!px-0'} onClick={onBackPress}>

@@ -26,7 +26,9 @@ class Invoice extends Model
      */
     protected $casts = [
         'total_amount' => 'float',
-        'due_at' => 'datetime'
+        'due_at' => 'datetime',
+        'sent_at' => 'datetime',
+        'created_at' => 'datetime'
     ];
 
     protected function generateSlug()

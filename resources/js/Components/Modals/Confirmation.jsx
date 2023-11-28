@@ -25,15 +25,16 @@ const Confirmation = () => {
       open={showConfirmation}
       onClose={handleClose}
       overlayStyle={'!z-[1000]'}
-      bodyStyle={'max-w-xl space-y-4'}>
+      bodyStyle={'max-w-xl space-y-8'}>
+
       <div>
         <h4>{confirmation?.title}</h4>
         <p>{confirmation?.message}</p>
       </div>
 
       <div className="flex gap-4 justify-end">
-        <Button onClick={handleClose} outline>Cancel</Button>
-        <Button onClick={handleConfirm}>Confirm</Button>
+        <Button onClick={handleClose} outline>{handleConfirm ? 'Cancel' : 'Close'}</Button>
+        {handleConfirm && <Button onClick={handleConfirm}>Confirm</Button>}
       </div>
     </Modal>
   )

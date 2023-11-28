@@ -1,12 +1,13 @@
-import { Chart as ChartJS, ArcElement, Tooltip } from 'chart.js';
-import { Doughnut } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, RadialLinearScale, BarElement, LinearScale, CategoryScale } from 'chart.js';
+import { Bar, Doughnut, PolarArea } from "react-chartjs-2";
 import Card from "../../Components/Card";
 import Section from "../../Components/Section";
 import AppLayout from "../../Layouts/AppLayout";
 import { Inertia } from '@inertiajs/inertia';
 import { usePage } from '@inertiajs/inertia-react';
+import Button from '../../Components/Button';
 
-ChartJS.register(ArcElement, Tooltip);
+ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip);
 
 const Dashboard = ({ overview, invoices }) => {
 
@@ -66,12 +67,36 @@ const Dashboard = ({ overview, invoices }) => {
       {
         data: [invoices.paid, invoices.unpaid],
         backgroundColor: [
-          '#000030',
-          '#860081',
+          '#b75d69ff',
+          '#1a1423ff',
         ]
       }
     ],
   }
+
+  const inventoryData = {
+    labels: ['Out of Stock', 'Critical', 'Low Stocks', 'Adequate Stock'],
+    datasets: [
+      {
+        data: [4, 19, 30, 50],
+        backgroundColor: [
+          '#1a1423ff',
+          '#372549ff',
+          '#774c60ff',
+          '#b75d69ff',
+        ]
+      },
+    ],
+  };
+
+  const Indicator = ({ color, title, children }) =>
+    <div>
+      <div className="flex gap-2 items-center">
+        <div className={`h-3 w-3 ${color}`}></div>
+        <small>{title}</small>
+      </div>
+      {children}
+    </div>
 
   return (
     <AppLayout title='Dashboard'>
@@ -87,21 +112,13 @@ const Dashboard = ({ overview, invoices }) => {
                   <Doughnut data={invoiceData} />
                 </div>
                 <div className="space-y-4">
-                  <div>
-                    <div className="flex gap-2 items-center">
-                      <div className="h-3 w-3 bg-primary"></div>
-                      <small>{invoices.paid_count} Paid Invoices</small>
-                    </div>
-                    <p>NGN{invoices.paid}</p>
-                  </div>
+                  <Indicator color={'bg-redwood'} title={`${invoices.paid_count} Paid Invoices`}>
+                    <p>{invoices.paid}</p>
+                  </Indicator>
 
-                  <div>
-                    <div className="flex gap-2 items-center">
-                      <div className="h-3 w-3 bg-secondary"></div>
-                      <small>{invoices.unpaid_count} Unpaid Invoices</small>
-                    </div>
-                    <p>NGN{invoices.unpaid}</p>
-                  </div>
+                  <Indicator color={'bg-primary'} title={`${invoices.unpaid_count} Unpaid Invoices`}>
+                    <p>{invoices.unpaid}</p>
+                  </Indicator>
                 </div>
               </div>
             </Card>
@@ -154,13 +171,36 @@ const Dashboard = ({ overview, invoices }) => {
 
       <Section bottom className={'grid md:grid-cols-3 gap-4'}>
         <Card flat>
+          <h6>Inventory Status</h6>
+          <hr />
+
+          <div className='flex gap-6 items-center mt-6'>
+            <div className="">
+              <Doughnut data={inventoryData} />
+            </div>
+
+            <div className='flex flex-col gap-4 justify-center'>
+              <Indicator color={'bg-primary'} title={`Out of Stock`}>
+                <p>4</p>
+              </Indicator>
+
+              <Indicator color={'bg-secondary'} title={`Critical`}>
+                <p>19</p>
+              </Indicator>
+
+              <Indicator color={'bg-eggplant'} title={`Low Stocks`}>
+                <p>30</p>
+              </Indicator>
+
+              <Indicator color={'bg-redwood'} title={`Adequate Stocks`}>
+                <p>50</p>
+              </Indicator>
+            </div>
+          </div>
+        </Card>
+
+        <Card flat>
           <h6>Top Customers</h6>
-        </Card>
-        <Card flat>
-          <h6>Top Products</h6>
-        </Card>
-        <Card flat>
-          <h6>Low Stocks</h6>
         </Card>
       </Section>
     </AppLayout>

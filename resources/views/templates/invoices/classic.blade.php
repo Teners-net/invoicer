@@ -265,40 +265,6 @@
             <p>{!! $invoice->note ?? 'No Note Added' !!}</p>
         </div>
         @endif
-
-        @if ($invoice->channels->count() > 0)
-        <div class="my-4">
-            <p>Payment should be made to:</p>
-            <table class="mt-1">
-                <tbody>
-                    @foreach ($invoice->channels->chunk(2) as $chunk)
-                    <tr>
-                        @foreach ($chunk as $channel)
-                        <td style="width: 33%;">
-                            <div class="p-2 border" style="background-color: gray;">
-                                <h4>{{$channel->bank_name}}</h4>
-                                <p class="mt-1">
-                                    <small>Account Name</small> <br>
-                                    {{$channel->account_name}}
-                                </p>
-
-                                <p class="mt-1">
-                                    <small>Account Number</small> <br>
-                                    {{$channel->account_number}}
-                                </p>
-                            </div>
-                        </td>
-                        @endforeach
-
-                        @for ($i = count($chunk); $i < 2; $i++) <td>
-                            </td>
-                            @endfor
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-        @endif
     </main>
 </body>
 

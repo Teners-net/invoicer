@@ -33,6 +33,7 @@ return new class extends Migration
             $table->timestamp('paid_at')->nullable();
             $table->timestamp('customer_marked_paid_at')->nullable();
 
+            $table->string('title')->nullable();
             $table->text('note')->nullable();
 
             $table->softDeletes();

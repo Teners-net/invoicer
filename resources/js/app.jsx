@@ -5,6 +5,7 @@ import { createInertiaApp } from '@inertiajs/inertia-react';
 import { createRoot } from 'react-dom/client'
 import { AppProvider } from './context';
 import Confirmation from './Components/Modals/Confirmation';
+import { Worker } from '@react-pdf-viewer/core';
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
@@ -25,7 +26,9 @@ createInertiaApp({
 
     root.render(
       <AppProvider>
-        <App {...props} />
+        <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
+          <App {...props} />
+        </Worker>
 
         <Confirmation />
       </AppProvider>

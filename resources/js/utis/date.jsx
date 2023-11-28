@@ -50,7 +50,6 @@ export function formatDate(dateString = Date.now(), addHour = 0, showYear = fals
   return formattedDate;
 }
 
-
 export const dateInputFormat = (dateString) => {
-  return new Date(dateString)?.toISOString().split('T')[0]
+  return dateString ? new Date(dateString)?.toISOString().split('T')[0] : ''
 }

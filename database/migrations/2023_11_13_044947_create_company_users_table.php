@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignIdFor(Company::class)->constrained()->cascadeOnDelete();
             $table->string('user_id');
             $table->boolean('is_owner')->default(true);
+            $table->string('email')->unique();
             $table->timestamps();
         });
     }

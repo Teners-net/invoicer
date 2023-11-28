@@ -41,6 +41,8 @@ class PaymentChannelController extends Controller
     public function update(Request $request, PaymentChannel $paymentChannel)
     {
         $request->validate($this->rules);
+
+        $this->confirmOwner($paymentChannel);
         $paymentChannel->update($request->all());
 
         return redirect()->back();
@@ -52,6 +54,7 @@ class PaymentChannelController extends Controller
      */
     public function destroy(PaymentChannel $paymentChannel)
     {
+        $this->confirmOwner($paymentChannel);
         $paymentChannel->delete();
 
         return redirect()->back();

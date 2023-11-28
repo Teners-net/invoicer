@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\App;
 
 use App\Http\Controllers\Controller;
+use App\Mail\NewInvoiceMail;
 use App\Models\Company;
 use App\Models\Currency;
 use App\Models\Customer;
@@ -13,6 +14,7 @@ use App\Models\Product;
 use App\Services\InvoiceService;
 use App\Traits\CompanyTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 
 class InvoiceController extends Controller
@@ -38,15 +40,19 @@ class InvoiceController extends Controller
     public function index()
     {
         $invoices = $this->getCurrentCompany()->invoices;
+        $drafts = $invoices->whereNull('sent_at');
+        $sent = $invoices->whereNotNull('sent_at');
 
         $overview = [
             'all' => $invoices->count(),
-            'paid' => $invoices->whereNotNull('paid_at')->count(),
-            'unpaid' => $invoices->whereNull('paid_at')->count(),
+            'draft' => $drafts->count(),
+            'paid' => $sent->whereNotNull('paid_at')->count(),
+            'unpaid' => $sent->whereNull('paid_at')->where('due_at', '<', now())->count(),
+            'overdue' => $sent->whereNull('paid_at')->where('due_at', '>', now())->count()
         ];
 
         return Inertia::render('App/Invoice/Index', [
-            'invoices' => $this->getCurrentCompany()->invoices()->with('customer')->get(),
+            'invoices' => $this->getCurrentCompany()->invoices()->with('customer', 'currency')->get(),
             'overview' => $overview
         ]);
     }
@@ -113,18 +119,39 @@ class InvoiceController extends Controller
 
     /**
      */
-    public function setupUpdate(Request $request, Invoice $invoice)
+    public function actions(Request $request, Invoice $invoice, string $action)
     {
-        $request->validate([
-            'payment_channels' => 'required|array',
-            'is_recuring' => 'required|boolean'
-        ], [
-            'payment_channels.required' => 'Select at least one payment channel'
-        ]);
+        // $request->validate([
+        //     'payment_channels' => 'required|array',
+        //     'is_recuring' => 'required|boolean'
+        // ], [
+        //     'payment_channels.required' => 'Select at least one payment channel'
+        // ]);
 
-        $invoice->channels()->attach($request->payment_channels);
+        // $invoice->channels()->attach($request->payment_channels);
 
-        return redirect()->route('invoices.index');
+        $this->confirmOwner($invoice->customer);
+
+        if ($action == 'SEND') {
+            $invoice->update([
+                'sent_at' => now()
+            ]);
+
+            try {
+                if ($invoice->company->send_invoice_email)
+
+                Mail::to($invoice->customer->email)->send(new NewInvoiceMail($invoice));
+            } catch (\Throwable $th) {
+            }
+        }
+
+        if ($action == 'MARK_PAID') {
+            $invoice->update([
+                'paid_at' => now()
+            ]);
+        }
+
+        return redirect()->route('invoices.show', $invoice);
     }
 
     /**
@@ -208,10 +235,10 @@ class InvoiceController extends Controller
     /**
      * Destroy the specified resource.
      */
-    public function destroy(Invoice $customer)
+    public function destroy(Invoice $invoice)
     {
-        $this->confirmOwner($customer);
-        $customer->forceDelete();
+        $this->confirmOwner($invoice);
+        $invoice->forceDelete();
 
         return redirect()->route('invoices.index');
     }

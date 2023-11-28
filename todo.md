@@ -16,3 +16,11 @@
 - Only 1 currency
 - Only 1 Company
 
+
+
+/* CSS HEX */
+--raisin-black: #1a1423ff;
+--dark-purple: #372549ff;
+--eggplant: #774c60ff;
+--redwood: #b75d69ff;
+--pale-dogwood: #eacdc2ff;

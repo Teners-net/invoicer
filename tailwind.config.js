@@ -27,8 +27,11 @@ module.exports = {
       },
 
       colors: {
-        primary: '#000030',
-        secondary: '#860081'
+        primary: '#1a1423ff',
+        secondary: '#372549ff',
+        eggplant: '#774c60ff',
+        redwood: '#b75d69ff',
+        dogwood: '#eacdc2ff',
       },
     }
   },

@@ -19,6 +19,11 @@ class Company extends Model
      */
     protected $guarded = ['id'];
 
+    public function users()
+    {
+        return $this->hasMany(CompanyUser::class);
+    }
+
     public function customers()
     {
         return $this->hasMany(Customer::class);

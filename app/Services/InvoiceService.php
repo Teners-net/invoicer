@@ -10,7 +10,7 @@ class InvoiceService
 
     public static function generateInvoice(Invoice $invoice)
     {
-        $pdf = PDF::loadView('templates.classic', [
+        $pdf = PDF::loadView('templates.invoices.classic', [
             'invoice' => $invoice
         ]);
 

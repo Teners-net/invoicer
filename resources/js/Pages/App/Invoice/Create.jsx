@@ -30,7 +30,10 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
     { row_id: 1, product: emptyProduct, quantity: 1, amount_in_base: 0.00 }
   ])
 
-  const { data, setData, post, patch, processing, errors, transform } = useForm({
+  const [isProcessing, setIsProcessing] = useState()
+  const [errors, setErrors] = useState({})
+
+  const { data, setData, post, patch, processing, errors: err, transform } = useForm({
     customer_id: invoice?.customer_id ?? '',
     discount_type: invoice?.discount_type ?? 'PERCENTAGE',
     discount_value: invoice?.discount_value ?? '',
@@ -84,8 +87,17 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
     return value.toFixed(2)
   }
 
+  const options = {
+    onError: e => {
+      setErrors(e)
+      setIsProcessing(false)
+    },
+  }
+
   const submit = (e) => {
     e.preventDefault();
+
+    setIsProcessing(true)
 
     const newData = {
       ...data,
@@ -103,9 +115,8 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
     //   note: editorRef?.current?.getContent(),
     // }));
 
-    invoice ?
-      Inertia.patch(route('invoices.update', invoice), newData) :
-      Inertia.post(route('invoices.store'), newData)
+    if (invoice) Inertia.patch(route('invoices.update', invoice), newData, options)
+    else Inertia.post(route('invoices.store'), newData, options)
   };
 
   const addNewRow = () => {
@@ -328,7 +339,7 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
             <div className="flex justify-end">
               <Button
                 type="submit"
-                isLoading={processing}>
+                isLoading={isProcessing}>
                 {invoice ? 'Update and Proceed' : 'Save and Proceed'}
               </Button>
             </div>

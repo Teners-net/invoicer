@@ -4,6 +4,8 @@ import Button from "../../../Components/Button";
 import Card from "../../../Components/Card";
 import Section from "../../../Components/Section";
 import AppLayout from "../../../Layouts/AppLayout";
+import { formatDate } from "../../../utis/date";
+import { statusColor } from "../../../Components/InvoiceParts";
 
 const Invoices = ({ invoices, overview }) => {
 
@@ -20,9 +22,20 @@ const Invoices = ({ invoices, overview }) => {
       label: 'Unpaid',
       value: overview.unpaid,
     },
+    {
+      label: 'Overdue',
+      value: overview.overdue,
+    },
+    {
+      label: 'Drafts',
+      value: overview.draft,
+    },
   ]
 
   const columns = [
+    // {
+    //   cell: (row, index, column, id) => index + 1
+    // },
     {
       name: "INVOICE NUMBER",
       selector: row => row.slug,
@@ -35,12 +48,17 @@ const Invoices = ({ invoices, overview }) => {
     },
     {
       name: 'AMOUNT',
-      selector: row => row.total_amount,
+      selector: row => row.currency?.symbol + " " + row.total_amount,
+      sortable: true,
+    },
+    {
+      name: 'STATUS',
+      selector: row => <p className={`${statusColor(row).text} py-1 px-2 ${statusColor(row).body} `}>{row.status}</p>,
       sortable: true,
     },
     {
       name: 'DUE DATE',
-      selector: row => row.due_at,
+      selector: row => formatDate(row.due_at, 0, true),
       sortable: true,
     },
     {
@@ -58,7 +76,7 @@ const Invoices = ({ invoices, overview }) => {
         <Section className={'!pt-1'}>
           <h2 className='h4 !font-light'>Overview</h2>
 
-          <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
+          <div className="grid gap-4 grid-cols-2 md:grid-cols-5">
             {overviews.map(_ =>
               <Card key={_.label}>
                 <h3 className="h1 !mb-1">{_.value}</h3>
