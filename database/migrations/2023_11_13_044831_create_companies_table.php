@@ -27,8 +27,8 @@ return new class extends Migration
             $table->string('address')->nullable();
 
             $table->string('logo')->nullable();
-            $table->string('primary_color', 7)->default('#1a1423ff');
-            $table->string('secondary_color', 7)->default('#372549ff');
+            $table->string('primary_color', 9)->default('#1a1423ff');
+            $table->string('secondary_color', 9)->default('#372549ff');
 
             $table->boolean('send_invoice_email')->default(true);
 

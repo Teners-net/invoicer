@@ -5,7 +5,7 @@ import Card from "../../../Components/Card";
 import Section from "../../../Components/Section";
 import AppLayout from "../../../Layouts/AppLayout";
 import { formatDate } from "../../../utis/date";
-import { statusColor } from "../../../Components/InvoiceParts";
+import { statusColor } from "../../../Components/Partials";
 
 const Invoices = ({ invoices, overview }) => {
 

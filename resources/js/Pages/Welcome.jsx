@@ -1,26 +1,25 @@
 import Button from "../Components/Button";
 import Card from "../Components/Card";
+import { GetStarted } from "../Components/Partials";
 import Section from "../Components/Section";
 import GuestLayout from "../Layouts/GuestLayout";
 
 const Welcome = () => {
 
-  const GetStarted = ({ ...rest }) => <Button {...rest} link href={route('dashboard')}>Create a Free Invoice Now</Button>
-
   const features = [
     {
-      'title': "Easy Inventory Management",
-      'description': "Know what stock sells faster and what item is low on stock"
+      'title': "Effortless Inventory Management",
+      'description': "Keep track of your stock effortlessly. Identify fast-selling items and manage low-stock items with ease."
     },
     {
-      'title': "Multiple Currency",
-      'description': "Don't be restricted, create your invoices in any currency and work smoothly with your international customers"
+      'title': "Multi-Currency Support",
+      'description': "Break free from currency limitations. Create invoices in any currency, facilitating smooth transactions with international customers."
     },
     {
-      'title': "Amplify your brand",
-      'description': "Get your invoice looking the way you want with your own logo, brand colors and extra notes. Create beautiful, customised invoices quickly."
+      'title': "Brand Amplification",
+      'description': "Personalize your invoices with your brand's identity. Add your logo, brand colors, and extra notes to reflect your business."
     },
-  ]
+  ];
 
   return (
     <GuestLayout title={'Home'}>

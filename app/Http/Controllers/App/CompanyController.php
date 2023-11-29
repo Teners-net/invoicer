@@ -62,6 +62,7 @@ class CompanyController extends Controller
         CompanyUser::create([
             'user_id' => $user->sub,
             'company_id' => $company->id,
+            'email' => $user->email,
             'is_owner' => true,
         ]);
 

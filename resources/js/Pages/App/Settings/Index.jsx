@@ -6,7 +6,7 @@ import PaymentChannel from "../../../Components/Modals/PaymentChannel";
 import Section from "../../../Components/Section";
 import AppLayout from "../../../Layouts/AppLayout";
 
-const Company = ({ company }) => {
+const Settings = ({ company }) => {
 
   const { currencies } = usePage().props
   const [toEdit, setToEdit] = useState(null)
@@ -41,19 +41,19 @@ const Company = ({ company }) => {
   const NewChannelButton = <Button onClick={() => setOpenChannelModal(true)}>Add Payment Channel</Button>
 
   return (
-    <AppLayout title='Company Setup' >
+    <AppLayout title='Settings' onBackPress={() => Inertia.visit(route('dashboard'))}>
 
       <Section className={'grid md:grid-cols-3 gap-4'}>
         <Card className={'col-span-2'}>
           <div className=" grid grid-cols-2 mb-4">
             <div>
-              <small>Company Name</small>
+              <small>Settings Name</small>
               <p className="mb-4">{company.name}</p>
 
               <small>RC Number</small>
               <p className="mb-4">{company.rc_number ?? 'Not Set'}</p>
 
-              <small>Company Website</small>
+              <small>Settings Website</small>
               <p className="mb-4">{company.website ?? 'Not Set'}</p>
 
               <small>Address</small>
@@ -82,7 +82,7 @@ const Company = ({ company }) => {
             </div>
           </div>
 
-          <Button>Edit Company</Button>
+          <Button>Edit Settings</Button>
         </Card>
 
         {/* <div>
@@ -120,4 +120,4 @@ const Company = ({ company }) => {
   );
 }
 
-export default Company
+export default Settings

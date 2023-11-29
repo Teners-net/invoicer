@@ -1,3 +1,5 @@
+import Button from "./Button";
+
 export const statusColor = (invoice) => {
   const define = {
     'Draft': {
@@ -24,3 +26,5 @@ export const statusColor = (invoice) => {
 
   return define[invoice.status];
 };
+
+export const GetStarted = ({ ...rest }) => <Button {...rest} link href={route('dashboard')}>Create a Free Invoice Now</Button>

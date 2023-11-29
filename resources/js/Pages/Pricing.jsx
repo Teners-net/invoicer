@@ -1,24 +1,123 @@
+import { useState } from "react";
 import Button from "../Components/Button";
 import Card from "../Components/Card";
 import Section from "../Components/Section";
 import GuestLayout from "../Layouts/GuestLayout";
+import { GetStarted } from "../Components/Partials";
 
 const Pricing = () => {
-  return (
-    <GuestLayout>
-      <Section className={'md:grid grid-cols-2'} bottom>
-        <div className={'md:-mr-14 z-10 flex flex-col justify-center'}>
-          <Card>
-            <h3 className="h4">Free Forever</h3>
-          </Card>
+  const [pricingType, setPricingType] = useState('YEARLY')
+
+  const plans = [
+    {
+      name: 'Free',
+      price: {
+        monthly: 0.00,
+        yearly: 0.00
+      },
+      bg: 'bg-gray-200',
+      features: [
+        'Up to 30 invoices monthly',
+        'Up to 3 payment channels',
+        'Basic Invoice Templates',
+        'Limited Brand Watermark',
+        'Single user access',
+        '1 custom currency conversion pair',
+        'Auto-updated currency exchange rate',
+        'Auto-delete data older than 1 year',
+      ]
+    },
+    {
+      name: 'Basic',
+      price: {
+        monthly: 5.99,
+        yearly: 4.99
+      },
+      bg: 'bg-blue-200',
+      features: [
+        'Up to 75 invoices monthly',
+        'Up to 8 payment channels',
+        'Enhanced Invoice Templates',
+        'No Brand Watermark',
+        'Up to 5 users',
+        'Up to 5 custom currency conversion pairs',
+        'Automatic Overdue Notice',
+        'Priority email support',
+      ]
+    },
+    {
+      name: 'Pro',
+      price: {
+        monthly: 14.99,
+        yearly: 13.99
+      },
+      bg: 'bg-yellow-200',
+      features: [
+        'Unlimited invoices monthly',
+        'Up to 15 payment channels',
+        'Premium Invoice Templates',
+        'No Brand Watermark',
+        'Up to 30 users',
+        'Up to 15 custom currency conversion pairs',
+        'Advanced Reporting',
+        'Automatic Overdue Notice with Customization Options',
+        '24/7 Priority customer support',
+      ]
+    },
+  ];
+
+  const Plan = ({ plan }) => {
+    const price = pricingType === 'YEARLY' ? plan.price.yearly : plan.price.monthly
+
+    return (
+      <Card key={plan.name} className="!p-0 flex flex-col justify-between">
+        <div>
+          <div className={`p-4 space-y-2 ${plan.bg}`}>
+            <h3>{plan.name}</h3>
+            <h4>${price}<small>/monthly</small></h4>
+            {pricingType === 'YEARLY' && <h5 className="p">${price * 12} billed yearly</h5>}
+          </div>
+
+          <div className="p-4">
+            {plan.features.map(feature =>
+              <div key={feature} className="pb-3 flex gap-1">
+                <p>{'\u2022'}</p>
+                {feature}
+              </div>
+            )}
+          </div>
         </div>
 
-        <Card className={'md:!pl-20'}>
-          <h3 className="h4">Premium</h3>
+        <div className="p-4 space-y-2">
+          <Button className="w-full">{plan.name == 'Free' ? 'Get Started' : 'Buy Now'}</Button>
+        </div>
+      </Card>
+    )
+  }
 
-          <Button className="w-full">Subscribe</Button>
-        </Card>
+  return (
+    <GuestLayout>
+
+      <div className="bg-white">
+        <Section className="flex flex-col items-center md:max-w-[60vw] text-center !py-24" bottom >
+          <h1 className="h2">Friendly Pricing Plan</h1>
+          <h2 className="p md:max-w-[40vw] m-auto">
+            We're offering a generous Free Plan and affordable premium pricing plans that grows with your business
+          </h2>
+
+          <div className="mt-12 flex items-center gap-4">
+            <GetStarted outline />
+            <p>It's FREE!</p>
+          </div>
+        </Section>
+      </div>
+
+      <Section block bottom className="-mt-12 md:max-w-[65vw]">
+        <div className="grid md:grid-cols-3 gap-4">
+          {plans.map(plan => <Plan key={plan.name} plan={plan} />)}
+        </div>
       </Section>
+
     </GuestLayout>
   );
 }

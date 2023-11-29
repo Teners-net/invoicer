@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Product;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Bus\Dispatchable;
 
 class UpdateStockJob
@@ -15,7 +16,7 @@ class UpdateStockJob
      * @return void
      */
     public function __construct(
-        private array $products
+        private Collection $products
     ) {
     }
 

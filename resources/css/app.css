@@ -66,13 +66,20 @@ h6,
 
 p,
 .p,
-a {
+a, li {
     @apply text-sm font-light;
 }
 
 small,
 .small {
     @apply text-xs font-extralight;
+}
+
+.ul,
+ ul,
+.ol,
+ ol {
+    @apply list-disc !px-6;
 }
 
 .underline {
@@ -106,7 +113,3 @@ th,
 td {
     @apply whitespace-nowrap px-4 py-2;
 }
-
-/* .tox-statusbar__branding {
-    @apply hidden;
-} */

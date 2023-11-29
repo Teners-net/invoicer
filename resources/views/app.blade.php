@@ -9,7 +9,7 @@
   <meta name="description" content="Get the best talent for your projects">
 
   <title inertia>{{ config('app.name', 'Laravel') }}</title>
-  <!-- <link rel="icon" type="image/png" href="{{ asset('assets/imgs/ise_favicon.png') }}"> -->
+  <link rel="icon" type="image/png" href="{{ asset('imgs/brand/invoicer.png') }}">
 
   <meta http-equiv="Content-Security-Policy" content="" />
 

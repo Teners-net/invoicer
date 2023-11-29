@@ -1,7 +1,7 @@
 import { Viewer } from "@react-pdf-viewer/core";
 import Button from "../../Components/Button";
 import Card from "../../Components/Card";
-import { statusColor } from "../../Components/InvoiceParts";
+import { statusColor } from "../../Components/Partials";
 import Section from "../../Components/Section";
 import { Inertia } from "@inertiajs/inertia";
 
