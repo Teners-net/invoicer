@@ -34,8 +34,8 @@ const AccountLayout = ({
       onclick: () => Inertia.visit(route('account.index'))
     },
     {
-      title: "Subscribtion",
-      icon: '/imgs/icons/account.png',
+      title: "Subscription",
+      icon: '/imgs/icons/subscription.png',
       onclick: () => Inertia.visit(route('account.index'))
     },
     {

@@ -28,6 +28,7 @@ class AppSeeders extends Seeder
         CompanyUser::create([
             'company_id' => $company->id,
             'user_id' => 'google-oauth2|105241206780222283429',
+            'email' => 'platinumemirate@gmail.com'
         ]);
 
         $this->seedProducts($company->id, [
@@ -65,7 +66,7 @@ class AppSeeders extends Seeder
                 'company_id' => $companyId,
                 'currency_id' => Company::inRandomOrder()->first()->id,
             ]);
-            
+
             Product::create($prod);
         }
     }

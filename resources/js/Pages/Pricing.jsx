@@ -17,6 +17,7 @@ const Pricing = () => {
       },
       bg: 'bg-gray-200',
       features: [
+        'Product Page and bio link',
         'Up to 30 invoices monthly',
         'Up to 3 payment channels',
         'Basic Invoice Templates',
@@ -35,6 +36,7 @@ const Pricing = () => {
       },
       bg: 'bg-blue-200',
       features: [
+        'Product Page and bio link',
         'Up to 75 invoices monthly',
         'Up to 8 payment channels',
         'Enhanced Invoice Templates',
@@ -53,6 +55,7 @@ const Pricing = () => {
       },
       bg: 'bg-yellow-200',
       features: [
+        'Customizable Product Page and custom link',
         'Unlimited invoices monthly',
         'Up to 15 payment channels',
         'Premium Invoice Templates',

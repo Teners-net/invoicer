@@ -7,6 +7,7 @@ use App\Http\Controllers\App\InvoiceController;
 use App\Http\Controllers\App\PaymentChannelController;
 use App\Http\Controllers\App\ProductController;
 use App\Http\Controllers\Customer\InvoiceController as CustomerInvoiceController;
+use App\Http\Controllers\Customer\StoreFrontController;
 use App\Http\Controllers\Platform\SubscriptionController;
 use App\Jobs\CurrencyUpdateJob;
 use App\Mail\NewInvoiceMail;
@@ -14,8 +15,8 @@ use App\Models\Invoice;
 use App\Services\InvoiceService;
 use Auth0\Laravel\Facade\Auth0;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -24,22 +25,26 @@ Route::get('/', function () {
 
 Route::get('/test', function () {
     CurrencyUpdateJob::dispatch();
-    $invoice = Invoice::find(1);
-    if ($invoice) {
-        // InvoiceService::generateInvoice($invoice);
-        // $pdf = PDF::loadView('templates.classic', [
-        //     'invoice' => $invoice
-        // ]);
-        // return $pdf
-        //     ->setPaper('a4')
-        //     ->setOption(['dpi' => 150])
-        //     ->setWarnings(true)
-        //     ->stream();
-    }
+    // $invoice = Invoice::find(1);
+    // if ($invoice) {
+    //     InvoiceService::generateInvoice($invoice);
+    //     $pdf = PDF::loadView('templates.classic', [
+    //         'invoice' => $invoice
+    //     ]);
+    //     return $pdf
+    //         ->setPaper('a4')
+    //         ->setOption(['dpi' => 150])
+    //         ->setWarnings(true)
+    //         ->stream();
+    // }
 });
 
 Route::resource('pricing', SubscriptionController::class)->only(['index']);
 Route::resource('invoice', CustomerInvoiceController::class)->only(['show', 'update']);
+
+Route::controller(StoreFrontController::class)->group(function () {
+    Route::get('store/{company_slug}', 'index')->name('store.index');
+});
 
 Route::middleware(['auth', 'company'])->group(function () {
 

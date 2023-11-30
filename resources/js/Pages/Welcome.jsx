@@ -32,7 +32,7 @@ const Welcome = () => {
               Save time, stay organized and professional, keep proper records and manage your inventory.
             </p>
 
-            <div className="flex gap-3 md:gap-6">
+            <div className="flex gap-3 md:gap-6 flex-wrap">
               <GetStarted />
               <Button outline>See a Demo</Button>
             </div>

@@ -7,11 +7,9 @@ use App\Models\CompanyUser;
 
 trait CompanyTrait
 {
-
     private function authUser()
     {
         $user = auth()->user();
-
         return $user ? CompanyUser::where('user_id', $user->sub)->first() : null;
     }
 
@@ -19,14 +17,12 @@ trait CompanyTrait
     {
         $company_user = $this->authUser();
 
-        return $company_user ? $company_user->company : null;
+        return $company_user ? Company::with('currency')->find($company_user->company_id) : null;
     }
 
     private function confirmOwner($product)
     {
         $company = $this->getCurrentCompany();
-
-        if ($product->company_id != $company->id)
-            return redirect()->route('logout');
+        if ($product->company_id != $company->id) return redirect()->route('logout');
     }
 }

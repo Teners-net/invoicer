@@ -1,14 +1,14 @@
-import { Chart as ChartJS, ArcElement, Tooltip, RadialLinearScale, BarElement, LinearScale, CategoryScale, LineElement, PointElement } from 'chart.js';
-import { Bar, Doughnut, Line, PolarArea } from "react-chartjs-2";
-import Card from "../../Components/Card";
-import Section from "../../Components/Section";
-import AppLayout from "../../Layouts/AppLayout";
 import { Inertia } from '@inertiajs/inertia';
 import { usePage } from '@inertiajs/inertia-react';
-import Button from '../../Components/Button';
-import { useEffect, useState } from 'react';
 import axios from 'axios';
-import TextInput from '../../Components/Form/TextInput';
+import { ArcElement, CategoryScale, Chart as ChartJS, LineElement, LinearScale, PointElement, Tooltip } from 'chart.js';
+import { useEffect, useState } from 'react';
+import { Doughnut, Line } from "react-chartjs-2";
+import Button from '../../Components/Button';
+import Card from "../../Components/Card";
+import { Share } from '../../Components/Partials';
+import Section from "../../Components/Section";
+import AppLayout from "../../Layouts/AppLayout";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, ArcElement, Tooltip);
 
@@ -16,6 +16,7 @@ const Dashboard = ({ overview, invoices }) => {
 
   const [salesData, setSalesData] = useState({})
   const [productsData, setProductsData] = useState({})
+  const { company } = usePage().props
 
   const menus = [
     {
@@ -40,7 +41,7 @@ const Dashboard = ({ overview, invoices }) => {
     },
     {
       title: 'Subscription',
-      icon: '/imgs/icons/bill.png',
+      icon: '/imgs/icons/subscription.png',
       route: 'pricing.index'
     }
   ]
@@ -144,13 +145,16 @@ const Dashboard = ({ overview, invoices }) => {
       <p className='font-bold'>{value}</p>
     </div>
 
+  const shareLinkInBio = {
+    title: "Check out my products catalogue",
+    url: route('store.index', company.slug)
+  }
+
   return (
     <AppLayout title='Dashboard'>
-
       <div className="bg-black-gradient">
         <Section className={'!pt-1'}>
           <h2 className='h6 !font-light'>Overview</h2>
-
           <div className="grid gap-2 md:gap-3 grid-cols-2 md:grid-cols-4">
             <Card className={"md:!p-4 col-span-2 md:col-span-1"}>
               <div className='flex gap-2 md:gap-3 items-center'>
@@ -158,8 +162,8 @@ const Dashboard = ({ overview, invoices }) => {
                   <Doughnut data={invoiceChartData} />
                 </div>
                 <div className="space-y-4">
-                  <Indicator color={'bg-redwood'} title={`${invoices.paid_count} Paid Invoices`} value={invoices.paid} />
-                  <Indicator color={'bg-primary'} title={`${invoices.unpaid_count} Unpaid Invoices`} value={invoices.unpaid} />
+                  <Indicator color={'bg-redwood'} title={`${invoices.paid_count} Paid Invoices`} value={company?.currency?.symbol + ' ' + invoices.paid} />
+                  <Indicator color={'bg-primary'} title={`${invoices.unpaid_count} Unpaid Invoices`} value={company?.currency?.symbol + ' ' + invoices.unpaid} />
                 </div>
               </div>
             </Card>
@@ -177,17 +181,16 @@ const Dashboard = ({ overview, invoices }) => {
         </Section>
       </div>
 
-      <Section className="grid md:grid-cols-3 gap-2 md:gap-0">
+      <Section className="grid md:grid-cols-3 gap-4 md:gap-0">
         <div className="md:col-span-1 md:border-r pr-0 md:pr-4">
           <h2 className='h6 !font-light'>Product Page</h2>
-          <div className="flex items-center">
-            <p className="flex-1 border px-5 py-3" ></p>
-            <Button>Visit</Button>
+          <div className="flex items-center border justify-between gap-4 pl-5">
+            <p className="py-3">{shareLinkInBio?.url}</p>
+            <Button link href={shareLinkInBio?.url} target='_blank'>Visit</Button>
           </div>
 
           <p className='mt-4'>Share</p>
-          <div className='flex'>
-          </div>
+          <Share shareLinkInBio={shareLinkInBio} />
         </div>
 
         <div className="md:col-span-2 pl-0 md:pl-4">
@@ -202,7 +205,7 @@ const Dashboard = ({ overview, invoices }) => {
                   <img
                     src={menu.icon}
                     alt={menu.title}
-                    className="h-10 w-10 group-hover:scale-125 transition-transform duration-500"
+                    className="h-12 w-12 group-hover:scale-125 transition-transform duration-500"
                   />
                 </div>
                 <p>{menu.title}</p>
@@ -247,13 +250,13 @@ const Dashboard = ({ overview, invoices }) => {
         <Card flat className='md:col-span-9 !p-4'>
           <h2 className='h6 !font-light'>Sales</h2>
           <hr />
-          <div className='grid grid-cols-8 gap-2 md:gap-3 items-center mt-6'>
-            <div className='col-span-7'>
+          <div className='grid md:grid-cols-8 gap-4 md:gap-3 items-center mt-6'>
+            <div className='md:col-span-7'>
               <Line data={salesChartData} />
             </div>
-            <div className='col-span-1 flex flex-col gap-2 md:gap-3 justify-center'>
-              <Indicator color={'bg-primary'} title={`Paid`} value={salesData?.paid?.reduce((a, val) => { return a + val }, 0)} />
-              <Indicator color={'bg-redwood'} title={`UnPaid`} value={salesData?.unpaid?.reduce((a, val) => { return a + val }, 0)} />
+            <div className='md:col-span-1 flex flex-row md:flex-col gap-2 md:gap-3 justify-center'>
+              <Indicator color={'bg-primary'} title={`Paid`} value={company?.currency?.symbol + ' ' + salesData?.paid?.reduce((a, val) => { return a + val }, 0)} />
+              <Indicator color={'bg-redwood'} title={`UnPaid`} value={company?.currency?.symbol + ' ' + salesData?.unpaid?.reduce((a, val) => { return a + val }, 0)} />
             </div>
           </div>
         </Card>

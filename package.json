@@ -27,6 +27,7 @@
         "pdfjs-dist": "3.4.120",
         "react-chartjs-2": "^5.2.0",
         "react-data-table-component": "^7.5.4",
+        "react-share": "^5.0.3",
         "styled-components": "^6.1.1"
     }
 }
