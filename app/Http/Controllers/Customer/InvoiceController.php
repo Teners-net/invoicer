@@ -5,12 +5,15 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Mail\InvoiceMarkedPaidMail;
 use App\Models\Invoice;
+use App\Traits\NotificationTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 
 class InvoiceController extends Controller
 {
+    use NotificationTrait;
+
     /**
      * Display a listing of the resource.
      *
@@ -73,7 +76,7 @@ class InvoiceController extends Controller
         } catch (\Throwable $th) {
         }
 
-        // TODO: Payment Notification Sent
+        $this->notify('Payment Notification Sent!');
         return redirect()->back();
     }
 }

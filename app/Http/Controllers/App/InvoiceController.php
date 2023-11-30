@@ -14,13 +14,14 @@ use App\Models\Platform\Setting;
 use App\Models\Product;
 use App\Services\InvoiceService;
 use App\Traits\CompanyTrait;
+use App\Traits\NotificationTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 
 class InvoiceController extends Controller
 {
-    use CompanyTrait;
+    use CompanyTrait, NotificationTrait;
 
     private $rules = [
         'customer_id' => 'nullable|exists:customers,id',
@@ -115,6 +116,7 @@ class InvoiceController extends Controller
 
         InvoiceService::generateInvoice($invoice);
 
+        $this->notify('Invoice Created!');
         return redirect()->route('invoices.show', $invoice);
     }
 
@@ -146,12 +148,16 @@ class InvoiceController extends Controller
                 Mail::to($invoice->customer->email)->send(new NewInvoiceMail($invoice));
             } catch (\Throwable $th) {
             }
+
+            $this->notify('Invoice Sent!');
         }
 
         if ($action == 'MARK_PAID') {
             $invoice->update([
                 'paid_at' => now()
             ]);
+
+            $this->notify('Invoice Marked Paid!');
         }
 
         return redirect()->route('invoices.show', $invoice);
@@ -211,6 +217,7 @@ class InvoiceController extends Controller
 
         InvoiceService::generateInvoice($invoice);
 
+        $this->notify('Invoice Updated!');
         return redirect()->route('invoices.show', $invoice);
     }
 
@@ -243,6 +250,7 @@ class InvoiceController extends Controller
         $this->confirmOwner($invoice);
         $invoice->forceDelete();
 
+        $this->notify('Invoice Deleted!');
         return redirect()->route('invoices.index');
     }
 }

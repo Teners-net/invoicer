@@ -18,8 +18,6 @@ class PaymentChannelController extends Controller
         'currency_id' => 'required|exists:currencies,id',
     ];
 
-    
-
     /**
      * Store a new $paymentChannel
      * @return \Illuminate\Http\Response
@@ -33,6 +31,7 @@ class PaymentChannelController extends Controller
 
         PaymentChannel::updateOrCreate($request->all());
 
+        $this->notify('Payment Channel Created!');
         return redirect()->back();
     }
 
@@ -47,6 +46,7 @@ class PaymentChannelController extends Controller
         $this->confirmOwner($paymentChannel);
         $paymentChannel->update($request->all());
 
+        $this->notify('Payment Channel Updated!');
         return redirect()->back();
     }
 
@@ -59,6 +59,7 @@ class PaymentChannelController extends Controller
         $this->confirmOwner($paymentChannel);
         $paymentChannel->delete();
 
+        $this->notify('Payment Channel Deleted!');
         return redirect()->back();
     }
 }

@@ -3,10 +3,11 @@ import Section from '../Components/Section';
 import Header from '../Components/Header';
 import Footer from '../Components/Footer';
 import Button from '../Components/Button';
+import Notify from '../Components/Notify';
 
 const AppLayout = ({ children, title, onBackPress }) => {
 
-  const {user} = usePage().props
+  const {user, notify} = usePage().props
 
   return (
     <div className="min-h-screen">
@@ -35,6 +36,7 @@ const AppLayout = ({ children, title, onBackPress }) => {
       </main>
 
       <Footer />
+      <Notify notify={notify} />
     </div>
   );
 }

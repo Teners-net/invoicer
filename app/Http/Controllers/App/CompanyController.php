@@ -113,7 +113,6 @@ class CompanyController extends Controller
         $company->update(['logo' => $logoUploaded->file->name]);
 
         $this->notify('Company Logo Updated!');
-
         return redirect()->back();
     }
 

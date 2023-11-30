@@ -5,12 +5,13 @@ namespace App\Http\Controllers\App;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Traits\CompanyTrait;
+use App\Traits\NotificationTrait;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CustomerController extends Controller
 {
-    use CompanyTrait;
+    use CompanyTrait, NotificationTrait;
 
     private $rules = [
         'first_name' => 'required|string|max:100|min:2',
@@ -49,6 +50,7 @@ class CustomerController extends Controller
 
         Customer::create($request->all());
 
+        $this->notify('Customer Created!');
         return redirect()->back();
     }
 
@@ -62,6 +64,7 @@ class CustomerController extends Controller
         $customer->update($request->all());
         $this->confirmOwner($customer);
 
+        $this->notify('Customer Updated!');
         return redirect()->route('customers.index');
     }
 
@@ -85,6 +88,8 @@ class CustomerController extends Controller
         $this->confirmOwner($customer);
 
         $customer->forceDelete();
+
+        $this->notify('Customer Deleted!');
         return redirect()->route('customers.index');
     }
 }

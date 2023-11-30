@@ -5,12 +5,13 @@ namespace App\Http\Controllers\App;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Traits\CompanyTrait;
+use App\Traits\NotificationTrait;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ProductController extends Controller
 {
-    use CompanyTrait;
+    use CompanyTrait, NotificationTrait;
 
     private $rules = [
         'name' => 'required|string|min:2',
@@ -46,6 +47,7 @@ class ProductController extends Controller
 
         Product::create($request->all());
 
+        $this->notify('Product Created!');
         return redirect()->back();
     }
 
@@ -56,6 +58,7 @@ class ProductController extends Controller
         $product->update($request->all());
         $this->confirmOwner($product);
 
+        $this->notify('Product Updated!');
         return redirect()->route('products.index');
     }
 
@@ -74,6 +77,7 @@ class ProductController extends Controller
         $this->confirmOwner($product);
         $product->forceDelete();
 
+        $this->notify('Product Deleted!');
         return redirect()->route('products.index');
     }
 }

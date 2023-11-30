@@ -25,7 +25,7 @@
 </head>
 
 <!-- subpixel- -->
-<body class="font-sans antialiased bg-gray-50 dark:bg-gray-950 text-gray-950 dark:text-gray-50">
+<body class="font-sans antialiased bg-gray-50 dark:bg-gray-950 text-gray-950 dark:text-gray-50 relative">
   @inertia
 </body>
 
