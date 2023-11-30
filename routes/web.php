@@ -20,36 +20,23 @@ use Inertia\Inertia;
 
 Route::get('/', function () {
     return Inertia::render('Welcome');
-});
-Route::get('/classic', function () {
+})->name('home');
+
+Route::get('/test', function () {
     CurrencyUpdateJob::dispatch();
-
     $invoice = Invoice::find(1);
-
     if ($invoice) {
         // InvoiceService::generateInvoice($invoice);
-
-        $pdf = PDF::loadView('templates.classic', [
-            'invoice' => $invoice
-        ]);
-
-        return $pdf
-            ->setPaper('a4')
-            ->setOption(['dpi' => 150])
-            ->setWarnings(true)
-            ->stream();
+        // $pdf = PDF::loadView('templates.classic', [
+        //     'invoice' => $invoice
+        // ]);
+        // return $pdf
+        //     ->setPaper('a4')
+        //     ->setOption(['dpi' => 150])
+        //     ->setWarnings(true)
+        //     ->stream();
     }
 });
-
-// Route::get('/testmail', function () {
-//     $invoice = Invoice::find(1);
-
-//     if ($invoice) {
-//         Mail::to('platinumemirate@gmail.com')->send(new NewInvoiceMail($invoice));
-
-//         // return new NewInvoiceMail($invoice);
-//     }
-// });
 
 Route::resource('pricing', SubscriptionController::class)->only(['index']);
 Route::resource('invoice', CustomerInvoiceController::class)->only(['show', 'update']);
@@ -70,7 +57,7 @@ Route::middleware(['auth', 'company'])->group(function () {
     });
     Route::resource('invoices', InvoiceController::class);
 
-    Route::resource('account/payment_channels', PaymentChannelController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::resource('payment_channels', PaymentChannelController::class)->only(['index', 'store', 'update', 'destroy']);
 });
 
 Route::middleware(['auth'])->group(function () {

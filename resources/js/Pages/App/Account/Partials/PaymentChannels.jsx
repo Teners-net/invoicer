@@ -1,13 +1,13 @@
 import { usePage } from "@inertiajs/inertia-react";
 import { useEffect, useState } from "react";
-import Button from "../../../Components/Button";
-import Card from "../../../Components/Card";
-import PaymentChannel from "../../../Components/Modals/PaymentChannel";
-import Section from "../../../Components/Section";
-import AppLayout from "../../../Layouts/AppLayout";
-import AccountLayout from "./Layout";
+import Button from "../../../../Components/Button";
+import Card from "../../../../Components/Card";
+import PaymentChannel from "../../../../Components/Modals/PaymentChannel";
+import Section from "../../../../Components/Section";
+import AppLayout from "../../../../Layouts/AppLayout";
+import AccountLayout from "../Layout";
 
-const PaymentChannels = ({ company }) => {
+const PaymentChannels = ({ paymentChannels }) => {
 
   const { currencies } = usePage().props
   const [toEdit, setToEdit] = useState(null)
@@ -42,22 +42,20 @@ const PaymentChannels = ({ company }) => {
   const NewChannelButton = <Button onClick={() => setOpenChannelModal(true)}>Add Payment Channel</Button>
 
   return (
-    <AccountLayout>
-      <Section>
-        <Card>
-          <h3>Payment Channels</h3>
-          <p className="mb-4">Setup how you accept payments</p>
-          {company.payment_channels?.length ? NewChannelButton : ''}
-          <div className="grid md:grid-cols-3 gap-4 mt-4">
-            {company.payment_channels?.map(c => <Channel key={c.id} channel={c} />)}
-          </div>
-          {!company.payment_channels?.length &&
-            <div className="text-center border p-4 md:p-8 gap-4 flex flex-col items-center">
-              <p>You have not added any payment channels</p>
-              {NewChannelButton}
-            </div>}
-        </Card>
-      </Section>
+    <AccountLayout page="Payment Channels">
+      <Card>
+        <h3>Payment Channels</h3>
+        <p className="mb-4">Setup how you accept payments</p>
+        {paymentChannels?.length ? NewChannelButton : ''}
+        <div className="grid md:grid-cols-3 gap-4 mt-4">
+          {paymentChannels?.map(c => <Channel key={c.id} channel={c} />)}
+        </div>
+        {!paymentChannels?.length &&
+          <div className="text-center border p-4 md:p-8 gap-4 flex flex-col items-center">
+            <p>You have not added any payment channels</p>
+            {NewChannelButton}
+          </div>}
+      </Card>
 
       <PaymentChannel
         show={openChannelModal}

@@ -1,7 +1,7 @@
-import Card from "../../../Components/Card";
-import Section from "../../../Components/Section";
-import AppLayout from "../../../Layouts/AppLayout";
-import BasicDetails from "./Forms/Basics";
+import Card from "../../../../Components/Card";
+import Section from "../../../../Components/Section";
+import AppLayout from "../../../../Layouts/AppLayout";
+import BasicDetails from "../Forms/Basics";
 
 const Create = () => {
   return (

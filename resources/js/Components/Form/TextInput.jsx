@@ -1,7 +1,8 @@
 import React, { forwardRef } from 'react';
 
-const PrimaryInput = forwardRef(({
+const TextInput = forwardRef(({
   wrapperStyle = '',
+  groupStyle = '',
   inputStyle = '',
   label,
   id,
@@ -16,7 +17,7 @@ const PrimaryInput = forwardRef(({
 }, ref) => {
   if (textarea) {
     return (
-      <div>
+      <div className={`${groupStyle}`}>
         {label && <label htmlFor={id ?? name} className='p'>{label}</label>}
         <div className={`md:mt-1 flex p-3 bg-gray-50 dark:bg-gray-950 border ${(error && touched) && 'border-red-500'} ${wrapperStyle}`}>
           {prepend}
@@ -31,7 +32,7 @@ const PrimaryInput = forwardRef(({
   }
 
   return (
-    <div>
+    <div className={`${groupStyle}`}>
       <label htmlFor={id ?? name} className='p'>{label}</label>
       <div className={`md:mt-1 flex p-3 bg-gray-50 dark:bg-gray-950 border ${(error && touched) && 'border-red-500'} ${wrapperStyle}`}>
         {prepend}
@@ -43,4 +44,4 @@ const PrimaryInput = forwardRef(({
   );
 });
 
-export default PrimaryInput;
+export default TextInput;

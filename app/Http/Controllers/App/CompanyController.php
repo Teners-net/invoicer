@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\App;
 
 use App\Http\Controllers\Controller;
@@ -31,9 +32,9 @@ class CompanyController extends Controller
     public function index()
     {
         $company_id = $this->getCurrentCompany()->id;
-        $company = Company::with('paymentChannels', 'paymentChannels.currency')->find($company_id);
+        $company = Company::with('paymentChannels.currency')->find($company_id);
 
-        return Inertia::render('App/Account/Index', [
+        return Inertia::render('App/Account/Partials/Index', [
             'company' => $company
         ]);
     }
@@ -47,7 +48,7 @@ class CompanyController extends Controller
         $company = $this->getCurrentCompany();
         if ($company) return redirect()->route('dashboard');
 
-        return Inertia::render('App/Account/Create');
+        return Inertia::render('App/Account/Partials/Create');
     }
 
     /**
@@ -129,9 +130,10 @@ class CompanyController extends Controller
         $user = $this->authUser()->user_id;
         $request_user = $company->users->where('is_owner', true)->first()->user_id;
 
-        if($user != $request_user) return ;
+        if ($user != $request_user) return;
         $company->update($request->all());
 
+        $this->notify('Company Branding Details Updated!');
         return redirect()->back();
     }
 }

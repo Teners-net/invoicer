@@ -8,6 +8,7 @@ import { usePage } from '@inertiajs/inertia-react';
 import Button from '../../Components/Button';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import TextInput from '../../Components/Form/TextInput';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, ArcElement, Tooltip);
 
@@ -33,17 +34,12 @@ const Dashboard = ({ overview, invoices }) => {
       route: 'invoices.index'
     },
     {
-      title: 'Account Setup',
-      icon: '/imgs/icons/pencil.png',
-      route: 'company.index'
+      title: 'Account Settings',
+      icon: '/imgs/icons/account.png',
+      route: 'account.index'
     },
     {
       title: 'Subscription',
-      icon: '/imgs/icons/bill.png',
-      route: 'pricing.index'
-    },
-    {
-      title: 'Documentation',
       icon: '/imgs/icons/bill.png',
       route: 'pricing.index'
     }
@@ -181,27 +177,37 @@ const Dashboard = ({ overview, invoices }) => {
         </Section>
       </div>
 
-      <Section>
-        <div className="grid md:grid-cols-4 gap-2 md:gap-0">
-          <div className="col-span-3 md:border-r pr-0 md:pr-8 ">
-            <h2 className='h6 !font-light'>Menus</h2>
-            <div className="grid gap-2 md:gap-3 grid-cols-3 md:grid-cols-6">
-              {menus.map(menu =>
-                <div
-                  className="space-y-2 text-center cursor-pointer group"
-                  key={menu.title}
-                  onClick={() => handleItemClick(menu.route)}>
-                  <div className="p-6 md:p-8 bg-brand-gradient shadow-lg flex items-center justify-center group-hover:scale-95 transition-transform duration-500">
-                    <img
-                      src={menu.icon}
-                      alt={menu.title}
-                      className="h-10 w-10 group-hover:scale-125 transition-transform duration-500"
-                    />
-                  </div>
-                  <p>{menu.title}</p>
+      <Section className="grid md:grid-cols-3 gap-2 md:gap-0">
+        <div className="md:col-span-1 md:border-r pr-0 md:pr-4">
+          <h2 className='h6 !font-light'>Product Page</h2>
+          <div className="flex items-center">
+            <p className="flex-1 border px-5 py-3" ></p>
+            <Button>Visit</Button>
+          </div>
+
+          <p className='mt-4'>Share</p>
+          <div className='flex'>
+          </div>
+        </div>
+
+        <div className="md:col-span-2 pl-0 md:pl-4">
+          <h2 className='h6 !font-light'>Menus</h2>
+          <div className="grid gap-2 md:gap-3 grid-cols-3 md:grid-cols-5">
+            {menus.map(menu =>
+              <div
+                className="space-y-2 text-center cursor-pointer group"
+                key={menu.title}
+                onClick={() => handleItemClick(menu.route)}>
+                <div className="p-6 md:p-8 bg-brand-gradient shadow-lg flex items-center justify-center group-hover:scale-95 transition-transform duration-500">
+                  <img
+                    src={menu.icon}
+                    alt={menu.title}
+                    className="h-10 w-10 group-hover:scale-125 transition-transform duration-500"
+                  />
                 </div>
-              )}
-            </div>
+                <p>{menu.title}</p>
+              </div>
+            )}
           </div>
         </div>
       </Section>
@@ -241,8 +247,8 @@ const Dashboard = ({ overview, invoices }) => {
         <Card flat className='md:col-span-9 !p-4'>
           <h2 className='h6 !font-light'>Sales</h2>
           <hr />
-          <div className='grid grid-cols-7 gap-2 md:gap-3 items-center mt-6'>
-            <div className='col-span-6'>
+          <div className='grid grid-cols-8 gap-2 md:gap-3 items-center mt-6'>
+            <div className='col-span-7'>
               <Line data={salesChartData} />
             </div>
             <div className='col-span-1 flex flex-col gap-2 md:gap-3 justify-center'>

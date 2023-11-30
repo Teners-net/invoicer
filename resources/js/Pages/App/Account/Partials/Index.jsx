@@ -1,9 +1,9 @@
 import { Inertia } from '@inertiajs/inertia';
 import { useEffect, useState } from 'react';
-import Card from "../../../Components/Card";
-import BasicDetails from "./Forms/Basics";
-import BrandingDetails from "./Forms/Branding";
-import AccountLayout from "./Layout";
+import Card from "../../../../Components/Card";
+import BasicDetails from "../Forms/Basics";
+import BrandingDetails from "../Forms/Branding";
+import AccountLayout from "../Layout";
 
 const Company = ({ company }) => {
 
