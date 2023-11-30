@@ -6,7 +6,6 @@ import BrandingDetails from "../Forms/Branding";
 import AccountLayout from "../Layout";
 
 const Company = ({ company }) => {
-
   const [data, setData] = useState(null)
 
   useEffect(() => {

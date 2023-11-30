@@ -1,17 +1,21 @@
-import { useForm } from "@inertiajs/inertia-react";
+import { useForm, usePage } from "@inertiajs/inertia-react";
 import Button from "../../../../Components/Button";
 import TextInput from "../../../../Components/Form/TextInput";
+import SelectInput from "../../../../Components/Form/Select";
 
 const BrandingDetails = ({ company }) => {
 
   const { data, setData, patch, processing, errors, reset } = useForm({
     primary_color: (company?.primary_color ?? '').substring(0, 7),
     secondary_color: (company?.secondary_color ?? '').substring(0, 7),
+    currency_id: company?.currency_id
   });
 
   const handleChange = (e) => {
     setData(e.target.name, e.target.type === 'checkbox' ? e.target.checked : e.target.value);
   };
+
+  const { currencies } = usePage().props
 
   const submit = (e) => {
     e.preventDefault();
@@ -20,7 +24,7 @@ const BrandingDetails = ({ company }) => {
   }
 
   return (
-    <form onSubmit={submit}>
+    <form onSubmit={submit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
         <TextInput
           label="Primary"
@@ -43,7 +47,18 @@ const BrandingDetails = ({ company }) => {
         />
       </div>
 
-      <div className="flex justify-end mt-4">
+      <SelectInput
+        label="Base Currency"
+        name="currency_id"
+        value={data.currency_id}
+        error={errors.currency_id}
+        onChange={handleChange}
+      >
+        <option value="">Select</option>
+        {currencies?.map(_ => <option value={_.id} key={_.id}>{_.name} ({_.symbol})</option>)}
+      </SelectInput>
+
+      <div className="flex justify-end">
         <Button
           type="submit"
           isLoading={processing}>

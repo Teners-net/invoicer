@@ -1,6 +1,6 @@
 import { Inertia } from "@inertiajs/inertia";
 import { useForm } from "@inertiajs/inertia-react";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import AppContext from "../../context";
 import Button from "../Button";
 import SelectInput from "../Form/Select";
@@ -9,34 +9,62 @@ import Modal from "../Modal";
 
 const PaymentChannel = ({ show, setClose, channel, currencies }) => {
 
-  const { data, setData, post, patch, processing, errors, reset } = useForm({
-    bank_name: channel?.bank_name ?? '',
-    account_name: channel?.account_name ?? '',
-    account_number: channel?.account_number ?? '',
-    currency_id: channel?.currency_id ?? '',
-  });
+  const empty = {
+    bank_name: '',
+    account_name: '',
+    account_number: '',
+    currency_id: '',
+  }
+
+  const [data, setData] = useState(empty)
+  const [errors, setErrors] = useState({})
+  const [processing, setProcessing] = useState(false)
+
+  useEffect(() => {
+    (channel) ? setData(channel) : setData(empty)
+  }, [channel])
 
   const handleChange = (e) => {
-    setData(e.target.name, e.target.type === 'checkbox' ? e.target.checked : e.target.value);
-  };
+    const key = e.target.name;
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
 
-  const handleClose = () => {
-    reset()
-    setClose && setClose()
+    setData(values => ({
+      ...values,
+      [key]: value,
+    }))
   }
 
   const submit = (e) => {
     e.preventDefault();
 
     channel ?
-      patch(route('payment_channels.update', channel), {
-        preserveScroll: true,
-        onSuccess: () => handleClose(),
-      }) :
-      post(route('payment_channels.store'), {
-        preserveScroll: true,
-        onSuccess: () => handleClose(),
-      })
+      Inertia.patch(
+        route('payment_channels.update', channel),
+        data,
+        {
+          onError: e => {
+            setErrors(e)
+            setProcessing(false)
+          },
+          onSuccess: handleClose(),
+        }
+      ) :
+      Inertia.post(
+        route('payment_channels.store'),
+        data,
+        {
+          onError: e => {
+            setErrors(e)
+            setProcessing(false)
+          },
+          onSuccess: handleClose(),
+        }
+      )
+  }
+
+  const handleClose = () => {
+    setProcessing(false)
+    setClose && setClose()
   }
 
   const { setConfirmation } = useContext(AppContext)

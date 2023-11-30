@@ -1,11 +1,7 @@
 import { Inertia } from "@inertiajs/inertia";
-import { useForm, usePage } from "@inertiajs/inertia-react";
-import Button from "../../../Components/Button";
-import Card from "../../../Components/Card";
-import TextInput from "../../../Components/Form/TextInput";
-import Section from "../../../Components/Section";
-import AppLayout from "../../../Layouts/AppLayout";
 import { useEffect, useState } from "react";
+import Button from "../../../Components/Button";
+import TextInput from "../../../Components/Form/TextInput";
 import Modal from "../../../Components/Modal";
 
 const CreateCustomer = ({ customer, setCustomer, show, setShow }) => {
@@ -25,7 +21,6 @@ const CreateCustomer = ({ customer, setCustomer, show, setShow }) => {
   useEffect(() => {
     (customer) ? setData(customer) : setData(empty)
   }, [customer])
-
 
   const handleChange = (e) => {
     const key = e.target.name;

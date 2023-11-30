@@ -124,7 +124,8 @@ class CompanyController extends Controller
     {
         $request->validate([
             'primary_color' => 'required|string|max:9',
-            'secondary_color' => 'required|string|max:9'
+            'secondary_color' => 'required|string|max:9',
+            'currency_id' => 'required|exists:currencies,id'
         ]);
 
         $user = $this->authUser()->user_id;
