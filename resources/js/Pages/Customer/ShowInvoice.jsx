@@ -30,7 +30,7 @@ const ShowInvoice = ({ invoice }) => {
             <p>Payment Channels</p>
             <small>Pay through any of the following channels</small>
             <div className="mt-4 grid gap-2">
-              {invoice?.allowed_channels.map(channel => <Channel channel={channel} transform={{
+              {invoice?.allowed_channels.map(channel => <Channel key={channel.id} channel={channel} transform={{
                 amount: invoice?.total_amount,
                 from: invoice?.currency
               }} />)}

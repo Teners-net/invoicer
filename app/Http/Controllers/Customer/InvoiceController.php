@@ -53,6 +53,8 @@ class InvoiceController extends Controller
      */
     public function show(Invoice $invoice)
     {
+        $invoice = Invoice::with('currency')->find($invoice->id);
+        
         return Inertia('Customer/ShowInvoice', [
             'invoice' => $invoice
         ]);
