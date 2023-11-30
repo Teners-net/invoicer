@@ -5,14 +5,13 @@ import { toolbarPlugin } from '@react-pdf-viewer/toolbar';
 import { useContext } from "react";
 import Button from "../../../Components/Button";
 import Card from "../../../Components/Card";
-import { statusColor } from "../../../Components/Partials";
+import { Channel, statusColor } from "../../../Components/Partials";
 import Section from "../../../Components/Section";
 import AppLayout from "../../../Layouts/AppLayout";
 import AppContext from "../../../context";
 import { formatDate } from "../../../utis/date";
 
 const ShowInvoice = ({ invoice }) => {
-
   const Boxed = ({ children, className, ...rest }) => <div className={`p-4 bg-gray-50 dark:bg-gray-950 border ${className}`} {...rest}>{children}</div>
   const toolbarPluginInstance = toolbarPlugin();
   const { renderDefaultToolbar, Toolbar } = toolbarPluginInstance;
@@ -39,8 +38,7 @@ const ShowInvoice = ({ invoice }) => {
   const { setConfirmation } = useContext(AppContext)
 
   const handleInvoiceActions = (action) => {
-    // Check User and Due date
-    // Send
+    // TODO: Check User and Due date
     Inertia.post(route('invoices.action', [invoice, action]), {});
   }
 
@@ -57,8 +55,8 @@ const ShowInvoice = ({ invoice }) => {
                 <div className={`p-1 ${statusColor(invoice).body} border ${statusColor(invoice).border}`}></div>
                 <h5>{invoice.status}</h5>
               </div>
-              {invoice.status == "Draft" && <Button onClick={()=>handleInvoiceActions('SEND')}>Send Invoice</Button>}
-              {(invoice.status == "Pending" || invoice.status == "Sent")&& <Button onClick={()=>handleInvoiceActions('MARK_PAID')}>Confirm Payment Receipt</Button>}
+              {invoice.status == "Draft" && <Button onClick={() => handleInvoiceActions('SEND')}>Send Invoice</Button>}
+              {(invoice.status == "Pending" || invoice.status == "Sent") && <Button onClick={() => handleInvoiceActions('MARK_PAID')}>Confirm Payment Receipt</Button>}
             </div>
           </Card>
 
@@ -93,8 +91,9 @@ const ShowInvoice = ({ invoice }) => {
 
           <Card>
             <p>Payment Channels</p>
-            <div className="mt-4">
-              <p className="text-center p-6">Coming Soon...</p>
+            <small>Select custom payment channels for this invoice</small>
+            <div className="my-4 grid gap-2">
+              {invoice?.allowed_channels.map(channel => <Channel channel={channel} />)}
             </div>
             <Button isComing>Select Payment Channels</Button>
           </Card>

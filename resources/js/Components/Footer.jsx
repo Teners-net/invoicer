@@ -10,13 +10,13 @@ const Footer = () => {
         <div className="space-y-2">
           <h5 className="mb-1 md:mb-4">Resources</h5>
           <p><a href="">Blog</a></p>
-          <p><a href="">Teners</a></p>
+          {/* <p><a href="">Teners</a></p> */}
         </div>
 
         <div className="space-y-2">
           <h5 className="mb-1 md:mb-4">Contact</h5>
           <p><a href="tel:+2347014293952">+2347014293952</a></p>
-          <p><a href="mailto:contact@teners.net">contact@teners.net</a></p>
+          <p><a href="mailto:contact@invoicer.teners.net">contact@invoicer.teners.net</a></p>
         </div>
       </Section>
 

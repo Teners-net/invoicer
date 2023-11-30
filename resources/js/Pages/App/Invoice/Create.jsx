@@ -8,6 +8,7 @@ import SelectInput from "../../../Components/Form/Select";
 import TextInput from "../../../Components/Form/TextInput";
 import Section from "../../../Components/Section";
 import AppLayout from "../../../Layouts/AppLayout";
+import { transformCurrency } from "../../../utis/currency";
 import { dateInputFormat } from "../../../utis/date";
 import CreateCustomer from "../Customer/Create";
 import CreateProduct from "../Product/Create";
@@ -63,18 +64,12 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
 
   useEffect(() => {
     let total = rows.reduce((total_A, row) => {
-      const productAmount = row.quantity * toCompanyCurrency(row.product?.price, row.product?.currency);
+      const productAmount = row.quantity * transformCurrency(row.product?.price, row.product?.currency, base_currency?.company);
       return total_A + productAmount;
     }, 0).toFixed(2);
 
     setSubTotal(total)
   }, [rows])
-
-  // TODO: Make a UTIL
-  const toCompanyCurrency = (price, current_currency) => {
-    let amnt_platform = price / (current_currency?.base_rate ?? 1)
-    return (amnt_platform * base_currency?.company.base_rate).toFixed(2)
-  }
 
   const handleChange = (e) => {
     setData(e.target.name, e.target.type === 'checkbox' ? e.target.checked : e.target.value)
@@ -125,7 +120,7 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
       row_id: lastRowId + 1,
       product: emptyProduct,
       quantity: 1,
-      amount_in_base: toCompanyCurrency(emptyProduct?.price, emptyProduct?.currency)
+      amount_in_base: transformCurrency(emptyProduct?.price, emptyProduct?.currency, base_currency?.company)
     }
     setRows([...rows, newRow]);
   };
@@ -154,12 +149,12 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
       const selectedProduct = (!e.target.value || e.target.value == "null") ? emptyProduct : products.find((p) => p.id.toString() === e.target.value);
 
       updateRowProperty(row.row_id, 'product', selectedProduct);
-      updateRowProperty(row.row_id, 'amount_in_base', row.quantity * toCompanyCurrency(selectedProduct?.price, selectedProduct?.currency))
+      updateRowProperty(row.row_id, 'amount_in_base', row.quantity * transformCurrency(selectedProduct?.price, selectedProduct?.currency, base_currency?.company))
     }
 
     const setQuantity = (q, product) => {
       updateRowProperty(row.row_id, 'quantity', q)
-      updateRowProperty(row.row_id, 'amount_in_base', q * toCompanyCurrency(product?.price, product?.currency))
+      updateRowProperty(row.row_id, 'amount_in_base', q * transformCurrency(product?.price, product?.currency, base_currency?.company))
     }
 
     return (

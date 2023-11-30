@@ -1,5 +1,7 @@
+import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, WhatsappIcon, WhatsappShareButton } from 'react-share';
+import { transformCurrency } from "../utis/currency";
 import Button from "./Button";
-import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, LinkedinShareButton, TwitterShareButton, WhatsappIcon, WhatsappShareButton } from 'react-share';
+import Card from "./Card";
 
 export const statusColor = (invoice) => {
   const define = {
@@ -60,3 +62,25 @@ export const Share = ({ shareLinkInBio }) => {
     </div>
   )
 }
+
+export const Channel = ({
+  channel,
+  transform = null
+}) =>
+  <Card flat className={`text-start grid grid-cols-2 !p-3`}>
+    <div>
+      <small>Bank Name</small>
+      <p className="mb-2">{channel.bank_name}</p>
+
+      <small>Account Number</small>
+      <p>{channel.account_number}</p>
+    </div>
+
+    <div>
+      <small>Account Name</small>
+      <p className="mb-2">{channel.account_name}</p>
+
+      <small>Currency {transform && ' and Amount'}</small>
+      <p className={`${transform && 'font-bold'}`}>{channel.currency?.name} ({channel.currency?.symbol}) {transform && transformCurrency(transform?.amount, transform?.from, channel?.currency)}</p>
+    </div>
+  </Card>

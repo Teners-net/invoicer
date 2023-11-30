@@ -12,7 +12,7 @@ const CustomerLayout = ({ children, title }) => {
 
       <footer>
         <Section className={"flex justify-center py-6 "}>
-          <p>Powered <a href={route('dashboard')} className="underline p">Invoicer</a>. Create your free invoice now</p>
+          <p>Powered <a href={route('home')} className="underline p">Invoicer</a>. Create your free invoice now</p>
         </Section>
       </footer>
     </div>

@@ -56,7 +56,7 @@ class Company extends Model
      */
     public function getLogoPublicUrlAttribute()
     {
-        return ($this->logo) ? '/company_logo/' . $this->logo : null;
+        return ($this->logo) ? 'storage/company_logo/' . $this->logo : null;
     }
 
     /**

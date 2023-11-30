@@ -78,7 +78,12 @@ class Invoice extends Model
         return $status;
     }
 
+    public function getAllowedChannelsAttribute()
+    {
+        return $this->channels->count() > 0 ? $this->channels()->with('currency')->get() : $this->company->paymentChannels()->with('currency')->get();
+    }
+
     protected $appends = [
-        'pdf_url', 'status'
+        'pdf_url', 'status', 'allowed_channels'
     ];
 }
