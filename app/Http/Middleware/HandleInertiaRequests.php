@@ -46,7 +46,8 @@ class HandleInertiaRequests extends Middleware
             'company' => $this->getCurrentCompany(),
             'config' => [
                 'tiny_mce' => config('app.secrets.tiny_mce')
-            ]
+            ],
+            'notify' => fn () => $request->session()->get('notify')
         ]);
     }
 }

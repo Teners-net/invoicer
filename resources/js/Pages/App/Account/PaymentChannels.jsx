@@ -5,8 +5,9 @@ import Card from "../../../Components/Card";
 import PaymentChannel from "../../../Components/Modals/PaymentChannel";
 import Section from "../../../Components/Section";
 import AppLayout from "../../../Layouts/AppLayout";
+import AccountLayout from "./Layout";
 
-const Settings = ({ company }) => {
+const PaymentChannels = ({ company }) => {
 
   const { currencies } = usePage().props
   const [toEdit, setToEdit] = useState(null)
@@ -41,57 +42,8 @@ const Settings = ({ company }) => {
   const NewChannelButton = <Button onClick={() => setOpenChannelModal(true)}>Add Payment Channel</Button>
 
   return (
-    <AppLayout title='Settings' onBackPress={() => Inertia.visit(route('dashboard'))}>
-
-      <Section className={'grid md:grid-cols-3 gap-4'}>
-        <Card className={'col-span-2'}>
-          <div className=" grid grid-cols-2 mb-4">
-            <div>
-              <small>Settings Name</small>
-              <p className="mb-4">{company.name}</p>
-
-              <small>RC Number</small>
-              <p className="mb-4">{company.rc_number ?? 'Not Set'}</p>
-
-              <small>Settings Website</small>
-              <p className="mb-4">{company.website ?? 'Not Set'}</p>
-
-              <small>Address</small>
-              <p className="mb-4">{company.address ?? 'Not Set'}</p>
-
-              <small>Contact</small>
-              <p>{company.contact_email ?? 'Email Not Set'}</p>
-              <p>{company.contact_number ?? 'Phone Not Set'}</p>
-            </div>
-
-            <div>
-              <small className="underline">Branding</small>
-              <img src={company.logo_url} alt={company.name} className="max-h-32 md:max-h-40 object-contain border my-4 p-2" />
-
-              <small>Primary</small>
-              <div className="flex gap-2 items-center mb-4">
-                <div className="h-6 w-6" style={{ backgroundColor: company.primary_color }}></div>
-                <p>{company.primary_color}</p>
-              </div>
-
-              <small>Secondary</small>
-              <div className="flex gap-2 items-center">
-                <div className="h-6 w-6" style={{ backgroundColor: company.secondary_color }}></div>
-                <p>{company.secondary_color}</p>
-              </div>
-            </div>
-          </div>
-
-          <Button>Edit Settings</Button>
-        </Card>
-
-        {/* <div>
-          <small>Preview</small>
-          <Card></Card>
-        </div> */}
-      </Section>
-
-      <Section bottom>
+    <AccountLayout>
+      <Section>
         <Card>
           <h3>Payment Channels</h3>
           <p className="mb-4">Setup how you accept payments</p>
@@ -116,8 +68,8 @@ const Settings = ({ company }) => {
         currencies={currencies}
         channel={toEdit}
       />
-    </AppLayout>
+    </AccountLayout >
   );
 }
 
-export default Settings
+export default PaymentChannels

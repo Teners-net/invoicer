@@ -41,15 +41,15 @@ Route::get('/classic', function () {
     }
 });
 
-Route::get('/testmail', function () {
-    $invoice = Invoice::find(1);
+// Route::get('/testmail', function () {
+//     $invoice = Invoice::find(1);
 
-    if ($invoice) {
-        Mail::to('platinumemirate@gmail.com')->send(new NewInvoiceMail($invoice));
+//     if ($invoice) {
+//         Mail::to('platinumemirate@gmail.com')->send(new NewInvoiceMail($invoice));
 
-        // return new NewInvoiceMail($invoice);
-    }
-});
+//         // return new NewInvoiceMail($invoice);
+//     }
+// });
 
 Route::resource('pricing', SubscriptionController::class)->only(['index']);
 Route::resource('invoice', CustomerInvoiceController::class)->only(['show', 'update']);
@@ -70,9 +70,14 @@ Route::middleware(['auth', 'company'])->group(function () {
     });
     Route::resource('invoices', InvoiceController::class);
 
-    Route::resource('payment_channels', PaymentChannelController::class)->only(['store', 'update', 'destroy']);
+    Route::resource('account/payment_channels', PaymentChannelController::class)->only(['index', 'store', 'update', 'destroy']);
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::resource('company', CompanyController::class)->only(['index', 'store', 'update', 'create']);
+    Route::controller(CompanyController::class)->prefix('account')->group(function () {
+        Route::get('', 'index')->name('account.index');
+        Route::put('{company}/logo', 'logo')->name('company.logo');
+        Route::patch('{company}/branding', 'branding')->name('company.branding');
+    });
+    Route::resource('company', CompanyController::class)->only(['store', 'update', 'create']);
 });

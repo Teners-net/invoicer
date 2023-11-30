@@ -18,6 +18,8 @@ class PaymentChannelController extends Controller
         'currency_id' => 'required|exists:currencies,id',
     ];
 
+    
+
     /**
      * Store a new $paymentChannel
      * @return \Illuminate\Http\Response
