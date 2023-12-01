@@ -18,7 +18,6 @@ const ShowInvoice = ({ invoice }) => {
   const transform = (slot) => ({
     ...slot,
     Open: () => <></>,
-    PrintMenuItem: () => <></>,
 
     Print: () => <></>,
     PrintMenuItem: () => <></>,
