@@ -6,9 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="author" content="Teners">
-  <meta name="description" content="Get the best talent for your projects">
+  <title inertia>Simplify Business Management, Inventory and Invoicing</title>
+  <meta name="description" content="The all-in-one solution for small businesses. Manage customers, products, and invoicing effortlessly. Showcase your products with free link-in-bio.">
+  <meta name="keywords" content="business management, invoicing software, customer management, product catalog, small business tools">
+  <link rel="canonical" href="https://invoicer.teners.net" />
 
-  <title inertia>{{ config('app.name', 'Laravel') }}</title>
   <link rel="icon" type="image/png" href="{{ asset('imgs/brand/invoicer.png') }}">
 
   <meta http-equiv="Content-Security-Policy" content="" />

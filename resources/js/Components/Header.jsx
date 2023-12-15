@@ -17,7 +17,7 @@ const Header = ({ user }) => {
   return (
     <nav className="bg-white text-black">
       <Section block className={"flex justify-between items-center py-4"}>
-        <ApplicationLogo className={'h-12'} />
+        <ApplicationLogo />
 
         <MenuItems className={"hidden md:flex gap-4"} />
 
