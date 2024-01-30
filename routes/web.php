@@ -23,22 +23,6 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 })->name('home');
 
-Route::get('/test', function () {
-    CurrencyUpdateJob::dispatch();
-    // $invoice = Invoice::find(1);
-    // if ($invoice) {
-    //     InvoiceService::generateInvoice($invoice);
-    //     $pdf = PDF::loadView('templates.classic', [
-    //         'invoice' => $invoice
-    //     ]);
-    //     return $pdf
-    //         ->setPaper('a4')
-    //         ->setOption(['dpi' => 150])
-    //         ->setWarnings(true)
-    //         ->stream();
-    // }
-});
-
 Route::resource('pricing', SubscriptionController::class)->only(['index']);
 Route::resource('invoice', CustomerInvoiceController::class)->only(['show', 'update']);
 
@@ -63,6 +47,12 @@ Route::middleware(['auth', 'company'])->group(function () {
     Route::resource('invoices', InvoiceController::class);
 
     Route::resource('payment_channels', PaymentChannelController::class)->only(['index', 'store', 'update', 'destroy']);
+
+    Route::get('/test/{key}', function ($key) {
+        if ($key === 'g1h?h0') {
+            CurrencyUpdateJob::dispatch();
+        }
+    });
 });
 
 Route::middleware(['auth'])->group(function () {
