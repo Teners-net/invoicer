@@ -151,12 +151,12 @@
 </head>
 
 <body>
-    <header style="padding: 0.1rem 3rem; border-top: 0.8rem solid <?php echo $invoice->company->primary_color; ?>">
+    <header style="padding: 0.1rem 4rem; border-top: 0.8rem solid <?php echo $invoice->company->primary_color; ?>">
     </header>
 
-    <footer style="padding: 0.1rem 3rem; border-bottom: 0.8rem solid <?php echo $invoice->company->secondary_color; ?>">
+    <footer style="padding: 0.1rem 4rem; border-bottom: 0.8rem solid <?php echo $invoice->company->secondary_color; ?>">
         <hr>
-        <small>Powered by Invoicer &bull; invoicer.teners.net</small>
+        <small>Powered by Invoicer &bull; <a href="https://invoicer.teners.net">invoicer.teners.net</a></small>
     </footer>
 
     <main>
@@ -168,11 +168,11 @@
                         <p>{{$invoice->company->rc_number}}</p>
                         <p>{{$invoice->company->website}}</p>
                     </td>
-                    <!-- <td>
+                    <td>
                         @if ($invoice->company->logo_public_url)
-                        <img src="{{ asset($invoice->company->logo_public_url) }}" class="float-right" height="100" alt="Company Logo">
+                        <img src="<?php echo $_SERVER["DOCUMENT_ROOT"] . $invoice->company->logo_public_url; ?>" class="float-right" height="100" alt="{{$invoice->company->name}}">
                         @endif
-                    </td> -->
+                    </td>
                 </tr>
             </tbody>
         </table>
