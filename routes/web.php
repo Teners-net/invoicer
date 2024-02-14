@@ -10,13 +10,8 @@ use App\Http\Controllers\Customer\InvoiceController as CustomerInvoiceController
 use App\Http\Controllers\Customer\StoreFrontController;
 use App\Http\Controllers\Platform\SubscriptionController;
 use App\Jobs\CurrencyUpdateJob;
-use App\Mail\NewInvoiceMail;
-use App\Models\Invoice;
-use App\Services\InvoiceService;
-use Auth0\Laravel\Facade\Auth0;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -63,3 +58,5 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::resource('company', CompanyController::class)->only(['store', 'update', 'create']);
 });
+
+require __DIR__ . '/auth.php';

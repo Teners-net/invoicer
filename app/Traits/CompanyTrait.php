@@ -10,7 +10,7 @@ trait CompanyTrait
     private function authUser()
     {
         $user = auth()->user();
-        return $user ? CompanyUser::where('user_id', $user->sub)->first() : null;
+        return $user ? CompanyUser::where('user_id', $user->id)->first() : null;
     }
 
     private function getCurrentCompany(): ?Company

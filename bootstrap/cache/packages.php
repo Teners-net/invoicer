@@ -1,15 +1,4 @@
 <?php return array (
-  'auth0/login' => 
-  array (
-    'aliases' => 
-    array (
-      'Auth0' => 'Auth0\\Laravel\\Facade\\Auth0',
-    ),
-    'providers' => 
-    array (
-      0 => 'Auth0\\Laravel\\ServiceProvider',
-    ),
-  ),
   'barryvdh/laravel-dompdf' => 
   array (
     'providers' => 
@@ -38,6 +27,13 @@
     'aliases' => 
     array (
       'Image' => 'Intervention\\Image\\Facades\\Image',
+    ),
+  ),
+  'laravel/breeze' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Laravel\\Breeze\\BreezeServiceProvider',
     ),
   ),
   'laravel/sail' => 
@@ -80,6 +76,13 @@
     'providers' => 
     array (
       0 => 'Termwind\\Laravel\\TermwindServiceProvider',
+    ),
+  ),
+  'pestphp/pest' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Pest\\Laravel\\PestServiceProvider',
     ),
   ),
   'platinum/laravel-extras' => 

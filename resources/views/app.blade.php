@@ -12,7 +12,7 @@
   <link rel="canonical" href="https://invoicer.teners.net" />
 
   <link rel="icon" type="image/png" href="{{ asset('imgs/brand/invoicer.png') }}">
-
+  <title inertia>{{ config('app.name', 'Laravel') }}</title>
   <meta http-equiv="Content-Security-Policy" content="" />
 
   <!-- Fonts -->

@@ -16,7 +16,13 @@
 - Only 1 currency
 - Only 1 Company
 
-
+<!--  -->
+Delete user and user_company migration
+then, migrate
+Update user column
+Copy emails from user company
+Update user company table
+Put passwords for users - password
 
 /* CSS HEX */
 --raisin-black: #1a1423ff;

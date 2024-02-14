@@ -18,7 +18,7 @@ class MustHaveCompany
     public function handle(Request $request, Closure $next)
     {
         $user = auth()->user();
-        $user_company = CompanyUser::where('user_id', $user->sub)->first();
+        $user_company = CompanyUser::where('user_id', $user->id)->first();
 
         if (!$user_company) return redirect()->route('company.create');
 

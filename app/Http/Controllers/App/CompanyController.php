@@ -70,10 +70,8 @@ class CompanyController extends Controller
         $user = auth()->user();
 
         CompanyUser::create([
-            'user_id' => $user->sub,
-            'company_id' => $company->id,
-            'email' => $user->email,
-            'is_owner' => true,
+            'user_id' => $user->id,
+            'company_id' => $company->id
         ]);
 
         return redirect()->route('dashboard');

@@ -6,6 +6,7 @@ use App\Models\Currency;
 use App\Traits\CompanyTrait;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Tightenco\Ziggy\Ziggy;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -47,7 +48,15 @@ class HandleInertiaRequests extends Middleware
             'config' => [
                 'tiny_mce' => config('app.secrets.tiny_mce')
             ],
-            'notify' => fn () => $request->session()->get('notify')
+            'notify' => fn () => $request->session()->get('notify'),
+            // 'auth' => [
+            //     'user' => $request->user(),
+            // ],
+            'ziggy' => function () use ($request) {
+                return array_merge((new Ziggy)->toArray(), [
+                    'location' => $request->url(),
+                ]);
+            },
         ]);
     }
 }
