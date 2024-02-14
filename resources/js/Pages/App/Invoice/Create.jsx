@@ -5,7 +5,7 @@ import { memo, useEffect, useRef, useState } from "react";
 import Button from "../../../Components/Button";
 import Card from "../../../Components/Card";
 import SelectInput from "../../../Components/Form/Select";
-import TextInput from "../../../Components/Form/TextInput";
+import Input from "../../../Components/Form/Input";
 import Section from "../../../Components/Section";
 import AppLayout from "../../../Layouts/AppLayout";
 import { transformCurrency } from "../../../utis/currency";
@@ -172,7 +172,7 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
           </SelectInput>
         </td>
         <td>
-          <TextInput
+          <Input
             value={row.quantity}
             type="number"
             onChange={(e) => setQuantity(e.target.value, row.product)}
@@ -227,7 +227,7 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
                   </Button>
                 </div>
 
-                <TextInput
+                <Input
                   label="Due Date"
                   name="due_at"
                   type="date"
@@ -293,14 +293,14 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
               </div>
 
               <div className="space-y-3 md:space-y-6">
-                <TextInput
+                <Input
                   label="Sub Total"
                   prepend={<span className="pr-1 ">{base_currency?.company.symbol}</span>}
                   value={subTotal}
                   readOnly
                 />
 
-                <TextInput
+                <Input
                   value={data.discount_value}
                   type="number"
                   onChange={handleChange}
@@ -322,7 +322,7 @@ const CreateInvoice = ({ invoice, products, customers, base_currency }) => {
                   }
                 />
 
-                <TextInput
+                <Input
                   label="Total"
                   prepend={<span className="pr-1 ">{base_currency?.company.symbol}</span>}
                   value={getTotalAmount()}

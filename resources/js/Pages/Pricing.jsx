@@ -83,7 +83,7 @@ const Pricing = () => {
 
           <div className="p-4">
             {plan.features.map(feature =>
-              <div key={feature} className="pb-3 flex gap-1">
+              <div key={feature} className="pb-3 flex gap-2 items-center">
                 <p>{'\u2022'}</p>
                 {feature}
               </div>
@@ -99,16 +99,12 @@ const Pricing = () => {
   }
 
   return (
-    <GuestLayout>
-
+    <GuestLayout title={"Pricing Plans"}>
       <div className="bg-white">
-        <Section className="flex flex-col items-center md:max-w-[60vw] text-center !py-24" bottom >
-          <h1 className="h2">Friendly Pricing Plan</h1>
-          <h2 className="p md:max-w-[40vw] m-auto">
-            We're offering a generous Free Plan and affordable premium pricing plans that grows with your business
-          </h2>
-
-          <div className="mt-12 flex items-center gap-4">
+        <Section className="flex flex-col items-center text-center !py-24 space-y-6" bottom >
+          <h1>Friendly Pricing Plan <span className="p">-Coming Soon</span></h1>
+          <p>We're offering a generous Free Plan and affordable premium pricing plans that grows with your business</p>
+          <div className="flex items-center gap-4">
             <GetStarted outline />
             <p>It's FREE!</p>
           </div>

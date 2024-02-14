@@ -1,6 +1,6 @@
 import { useForm } from "@inertiajs/inertia-react";
 import Button from "../../../../Components/Button";
-import TextInput from "../../../../Components/Form/TextInput";
+import Input from "../../../../Components/Form/Input";
 
 const BasicDetails = ({ company }) => {
 
@@ -27,7 +27,7 @@ const BasicDetails = ({ company }) => {
     <form onSubmit={submit} className={`p-3 ${company ? 'md:p-4' : 'md:p-6'}`}>
       <div className="grid md:grid-cols-2">
         <div className={`py-2 ${company ? 'md:pr-4' : 'md:pt-12 md:pb-12 md:pr-12'} md:border-r space-y-4 md:space-y-6`}>
-          <TextInput
+          <Input
             label="Company Name *"
             name="name"
             value={data.name}
@@ -36,7 +36,7 @@ const BasicDetails = ({ company }) => {
             onChange={handleChange}
           />
 
-          <TextInput
+          <Input
             label="Website"
             name="website"
             value={data.website}
@@ -44,7 +44,7 @@ const BasicDetails = ({ company }) => {
             onChange={handleChange}
           />
 
-          <TextInput
+          <Input
             label="RC Number"
             name="rc_number"
             value={data.rc_number}
@@ -54,7 +54,7 @@ const BasicDetails = ({ company }) => {
         </div>
 
         <div className={`py-2 ${company ? 'md:pl-4' : 'md:pt-12 md:pb-12 md:pl-12'} space-y-4 md:space-y-6`}>
-          <TextInput
+          <Input
             label="Contact Email"
             name="contact_email"
             value={data.contact_email}
@@ -62,7 +62,7 @@ const BasicDetails = ({ company }) => {
             onChange={handleChange}
           />
 
-          <TextInput
+          <Input
             label="Contact Tel. Number"
             name="contact_number"
             autoComplete="tel"
@@ -71,7 +71,7 @@ const BasicDetails = ({ company }) => {
             onChange={handleChange}
           />
 
-          <TextInput
+          <Input
             label="Address"
             name="address"
             value={data.address}

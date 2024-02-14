@@ -24,21 +24,14 @@ const Welcome = () => {
   return (
     <GuestLayout title={'Home'}>
       <div className="bg-white">
-        <Section block className={'grid md:grid-cols-2 gap-6 md:gap-12 items-center'}>
-          <div className="space-y-6 py-6 md:py-0">
+        <Section className={'space-y-6 md:py-24 text-center'}>
             <h1>Effortless Invoicing and Seamless Inventory Management for Your Business</h1>
-            <p>
-              The world's simplest way to manage your payments and customers.
-              Save time, stay organized and professional, keep proper records and manage your inventory.
-            </p>
+            <p>The world's simplest way to manage your payments and customers. Save time, stay organized and professional, keep proper records and manage your inventory.</p>
 
-            <div className="flex gap-3 md:gap-6 flex-wrap">
+            <div className="flex gap-3 md:gap-6 flex-wrap justify-center">
               <GetStarted />
               <Button outline>See a Demo</Button>
             </div>
-          </div>
-
-          <img src="/imgs/assets/invoicer_banner.png" alt="Invoicer" className="hidden md:block w-full py-12" />
         </Section>
       </div>
 
@@ -49,7 +42,7 @@ const Welcome = () => {
         </div>
         <div className="grid md:grid-cols-3 gap-3 md:gap-6">
           {features.map(_ =>
-            <Card className={"space-y-3 md:space-y-6"}>
+            <Card className={"space-y-3 md:space-y-6"} key={_.title}>
               <h3 className="h4">{_.title}</h3>
               <p>{_.description}</p>
             </Card>

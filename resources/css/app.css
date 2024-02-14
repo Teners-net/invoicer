@@ -36,49 +36,57 @@
 /* Typography */
 h1,
 .h1 {
-    @apply text-4xl md:text-5xl mb-3 font-bold;
+    @apply text-5xl md:text-7xl mb-5 font-bold !leading-[1.2] md:!leading-[1.4];
 }
 
 h2,
 .h2 {
-    @apply text-3xl md:text-4xl mb-2 font-semibold;
+    @apply text-4xl md:text-5xl mb-4 font-semibold;
 }
 
 h3,
 .h3 {
-    @apply text-2xl md:text-3xl font-medium;
+    @apply text-3xl md:text-4xl mb-3 font-medium;
 }
 
 h4,
 .h4 {
-    @apply text-xl md:text-2xl font-medium;
+    @apply text-2xl md:text-3xl font-medium;
 }
 
 h5,
 .h5 {
-    @apply text-lg md:text-xl;
+    @apply text-xl md:text-2xl;
 }
 
 h6,
 .h6 {
-    @apply text-base md:text-base;
+    @apply text-lg md:text-xl;
 }
 
 p,
-.p,
-a, li {
-    @apply text-sm font-light;
+.p {
+    @apply text-base md:text-lg;
 }
 
 small,
 .small {
-    @apply text-xs font-extralight;
+    @apply text-xs md:text-sm font-extralight;
 }
 
+ul,
+ol,
+li,
 .ul,
- ul,
 .ol,
- ol {
+.li {
+    @apply mb-2 p;
+}
+
+ul,
+ol,
+.ul,
+.ol {
     @apply list-disc !px-6;
 }
 

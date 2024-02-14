@@ -1,7 +1,7 @@
 import { Inertia } from "@inertiajs/inertia";
 import { useEffect, useState } from "react";
 import Button from "../../../Components/Button";
-import TextInput from "../../../Components/Form/TextInput";
+import Input from "../../../Components/Form/Input";
 import Modal from "../../../Components/Modal";
 
 const CreateCustomer = ({ customer, setCustomer, show, setShow }) => {
@@ -78,7 +78,7 @@ const CreateCustomer = ({ customer, setCustomer, show, setShow }) => {
 
         <div className="grid md:grid-cols-2">
           <div className="py-2 md:pt-12 md:pb-12 md:pr-12 md:border-r space-y-4 md:space-y-6">
-            <TextInput
+            <Input
               label="Customer's Firstname *"
               name="first_name"
               value={data.first_name}
@@ -87,7 +87,7 @@ const CreateCustomer = ({ customer, setCustomer, show, setShow }) => {
               onChange={handleChange}
             />
 
-            <TextInput
+            <Input
               label="Customer's Lastname"
               name="last_name"
               value={data.last_name}
@@ -95,7 +95,7 @@ const CreateCustomer = ({ customer, setCustomer, show, setShow }) => {
               onChange={handleChange}
             />
 
-            <TextInput
+            <Input
               label="Customer's Email *"
               name="email"
               value={data.email}
@@ -107,7 +107,7 @@ const CreateCustomer = ({ customer, setCustomer, show, setShow }) => {
 
           <div className="py-2 md:pt-12 md:pb-12 md:pl-12 space-y-4 md:space-y-6">
 
-            <TextInput
+            <Input
               label="Customer's Phone"
               name="phone"
               value={data.phone}
@@ -115,7 +115,7 @@ const CreateCustomer = ({ customer, setCustomer, show, setShow }) => {
               onChange={handleChange}
             />
 
-            <TextInput
+            <Input
               label="Customer Address"
               name="address"
               value={data.address}

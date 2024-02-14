@@ -15,7 +15,7 @@ const Header = ({ user }) => {
     </div>
 
   return (
-    <nav className="bg-white text-black">
+    <nav className="bg-white text-black border-b sticky top-0 z-50">
       <Section block className={"flex justify-between items-center py-4"}>
         <ApplicationLogo />
 

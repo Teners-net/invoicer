@@ -1,6 +1,6 @@
 import { useForm, usePage } from "@inertiajs/inertia-react";
 import Button from "../../../../Components/Button";
-import TextInput from "../../../../Components/Form/TextInput";
+import Input from "../../../../Components/Form/Input";
 import SelectInput from "../../../../Components/Form/Select";
 
 const BrandingDetails = ({ company }) => {
@@ -26,7 +26,7 @@ const BrandingDetails = ({ company }) => {
   return (
     <form onSubmit={submit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
-        <TextInput
+        <Input
           label="Primary"
           name="primary_color"
           type="color"
@@ -36,7 +36,7 @@ const BrandingDetails = ({ company }) => {
           onChange={handleChange}
         />
 
-        <TextInput
+        <Input
           label="Secondary"
           name="secondary_color"
           type="color"

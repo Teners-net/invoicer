@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import AppContext from "../../context";
 import Button from "../Button";
 import SelectInput from "../Form/Select";
-import TextInput from "../Form/TextInput";
+import Input from "../Form/Input";
 import Modal from "../Modal";
 
 const PaymentChannel = ({ show, setClose, channel, currencies }) => {
@@ -77,7 +77,7 @@ const PaymentChannel = ({ show, setClose, channel, currencies }) => {
         <div className="grid md:grid-cols-2">
           <div className="py-2 md:pt-12 md:pb-12 md:pr-12 md:border-r space-y-4 md:space-y-6">
 
-            <TextInput
+            <Input
               label="Bank Name *"
               name="bank_name"
               value={data.bank_name}
@@ -86,7 +86,7 @@ const PaymentChannel = ({ show, setClose, channel, currencies }) => {
               onChange={handleChange}
             />
 
-            <TextInput
+            <Input
               label="Account Name *"
               name="account_name"
               value={data.account_name}
@@ -108,7 +108,7 @@ const PaymentChannel = ({ show, setClose, channel, currencies }) => {
               {currencies?.map(_ => <option key={_.id} value={_.id}>{_.name} ({_.symbol})</option>)}
             </SelectInput>
 
-            <TextInput
+            <Input
               label="Account Number *"
               name="account_number"
               value={data.account_number}

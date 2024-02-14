@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
 
-const TextInput = forwardRef(({
+const Input = forwardRef(({
   wrapperStyle = '',
   groupStyle = '',
   inputStyle = '',
@@ -44,4 +44,4 @@ const TextInput = forwardRef(({
   );
 });
 
-export default TextInput;
+export default Input;

@@ -4,7 +4,7 @@ import { Editor } from "@tinymce/tinymce-react";
 import { useEffect, useState } from "react";
 import Button from "../../../Components/Button";
 import SelectInput from "../../../Components/Form/Select";
-import TextInput from "../../../Components/Form/TextInput";
+import Input from "../../../Components/Form/Input";
 import Modal from "../../../Components/Modal";
 
 const CreateProduct = ({ product, setProduct, show, setShow }) => {
@@ -69,7 +69,7 @@ const CreateProduct = ({ product, setProduct, show, setShow }) => {
 
         <div className="grid md:grid-cols-2">
           <div className="py-4 md:pr-6 md:border-r space-y-4 md:space-y-6">
-            <TextInput
+            <Input
               label="Product Name *"
               name="name"
               value={data.name}
@@ -78,7 +78,7 @@ const CreateProduct = ({ product, setProduct, show, setShow }) => {
               onChange={handleChange}
             />
 
-            <TextInput
+            <Input
               label="Unit Price *"
               name="price"
               type='number'
@@ -103,7 +103,7 @@ const CreateProduct = ({ product, setProduct, show, setShow }) => {
               <option value="SERVICE">Services</option>
             </SelectInput>
 
-            {data.type != 'SERVICE' && <TextInput
+            {data.type != 'SERVICE' && <Input
               label="Number in Stock"
               name="stock"
               value={data.stock}
