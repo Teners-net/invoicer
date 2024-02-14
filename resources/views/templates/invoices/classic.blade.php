@@ -160,22 +160,12 @@
     </footer>
 
     <main>
-        <table>
-            <tbody>
-                <tr>
-                    <td>
-                        <h1>{{$invoice->company->name}}</h1>
-                        <p>{{$invoice->company->rc_number}}</p>
-                        <p>{{$invoice->company->website}}</p>
-                    </td>
-                    <td>
-                        @if ($invoice->company->logo_public_url)
-                        <img src="<?php echo $_SERVER["DOCUMENT_ROOT"] . $invoice->company->logo_public_url; ?>" class="float-right" height="100" alt="{{$invoice->company->name}}">
-                        @endif
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        @if ($invoice->company->logo_url)
+        <img src="{{base_path().'/storage/app/public/company_logo/'.$invoice->company->logo}}" height="100" alt="{{$invoice->company->name}}">
+        @endif
+        <h1>{{$invoice->company->name}}</h1>
+        <p>{{$invoice->company->rc_number}}</p>
+        <p><a href="{{$invoice->company->website}}">{{$invoice->company->website}}</a></p>
 
         <div class="my-4">
             <small>INVOICE</small>

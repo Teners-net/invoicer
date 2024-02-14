@@ -32,8 +32,6 @@ const Input = forwardRef(({
     ...extras,
   }
 
-  console.log(error);
-
   return (
     <div className={`${groupStyle}`}>
       {useLabel && <label htmlFor={id ?? name} className='p capitalize'>{label ?? props.name}</label>}
