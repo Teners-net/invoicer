@@ -85,13 +85,6 @@
       0 => 'Pest\\Laravel\\PestServiceProvider',
     ),
   ),
-  'platinum/laravel-extras' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Platinum\\LaravelExtras\\LaravelExtrasServiceProvider',
-    ),
-  ),
   'spatie/laravel-ignition' => 
   array (
     'providers' => 
@@ -115,6 +108,13 @@
     'providers' => 
     array (
       0 => 'Spatie\\Sitemap\\SitemapServiceProvider',
+    ),
+  ),
+  'teners/laravel-extras' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Teners\\LaravelExtras\\LaravelExtrasServiceProvider',
     ),
   ),
   'tightenco/ziggy' => 

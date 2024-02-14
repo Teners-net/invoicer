@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
-use Platinum\LaravelExtras\Traits\FileUploadTrait;
+use Teners\LaravelExtras\Traits\FileUploadTrait;
 
 class CompanyController extends Controller
 {

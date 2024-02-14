@@ -17,8 +17,8 @@
         "laravel/framework": "^9",
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2",
-        "platinum/laravel-extras": "^1.2",
         "spatie/laravel-sitemap": "^6.4",
+        "teners/laravel-extras": "^2.1",
         "tightenco/ziggy": "^1.0"
     },
     "require-dev": {

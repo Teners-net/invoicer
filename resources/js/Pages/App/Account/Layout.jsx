@@ -42,7 +42,7 @@ const AccountLayout = ({
       title: "Logout",
       icon: '/imgs/icons/logout.png',
       onclick: () => {
-        Inertia.visit(route('logout'), {
+        Inertia.post(route('logout'), {
           onFinish: () => Inertia.visit(route('home'))
         })
       }

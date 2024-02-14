@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-use App\Models\Platform\Setting;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-use Platinum\LaravelExtras\Traits\Sluggable;
+use Teners\LaravelExtras\Traits\Sluggable;
 
 class Company extends Model
 {
@@ -54,16 +53,6 @@ class Company extends Model
      *
      * @return string
      */
-    public function getLogoPublicUrlAttribute()
-    {
-        return ($this->logo) ? 'storage/company_logo/' . $this->logo : null;
-    }
-
-    /**
-     * Get the URL for the user's profile picture.
-     *
-     * @return string
-     */
     public function getLogoUrlAttribute()
     {
         if ($this->logo) {
@@ -78,6 +67,5 @@ class Company extends Model
      */
     protected $appends = [
         'logo_url',
-        'logo_public_url',
     ];
 }

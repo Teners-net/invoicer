@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Models\Currency;
 use App\Models\Platform\Setting;
 use Illuminate\Database\Eloquent\Model;
-use Platinum\LaravelExtras\Traits\Sluggable;
+use Teners\LaravelExtras\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model

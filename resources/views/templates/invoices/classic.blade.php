@@ -160,12 +160,13 @@
     </footer>
 
     <main>
-        @if ($invoice->company->logo_url)
+        @if ($invoice->company->logo)
         <img src="{{base_path().'/storage/app/public/company_logo/'.$invoice->company->logo}}" height="100" alt="{{$invoice->company->name}}">
         @endif
         <h1>{{$invoice->company->name}}</h1>
         <p>{{$invoice->company->rc_number}}</p>
         <p><a href="{{$invoice->company->website}}">{{$invoice->company->website}}</a></p>
+        <p><a href="mailto:{{$invoice->company->contact_email}}">{{$invoice->company->contact_email}}</a></p>
 
         <div class="my-4">
             <small>INVOICE</small>

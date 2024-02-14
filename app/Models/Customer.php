@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Traits\UtilityTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Platinum\LaravelExtras\Traits\Sluggable;
+use Teners\LaravelExtras\Traits\Sluggable;
 
 class Customer extends Model
 {
